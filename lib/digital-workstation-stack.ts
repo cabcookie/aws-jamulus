@@ -20,7 +20,7 @@ export class DigitalWorkstation extends Stack {
       // this must be defined in cdk.json
       elasticIpAllocation: 'eipalloc-4d0de976',
       jamulusServerSettingsFileName: 'band-server-settings.sh',
-      // imageId: 'ami...',
+      imageId: 'ami-075e42d91002be826',
     });
 
     const jamulusMixingResult = createJamulusServerInstance(this, 'JamulusMixingServer', {
@@ -29,7 +29,7 @@ export class DigitalWorkstation extends Stack {
       // this must be defined in cdk.json
       elasticIpAllocation: 'eipalloc-7680094d',
       jamulusServerSettingsFileName: 'mixing-server-settings.sh',
-      // imageId: 'ami...',
+      imageId: 'ami-04e4753b514544b93',
     });
 
     const onlineMixer = new OnlineMixingConsole(this, 'OnlineMixer', {

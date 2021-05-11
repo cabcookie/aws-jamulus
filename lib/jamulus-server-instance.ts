@@ -66,7 +66,7 @@ export const createJamulusServerInstance = (scope: Stack, id: string, props: Jam
   } = props;
   const userDataFileName = './lib/configure-jamulus.sh';
 
-  if (imageId && jamulusServerSettingsFileName) throw(new TypeError('You should not provide both an AMI ID and a server settings file name'));
+  if (imageId && jamulusServerSettingsFileName) console.log('If both an imageId and a jamulusServerSettingsFileName is provided, only the imageId is considered and the settings from the configuration file are ignored.');
   if (!imageId && !jamulusServerSettingsFileName) throw(new TypeError('You should either provide an AMI ID or a server settings file name'));
 
   const host = new Instance(scope, id, {
@@ -81,14 +81,11 @@ export const createJamulusServerInstance = (scope: Stack, id: string, props: Jam
     userDataCausesReplacement: true,
   });
 
-  if (jamulusServerSettingsFileName) {
+  if (!imageId && jamulusServerSettingsFileName) {
     flow(
       readFileSync,
-      // log('file'),
       replaceServerSettingsFileName(jamulusServerSettingsFileName),
-      // log('server setting adjusted'),
       addUserData(host),
-      log('run add user data'),
     )(userDataFileName, 'utf8');
   };
 

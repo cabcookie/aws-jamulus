@@ -1,20 +1,62 @@
 import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, IVpc, Peer, Port, Protocol, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Effect, Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { CfnOutput, Construct } from "@aws-cdk/core";
+import { readFileSync } from "fs";
+import { flow } from "lodash/fp";
+import { addUserData } from "../utilities/utilities";
 
+/**
+ * Interface for online mixing console properties.
+ */
 export interface OnlineMixingConsoleProps {
+  /**
+   * The IP address for the Jamulus server where band members connect to.
+   */
   jamulusBandServerIp: string;
+  /**
+   * The IP address for the Jamulus server where the mixing console and the
+   * presenter connects to.
+   */
   jamulusMixingServerIp: string;
+  /**
+   * Provide a keyname so the EC2 instance is accessible via SSH with a
+   * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
+   */
   keyName: string;
+  /**
+   * Provides an allocation ID for an Elastic IP so that this mixing console will
+   * always be available under the same public IP address.
+   */
   elasticIpAllocation?: string;
+  /**
+   * Provide the VPC where the online mixing console should be created in.
+   */
   vpc: IVpc;
+  /**
+   * Provide an AMI ID if you have created an image with a running Jamulus
+   * server already. This image will then be used instead of running a
+   * launch script (i.e., user data) to install and configure the Jamulus
+   * server instance.
+   * If no image is provided a standard image will be used.
+   */
+  imageId?: string;
 };
 
+/**
+ * A construct to create an EC2 instance with an Ardour mixing console installed.
+ */
 export class OnlineMixingConsole extends Construct {
-  constructor(scope: Construct, id: string, {
-    jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc
-  }: OnlineMixingConsoleProps) {
+  /**
+   * 
+   * @param scope Parent stack, usually an `App` or a `Stage`, but could be any construct.
+   * @param id The id for the server; will be used for the EC2 instance name.
+   * @param props 
+   */
+  constructor(scope: Construct, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
+
+    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId } = props;
+    const userDataFileName = './lib/configure-online-mixer.sh';
 
     const securityGroup = new SecurityGroup(this, 'SSHandJamulusAccess', {
       description: 'Allows access for SSH and for Jamulus clients',
@@ -43,13 +85,11 @@ export class OnlineMixingConsole extends Construct {
       ],
     }));
   
-    const mixer = new Instance(this, 'OnlineMixingConsole', {
-      instanceName: 'OnlineMixingConsole',
+    const mixer = new Instance(this, `${id}Instance`, {
+      instanceName: id,
       machineImage: new GenericLinuxImage({
-        // ubuntu 20.04 for intel/AMD
-        // 'eu-central-1': 'ami-05f7491af5eef733a',
-        // Ubuntu Desktop 20.04 with Jamulus and Ardour installed
-        'eu-central-1': 'ami-0652e964f40833660',
+        // use the provided custom image with a running Ubuntu Desktop and Ardour or an Ubuntu 20.04 AMD standard image
+        'eu-central-1': imageId || 'ami-05f7491af5eef733a',
       }),
       vpc,
       securityGroup,
@@ -60,9 +100,17 @@ export class OnlineMixingConsole extends Construct {
         volume: BlockDeviceVolume.ebs(20),
         deviceName: '/dev/sda1',
       }],
-      // userDataCausesReplacement: true,
-      // userData: UserData.custom(readFileSync('./lib/configure-online-mixer.sh', 'utf8')),
+      userDataCausesReplacement: true,
     });
+
+    if (!imageId) {
+      flow(
+        readFileSync,
+        // don't use the user data for now; manual installation is needed
+        // addUserData(mixer),
+      )(userDataFileName, 'utf8');
+    };
+  
     // mixer.connections.allowFromAnyIpv4(new Port({
     //   stringRepresentation: 'VNC Ubuntu Desktop',
     //   protocol: Protocol.TCP,
@@ -71,7 +119,6 @@ export class OnlineMixingConsole extends Construct {
     // }));
 
     if (elasticIpAllocation) new CfnEIPAssociation(this, 'MixerIp', {
-      // this should be a parameter in cdk.json
       allocationId: elasticIpAllocation,
       instanceId: mixer.instanceId,
     });
