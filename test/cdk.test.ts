@@ -1,11 +1,11 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import { App } from '@aws-cdk/core';
-import { JamulusDigitalWorkstation } from '../lib/jamulus-server-stack';
+import { DigitalWorkstation } from '../lib/digital-workstation-stack';
 
 test('Empty Stack', () => {
     const app = new App();
     // WHEN
-    const stack = new JamulusDigitalWorkstation(app, 'MyTestStack');
+    const stack = new DigitalWorkstation(app, 'MyTestStack');
     // THEN
     expectCDK(stack).to(matchTemplate({
       "Resources": {}

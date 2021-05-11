@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { JamulusDigitalWorkstation } from '../lib/jamulus-server-stack';
+import { DigitalWorkstation } from '../lib/digital-workstation-stack';
 
 const app = new cdk.App();
-new JamulusDigitalWorkstation(app, 'JamulusDigitalWorkstation', {
+new DigitalWorkstation(app, 'DigitalWorkstation', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
