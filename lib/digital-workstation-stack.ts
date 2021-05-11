@@ -1,5 +1,4 @@
-import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from '@aws-cdk/aws-ec2';
-import { Stack, Construct, StackProps, CfnOutput } from '@aws-cdk/core';
+import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { createConfigBucket } from './create-config-bucket';
 import { createVpc } from './create-vpc';
 import { createJamulusServerInstance } from './jamulus-server-instance';
@@ -20,13 +19,17 @@ export class DigitalWorkstation extends Stack {
       keyName,
       // this must be defined in cdk.json
       elasticIpAllocation: 'eipalloc-4d0de976',
+      jamulusServerSettingsFileName: 'band-server-settings.sh',
+      // imageId: 'ami...',
     });
 
     const jamulusMixingResult = createJamulusServerInstance(this, 'JamulusMixingServer', {
       vpcParams,
       keyName,
       // this must be defined in cdk.json
-    elasticIpAllocation: 'eipalloc-7680094d',
+      elasticIpAllocation: 'eipalloc-7680094d',
+      jamulusServerSettingsFileName: 'mixing-server-settings.sh',
+      // imageId: 'ami...',
     });
 
     const onlineMixer = new OnlineMixingConsole(this, 'OnlineMixer', {

@@ -17,8 +17,8 @@ Ardour mixes the different instrument to create a nice and pleasant sound. The m
 ```bash
 git clone https://github.com/cabcookie/aws-jamulus.git
 cd aws-jamulus
-# npm install global cdk
-# npm install global awscli
+# npm install -g aws-cdk # might request sudo
+# npm install -g aws-sdk # might request sudo
 npm install
 # create PEM file with name JamulusKey in EC2 and download it
 # aws configure

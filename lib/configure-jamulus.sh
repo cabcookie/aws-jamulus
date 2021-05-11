@@ -41,7 +41,7 @@ sudo mkdir /var/log/jamulus
 sudo chown jamulus:nogroup /var/log/jamulus
 
 echo [USER DATA] copy the start script from S3
-aws s3 cp s3://jamulus-config-bucket/server-settings.sh jamulus.service
+aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
 
 echo [USER DATA] move the script to the systems folder
 sudo mv jamulus.service /etc/systemd/system/
