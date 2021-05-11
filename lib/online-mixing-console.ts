@@ -1,16 +1,20 @@
-import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Peer, Port, Protocol, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
+import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, IVpc, Peer, Port, Protocol, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Effect, Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { CfnOutput, Construct } from "@aws-cdk/core";
 
 export interface OnlineMixingConsoleProps {
-  jamulusServerIpAddress: string;
+  jamulusBandServerIp: string;
+  jamulusMixingServerIp: string;
+  keyName: string;
+  elasticIpAllocation?: string;
+  vpc: IVpc;
 };
 
 export class OnlineMixingConsole extends Construct {
-  constructor(scope: Construct, id: string, props: OnlineMixingConsoleProps) {
+  constructor(scope: Construct, id: string, {
+    jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc
+  }: OnlineMixingConsoleProps) {
     super(scope, id);
-
-    const vpc = Vpc.fromLookup(this, 'VPCMixer', { isDefault: true });
 
     const securityGroup = new SecurityGroup(this, 'SSHandJamulusAccess', {
       description: 'Allows access for SSH and for Jamulus clients',
@@ -51,7 +55,7 @@ export class OnlineMixingConsole extends Construct {
       securityGroup,
       role,
       instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.XLARGE),
-      keyName: 'JamulusKey',
+      keyName,
       blockDevices: [{
         volume: BlockDeviceVolume.ebs(20),
         deviceName: '/dev/sda1',
@@ -66,9 +70,9 @@ export class OnlineMixingConsole extends Construct {
     //   toPort: 5901,      
     // }));
 
-    new CfnEIPAssociation(this, 'MixerIp', {
+    if (elasticIpAllocation) new CfnEIPAssociation(this, 'MixerIp', {
       // this should be a parameter in cdk.json
-      allocationId: 'eipalloc-3baa7e00',
+      allocationId: elasticIpAllocation,
       instanceId: mixer.instanceId,
     });
 

@@ -1,9 +1,15 @@
-import { Peer, Port, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
+import { IVpc, Peer, Port, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Effect, Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
 
-export const createVpc = (stack: Stack, configBucket: Bucket) => {
+export interface VpcProperties {
+  vpc: IVpc;
+  securityGroup: SecurityGroup;
+  role: Role;
+};
+
+export const createVpc = (stack: Stack, configBucket: Bucket): VpcProperties => {
   const vpc = Vpc.fromLookup(stack, 'VPC', { isDefault: true });
 
   const securityGroup = new SecurityGroup(stack, 'SSHandJamulusAccess', {
