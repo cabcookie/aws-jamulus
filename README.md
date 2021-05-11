@@ -4,9 +4,11 @@ Automatically sets up a Jamulus server and a Ardour mixing console on AWS using 
 
 ## Architecture
 
-The basic architecture is shown in the image below. We setup a Jamulus server in the AWS cloud which will be available through a defined DNS entry. In addition, it will set up an EC2 instance prepared for being a mixing console.
+The basic architecture is shown in the image below. We setup a Jamulus Band Server in the AWS cloud which will be available through a defined IP address. In addition, it will set up another EC2 instance prepared for being a mixing console. A third EC2 instance will run the Jamulus Mixing Server which is used to present the mixing result to an audience.
 
-Every musician opens one Jamulus instance per instrument or microphone and associates the signal to one instance. The Jamulus instances connect to the Jamulus server. The mixing console opens one Jamulus instance per instrument or microphone and directs the signal to separate input channels on Ardour. 
+Every musician opens one Jamulus instance per instrument or microphone and associates the signal to one instance. The Jamulus instances connect to the Jamulus server. The mixing console opens one Jamulus instance per instrument or microphone and directs the signal to separate input channels on Ardour.
+
+Ardour mixes the different instrument to create a nice and pleasant sound. The master will then be routed to the Jamulus Mixing Server. A presenter will feed this signal into a video conferencing tool like Zoom, so that attendees can listen to the music.
 
 ![architecture](./diagrams/architecture.png)
 
