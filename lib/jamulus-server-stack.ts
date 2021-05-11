@@ -4,7 +4,7 @@ import { createConfigBucket } from './create-config-bucket';
 import { createVpc } from './create-vpc';
 import { OnlineMixingConsole } from './online-mixing-console';
 
-export class JamulusServerStack extends Stack {
+export class JamulusDigitalWorkstation extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
