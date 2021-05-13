@@ -2,6 +2,7 @@
 !jest.config.js
 *.d.ts
 node_modules
+temp
 
 # CDK asset staging directory
 .cdk.staging
@@ -9,3 +10,4 @@ cdk.out
 .DS_Store
 *.pem
 cdk.context.json
+lib/not-validated-configure-online-mixer.sh

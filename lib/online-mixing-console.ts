@@ -107,7 +107,7 @@ export class OnlineMixingConsole extends Construct {
       flow(
         readFileSync,
         // don't use the user data for now; manual installation is needed
-        // addUserData(mixer),
+        addUserData(mixer),
       )(userDataFileName, 'utf8');
     };
   
