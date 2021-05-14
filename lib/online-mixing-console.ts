@@ -104,6 +104,7 @@ export class OnlineMixingConsole extends Construct {
     });
 
     if (!imageId) {
+      console.log(`${id}: Providing user data (${userDataFileName})`);
       flow(
         readFileSync,
         // don't use the user data for now; manual installation is needed
@@ -111,12 +112,10 @@ export class OnlineMixingConsole extends Construct {
       )(userDataFileName, 'utf8');
     };
   
-    // mixer.connections.allowFromAnyIpv4(new Port({
-    //   stringRepresentation: 'VNC Ubuntu Desktop',
-    //   protocol: Protocol.TCP,
-    //   fromPort: 5901,
-    //   toPort: 5901,      
-    // }));
+    mixer.connections.allowFromAnyIpv4(new Port({
+      stringRepresentation: 'Remote Desktop',
+      protocol: Protocol.RDP,
+    }));
 
     if (elasticIpAllocation) new CfnEIPAssociation(this, 'MixerIp', {
       allocationId: elasticIpAllocation,

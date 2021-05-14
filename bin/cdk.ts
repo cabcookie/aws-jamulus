@@ -19,6 +19,6 @@ new DigitalWorkstation(app, 'DigitalWorkstation', {
   },
   onlineMixerSettings: {
     ipId: 'eipalloc-3baa7e00',
-    // imageId: '',
+    imageId: 'ami-0eee13acaa53d92a2',
   },
 });
