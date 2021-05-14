@@ -8,7 +8,7 @@ echo y | sudo apt-get install gnome-session gnome-panel metacity gnome-terminal 
 echo y | sudo apt install xrdp
 sudo service gdm3 start
 sudo systemctl enable xrdp
-sudo apt-get install net-tools
+# sudo apt-get install net-tools
 
 echo y | sudo apt-get upgrade
 sudo reboot
