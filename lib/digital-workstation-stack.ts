@@ -4,32 +4,48 @@ import { createVpc } from './create-vpc';
 import { createJamulusServerInstance } from './jamulus-server-instance';
 import { OnlineMixingConsole } from './online-mixing-console';
 
+interface ServerProps {
+  ipId?: string;
+  settingsFileName?: string;
+  imageId?: string;
+};
+
+interface DigitalWorkstationProps extends StackProps {
+  keyName: string;
+  configBucketName?: string;
+  bandServerSettings?: ServerProps;
+  mixingResultServerSettings?: ServerProps;
+  onlineMixerSettings?: ServerProps;
+};
+
 export class DigitalWorkstation extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+  constructor(scope: Construct, id: string, {
+    keyName,
+    configBucketName,
+    bandServerSettings,
+    mixingResultServerSettings,
+    onlineMixerSettings,
+    ...rest
+  }: DigitalWorkstationProps) {
+    super(scope, id, { ...rest });
 
-    // this must be defined in cdk.json
-    const keyName = 'JamulusKey';
-
-    const configBucket = createConfigBucket(this);
+    const configBucket = createConfigBucket(this, configBucketName);
     const vpcParams = createVpc(this, configBucket);
 
     const bandServer = createJamulusServerInstance(this, 'JamulusBandServer', {
       vpcParams,
       keyName,
-      // this must be defined in cdk.json
-      elasticIpAllocation: 'eipalloc-4d0de976',
-      jamulusServerSettingsFileName: 'band-server-settings.sh',
-      imageId: 'ami-075e42d91002be826',
+      elasticIpAllocation: bandServerSettings?.ipId,
+      jamulusServerSettingsFileName: bandServerSettings?.settingsFileName,
+      imageId: bandServerSettings?.imageId,
     });
 
     const jamulusMixingResult = createJamulusServerInstance(this, 'JamulusMixingServer', {
       vpcParams,
       keyName,
-      // this must be defined in cdk.json
-      elasticIpAllocation: 'eipalloc-7680094d',
-      jamulusServerSettingsFileName: 'mixing-server-settings.sh',
-      imageId: 'ami-04e4753b514544b93',
+      elasticIpAllocation: mixingResultServerSettings?.ipId,
+      jamulusServerSettingsFileName: mixingResultServerSettings?.settingsFileName,
+      imageId: mixingResultServerSettings?.imageId,
     });
 
     const onlineMixer = new OnlineMixingConsole(this, 'OnlineMixer', {
@@ -37,8 +53,8 @@ export class DigitalWorkstation extends Stack {
       jamulusMixingServerIp: jamulusMixingResult.instancePublicIp,
       vpc: vpcParams.vpc,
       keyName,
-      // this must be defined in cdk.json
-      elasticIpAllocation: 'eipalloc-3baa7e00',
+      elasticIpAllocation: onlineMixerSettings?.ipId,
+      imageId: onlineMixerSettings?.imageId,
     });
   }
 }
