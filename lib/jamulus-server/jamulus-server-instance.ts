@@ -1,9 +1,10 @@
-import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
+import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Peer, Port, Protocol, SecurityGroup } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
-import { VpcProperties } from "./create-vpc";
+import { VpcProperties } from "../../utilities/basic-elements/create-vpc";
 import { readFileSync } from "fs";
 import { flow } from 'lodash/fp';
-import { addUserData, log } from "../utilities/utilities";
+import { addUserData, log } from "../../utilities/utilities";
+import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 
 /**
  * Interface for Jamalus server properties.
@@ -64,7 +65,7 @@ export const createJamulusServerInstance = (scope: Stack, id: string, props: Jam
   const {
     elasticIpAllocation, keyName, vpcParams, imageId, jamulusServerSettingsFileName
   } = props;
-  const userDataFileName = './lib/configure-jamulus.sh';
+  const userDataFileName = './lib/jamulus-server/configure-jamulus.sh';
 
   if (imageId && jamulusServerSettingsFileName) console.log(`${id}: If both an imageId and a jamulusServerSettingsFileName is provided, only the imageId is considered and the settings from the configuration file are ignored.`);
   if (!imageId && !jamulusServerSettingsFileName) throw(new TypeError(`${id}: You should either provide an AMI ID or a server settings file name`));
@@ -76,7 +77,9 @@ export const createJamulusServerInstance = (scope: Stack, id: string, props: Jam
       // use the provided custom image with a running Jamulus server or an Ubuntu 18.04 arm64 standard image
       'eu-central-1': imageId || 'ami-01bced7e7239dbd82',
     }),
-    ...vpcParams,
+    vpc: vpcParams.vpc,
+    role: vpcParams.role,
+    securityGroup: createSecurityGroup(scope, `${id}Sg`, vpcParams.vpc),
     keyName,
     userDataCausesReplacement: true,
   });

@@ -3,7 +3,9 @@ import { Effect, Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cd
 import { CfnOutput, Construct } from "@aws-cdk/core";
 import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
-import { addUserData } from "../utilities/utilities";
+import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
+import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
+import { addUserData } from "../../utilities/utilities";
 
 /**
  * Interface for online mixing console properties.
@@ -56,33 +58,11 @@ export class OnlineMixingConsole extends Construct {
     super(scope, id);
 
     const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId } = props;
-    const userDataFileName = './lib/configure-online-mixer.sh';
+    const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
-    const securityGroup = new SecurityGroup(this, 'SSHandJamulusAccess', {
-      description: 'Allows access for SSH and for Jamulus clients',
-      vpc,
-      allowAllOutbound: true,
-    });
-    
-    securityGroup.addIngressRule(
-      Peer.anyIpv4(),
-      Port.tcp(22),
-      'Allows SSH access from Internet'
-    );
-  
     const role = new Role(this, 'MixRole', { assumedBy: new ServicePrincipal('ec2.amazonaws.com') });
     role.attachInlinePolicy(new Policy(this, 'MixerRolePolicy', {
-      statements: [
-        new PolicyStatement({
-          actions: [
-            "ssmmessages:*",
-            "ssm:UpdateInstanceInformation",
-            "ec2messages:*"
-          ],
-          effect: Effect.ALLOW,
-          resources: ['*'],
-        }),
-      ],
+      statements: [ createSsmPermissions() ],
     }));
   
     const mixer = new Instance(this, `${id}Instance`, {
@@ -92,8 +72,8 @@ export class OnlineMixingConsole extends Construct {
         'eu-central-1': imageId || 'ami-05f7491af5eef733a',
       }),
       vpc,
-      securityGroup,
       role,
+      securityGroup: createSecurityGroup(this, `${id}Sg`, vpc),
       instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.XLARGE),
       keyName,
       blockDevices: [{
@@ -114,7 +94,9 @@ export class OnlineMixingConsole extends Construct {
   
     mixer.connections.allowFromAnyIpv4(new Port({
       stringRepresentation: 'Remote Desktop',
-      protocol: Protocol.RDP,
+      protocol: Protocol.TCP,
+      fromPort: 3389,
+      toPort: 3389,
     }));
 
     if (elasticIpAllocation) new CfnEIPAssociation(this, 'MixerIp', {

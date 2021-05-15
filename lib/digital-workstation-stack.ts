@@ -1,8 +1,9 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
-import { createConfigBucket } from './create-config-bucket';
-import { createVpc } from './create-vpc';
-import { createJamulusServerInstance } from './jamulus-server-instance';
-import { OnlineMixingConsole } from './online-mixing-console';
+import { createConfigBucket } from '../utilities/basic-elements/create-config-bucket';
+import { createVpc } from '../utilities/basic-elements/create-vpc';
+import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
+import { createJamulusServerInstance } from './jamulus-server/jamulus-server-instance';
+import { OnlineMixingConsole } from './online-mixing-server/online-mixing-console';
 
 interface ServerProps {
   ipId?: string;
@@ -10,11 +11,16 @@ interface ServerProps {
   imageId?: string;
 };
 
+interface ZoomServerProps extends ServerProps {
+  zoomMeeting: ZoomMeetingProps;
+};
+
 interface DigitalWorkstationProps extends StackProps {
   keyName: string;
   configBucketName?: string;
   bandServerSettings?: ServerProps;
   mixingResultServerSettings?: ServerProps;
+  zoomServerSettings?: ZoomServerProps;
   onlineMixerSettings?: ServerProps;
 };
 
@@ -25,6 +31,7 @@ export class DigitalWorkstation extends Stack {
     bandServerSettings,
     mixingResultServerSettings,
     onlineMixerSettings,
+    zoomServerSettings,
     ...rest
   }: DigitalWorkstationProps) {
     super(scope, id, { ...rest });
@@ -48,7 +55,18 @@ export class DigitalWorkstation extends Stack {
       imageId: mixingResultServerSettings?.imageId,
     });
 
-    const onlineMixer = new OnlineMixingConsole(this, 'OnlineMixer', {
+    if (zoomServerSettings) {
+      createZoomServer(this, 'JamulusZoomServer', {
+        jamulusMixingInstance: jamulusMixingResult,
+        vpcParams,
+        elasticIpAllocation: zoomServerSettings.ipId,
+        imageId: zoomServerSettings.imageId,
+        zoomMeeting: zoomServerSettings.zoomMeeting,
+        keyName,
+      });
+    };
+
+    new OnlineMixingConsole(this, 'OnlineMixer', {
       jamulusBandServerIp: bandServer.instancePublicIp,
       jamulusMixingServerIp: jamulusMixingResult.instancePublicIp,
       vpc: vpcParams.vpc,

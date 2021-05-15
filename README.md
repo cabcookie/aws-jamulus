@@ -4,7 +4,7 @@ Automatically sets up a Jamulus server and a Ardour mixing console on AWS using 
 
 ## Architecture
 
-The basic architecture is shown in the image below. We setup a Jamulus Band Server in the AWS cloud which will be available through a defined IP address. In addition, it will set up another EC2 instance prepared for being a mixing console. A third EC2 instance will run the Jamulus Mixing Server which is used to present the mixing result to an audience.
+The basic architecture is shown in the image below. We setup a Jamulus Band Server in the AWS cloud which will be available through a defined IP address. In addition, it will set up another EC2 instance prepared for being a mixing console. A third EC2 instance will run the Jamulus Mixing Server which is used to present the mixing result to an audience. A forth server (Windows) runs a Jamulus client which connects to the Jamulus Mixing Server instance, and a Zoom client which connects to the Zoom meeting which the audience is listening to.
 
 Every musician opens one Jamulus instance per instrument or microphone and associates the signal to one instance. The Jamulus instances connect to the Jamulus server. The mixing console opens one Jamulus instance per instrument or microphone and directs the signal to separate input channels on Ardour.
 
@@ -32,7 +32,7 @@ cdk deploy
 1. Ini-Dateien automatisch erstellen ()
 1. Jack aliase rauskopieren
 1. Testen, ob die Ardour Session, auch die Verbindungen wieder herstellt
-1. Windows EC2 aufsetzen und an Arved schicken (carsten)
+1. Windows EC2 aufsetzen und an Arved schicken (carsten) => done
 1. Windows einrichten, so dass sie sich mit Jamulus Mixing Instanz verbindet und mit Zoom (Arved)
 1. Image von Windows Instanz erstellen
 1. Password für ubuntu Mixing Instanz automatisch setzen
