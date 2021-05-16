@@ -41,7 +41,9 @@ cdk deploy
 ## TODOS long term
 
 1. Permanenter Jamulus Server für die Band
-2. Landing page mit User/pwd für Production zum Starten des Sonntags; mit automatischer Selbsttörung nach einigen Stunden
+1. Landing page mit User/pwd für Production zum Starten des Sonntags; mit automatischer Selbsttörung nach einigen Stunden
+1. Create a server to send a lot of signals to the Jamulus Band Server for testing purposes.
+1. Create pipeline to run security updates
 
 ## Jack connection names
 
