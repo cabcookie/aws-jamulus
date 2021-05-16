@@ -10,4 +10,3 @@ cdk.out
 .DS_Store
 *.pem
 cdk.context.json
-lib/not-validated-configure-online-mixer.sh
