@@ -6,4 +6,3 @@ jamulus -c 3.66.182.113 --clientname Bass -i jamulus/bass.ini -M &
 jamulus -c 3.66.182.113 --clientname Drums -i jamulus/drums.ini -M &
 jamulus -c 3.66.182.113 --clientname Keys -i jamulus/keys.ini -M &
 jamulus -c 18.158.208.119 --clientname ToZoom -i jamulus/to-zoom.ini
-

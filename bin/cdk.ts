@@ -10,20 +10,20 @@ new DigitalWorkstation(app, 'DigitalWorkstation', {
   bandServerSettings: {
     ipId: 'eipalloc-4d0de976',
     settingsFileName: 'band-server-settings.sh',
-    imageId: 'ami-0ed221cd21a330912',
+    imageId: 'ami-02d9699177c9c199f',
   },
   mixingResultServerSettings: {
     ipId: 'eipalloc-7680094d',
     settingsFileName: 'mixing-server-settings.sh',
-    imageId: 'ami-0afd1c88bcb335aba',
+    imageId: 'ami-0d1c4eb27dc0762ce',
   },
   onlineMixerSettings: {
     ipId: 'eipalloc-3baa7e00',
-    imageId: 'ami-0a2f5a22e18c134ed',
+    imageId: 'ami-0e8b5b21dc79eb5a4',
   },
   zoomServerSettings: {
     ipId: 'eipalloc-f1eba0ca',
-    imageId: 'ami-0b51ce9c72dc98095',
+    imageId: 'ami-02fe188c4a165536b',
     zoomMeeting: {
       meetingId: '123456789012',
     },
