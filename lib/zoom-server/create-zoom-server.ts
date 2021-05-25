@@ -1,7 +1,7 @@
-import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
+import { CfnEIPAssociation, GenericWindowsImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
 import { readFileSync } from "fs";
-import { flow } from "lodash/fp";
+import { flow, replace } from "lodash/fp";
 import { addUserData } from "../../utilities/utilities";
 import { VpcProperties } from "../../utilities/basic-elements/create-vpc";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
@@ -30,6 +30,11 @@ export interface ZoomServerProps {
    * always be available under the same public IP address.
    */
    elasticIpAllocation?: string;
+  /**
+   * The EC2 instance where the Jamulus server is running where the band
+   * members will connect to.
+   */
+  jamulusBandInstance: Instance,
   /**
    * The EC2 instance where the Jamulus server with the mixed signal is
    * running. The local Jamulus client will connect to this Jamulus
@@ -62,6 +67,17 @@ export interface ZoomServerProps {
  
 };
 
+const replaceParameters = (
+  jamulusMixingInstance: Instance,
+  jamulusBandInstance: Instance,
+  zoomMeeting: ZoomMeetingProps,
+) => flow(
+  replace('%%JAMULUS_MIXER_IP%%', jamulusMixingInstance.instancePublicIp),
+  replace('%%JAMULUS_BAND_IP%%', jamulusBandInstance.instancePublicIp),
+  replace('%%MEETING_ID%%', zoomMeeting.meetingId),
+  replace('%%MEETING_PASSWORD%%', zoomMeeting.password ? `?pwd=${zoomMeeting.password}` : ''),
+);
+
 /**
  * Will create an EC2 Windows Server with a Jamulus client and a Zoom client.
  * The Jamulus client will connect to the Jamulus server which provides the 
@@ -75,18 +91,19 @@ export interface ZoomServerProps {
 export const createZoomServer = (scope: Stack, id: string, props: ZoomServerProps): Instance => {
   const {
     jamulusMixingInstance,
-    zoomMeeting: { meetingId, password },
+    jamulusBandInstance,
+    zoomMeeting,
     vpcParams,
     imageId,
     elasticIpAllocation,
     keyName,
   } = props;
-  const userDataFileName = './lib/zoom-server/configure-zoom-server.sh';
+  const userDataFileName = './lib/zoom-server/configure-zoom-server.ps1';
 
   const host = new Instance(scope, id, {
     instanceName: id,
     instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.MEDIUM),
-    machineImage: new GenericLinuxImage({
+    machineImage: new GenericWindowsImage({
       // use the provided custom image Id, or a standard Windows 2019 server
       'eu-central-1': imageId || 'ami-086d0be14ab5129e1',
     }),
@@ -101,6 +118,7 @@ export const createZoomServer = (scope: Stack, id: string, props: ZoomServerProp
     console.log(`${id}: Providing user data (${userDataFileName})`);
     flow(
       readFileSync,
+      replaceParameters(jamulusMixingInstance, jamulusBandInstance, zoomMeeting),
       addUserData(host),
     )(userDataFileName, 'utf8');
   }

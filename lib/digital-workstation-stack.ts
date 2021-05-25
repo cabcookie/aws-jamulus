@@ -58,6 +58,7 @@ export class DigitalWorkstation extends Stack {
     if (zoomServerSettings) {
       createZoomServer(this, 'JamulusZoomServer', {
         jamulusMixingInstance: jamulusMixingResult,
+        jamulusBandInstance: bandServer,
         vpcParams,
         elasticIpAllocation: zoomServerSettings.ipId,
         imageId: zoomServerSettings.imageId,

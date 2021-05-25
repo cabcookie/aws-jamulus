@@ -5,6 +5,9 @@
     "cdk": "bin/cdk.js"
   },
   "scripts": {
+    "fetch-files:ardour": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/mosaik-live/* server-config/ardour/",
+    "fetch-files:mixer": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/jamulus* server-config/online-mixer-jamulus-config/",
+    "ssh:mixer": "ssh -i JamulusKey.pem ubuntu@18.159.223.171",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
