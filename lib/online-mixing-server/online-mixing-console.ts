@@ -1,5 +1,5 @@
-import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, IVpc, Peer, Port, Protocol, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
-import { Effect, Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, IVpc, Port, Protocol } from "@aws-cdk/aws-ec2";
+import { Policy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { CfnOutput, Construct } from "@aws-cdk/core";
 import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
@@ -31,6 +31,10 @@ export interface OnlineMixingConsoleProps {
    */
   elasticIpAllocation?: string;
   /**
+   * Instance role to define access to relevant resources.
+   */
+  role?: Role;
+  /**
    * Provide the VPC where the online mixing console should be created in.
    */
   vpc: IVpc;
@@ -42,6 +46,14 @@ export interface OnlineMixingConsoleProps {
    * If no image is provided a standard image will be used.
    */
   imageId?: string;
+};
+
+const createInstanceRole = (scope: Construct) => {
+  const role = new Role(scope, 'MixRole', { assumedBy: new ServicePrincipal('ec2.amazonaws.com') });
+  role.attachInlinePolicy(new Policy(scope, 'MixerRolePolicy', {
+    statements: [ createSsmPermissions() ],
+  }));
+  return role;
 };
 
 /**
@@ -57,13 +69,9 @@ export class OnlineMixingConsole extends Construct {
   constructor(scope: Construct, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
 
-    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId } = props;
+    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role } = props;
     const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
-    const role = new Role(this, 'MixRole', { assumedBy: new ServicePrincipal('ec2.amazonaws.com') });
-    role.attachInlinePolicy(new Policy(this, 'MixerRolePolicy', {
-      statements: [ createSsmPermissions() ],
-    }));
   
     const mixer = new Instance(this, `${id}Instance`, {
       instanceName: id,
@@ -72,7 +80,7 @@ export class OnlineMixingConsole extends Construct {
         'eu-central-1': imageId || 'ami-05f7491af5eef733a',
       }),
       vpc,
-      role,
+      role: role || createInstanceRole(this),
       securityGroup: createSecurityGroup(this, `${id}Sg`, vpc),
       instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.XLARGE),
       keyName,
@@ -87,7 +95,6 @@ export class OnlineMixingConsole extends Construct {
       console.log(`${id}: Providing user data (${userDataFileName})`);
       flow(
         readFileSync,
-        // don't use the user data for now; manual installation is needed
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };
