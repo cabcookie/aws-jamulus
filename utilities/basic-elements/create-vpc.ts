@@ -3,6 +3,7 @@ import { Policy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Stack } from "@aws-cdk/core";
 import { createGetObjectPermissions, createListBucketPermissions } from "../policies/bucket-permissions";
+import { createCloudWatchPermissions, createSsmParameterPermissions } from "../policies/cloud-watch-agent-permission";
 import { createSsmPermissions } from "../policies/ssm-permissions";
 
 export interface VpcProperties {
@@ -19,6 +20,8 @@ export const createVpc = (stack: Stack, configBucket: Bucket): VpcProperties => 
       createSsmPermissions(),
       createGetObjectPermissions(configBucket),
       createListBucketPermissions(configBucket),
+      createSsmParameterPermissions(),
+      createCloudWatchPermissions(),
     ],
   }));
 

@@ -10,12 +10,12 @@ new DigitalWorkstation(app, 'DigitalWorkstation', {
   bandServerSettings: {
     ipId: 'eipalloc-4d0de976',
     settingsFileName: 'band-server-settings.sh',
-    imageId: 'ami-02d9699177c9c199f',
+    // imageId: 'ami-02d9699177c9c199f',
   },
   mixingResultServerSettings: {
     ipId: 'eipalloc-7680094d',
     settingsFileName: 'mixing-server-settings.sh',
-    imageId: 'ami-0d1c4eb27dc0762ce',
+    // imageId: 'ami-0d1c4eb27dc0762ce',
   },
   onlineMixerSettings: {
     ipId: 'eipalloc-3baa7e00',

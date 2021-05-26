@@ -1,9 +1,9 @@
-import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Peer, Port, Protocol, SecurityGroup } from "@aws-cdk/aws-ec2";
+import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
 import { VpcProperties } from "../../utilities/basic-elements/create-vpc";
 import { readFileSync } from "fs";
 import { flow } from 'lodash/fp';
-import { addUserData, log } from "../../utilities/utilities";
+import { addUserData } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 
 /**
@@ -45,6 +45,7 @@ export interface JamulusServerProps {
 };
 
 const replaceServerSettingsFileName = (newFileName: string) => (file: string) => file.replace('%%SERVER-SETTINGS-FILE-NAME%%', newFileName);
+const replaceRegion = (regionName: string) => (file: string) => file.replace(/%%REGION%%/g, regionName);
 
 /**
  * Will create an EC2 instance with a running Jamulus server. This server will
@@ -89,6 +90,7 @@ export const createJamulusServerInstance = (scope: Stack, id: string, props: Jam
     flow(
       readFileSync,
       replaceServerSettingsFileName(jamulusServerSettingsFileName),
+      replaceRegion(scope.region),
       addUserData(host),
     )(userDataFileName, 'utf8');
   };

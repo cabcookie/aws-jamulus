@@ -7,7 +7,13 @@
   "scripts": {
     "fetch-files:ardour": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/mosaik-live/* server-config/ardour/",
     "fetch-files:mixer": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/jamulus* server-config/online-mixer-jamulus-config/",
+    "clear-logs:band": "rm logs/jamulus-band/*",
+    "fetch-logs:band": "scp -i JamulusKey.pem ubuntu@3.66.182.113:/var/log/cloud-init*.log logs/jamulus-band/",
+    "clear-logs:mixer": "rm logs/jamulus-mixer/*",
+    "fetch-logs:mixer": "scp -i JamulusKey.pem ubuntu@18.158.208.119:/var/log/cloud-init*.log logs/jamulus-mixer/",
     "ssh:mixer": "ssh -i JamulusKey.pem ubuntu@18.159.223.171",
+    "ssh:band": "ssh -i JamulusKey.pem ubuntu@3.66.182.113",
+    "ssh:mixresult": "ssh -i JamulusKey.pem ubuntu@18.158.208.119",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
