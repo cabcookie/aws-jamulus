@@ -15,3 +15,5 @@ export const log: (message: string) => FunctionWithFlexibleInput = (message) => 
 };
 
 export const addUserData = (instance: Instance) => (commands: string) => instance.addUserData(commands);
+
+export const replaceRegion = (regionName: string) => (file: string) => file.replace(/%%REGION%%/g, regionName);

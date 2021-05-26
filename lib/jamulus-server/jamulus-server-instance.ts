@@ -3,7 +3,7 @@ import { CfnOutput, Stack } from "@aws-cdk/core";
 import { VpcProperties } from "../../utilities/basic-elements/create-vpc";
 import { readFileSync } from "fs";
 import { flow } from 'lodash/fp';
-import { addUserData } from "../../utilities/utilities";
+import { addUserData, replaceRegion } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 
 /**
@@ -45,7 +45,6 @@ export interface JamulusServerProps {
 };
 
 const replaceServerSettingsFileName = (newFileName: string) => (file: string) => file.replace('%%SERVER-SETTINGS-FILE-NAME%%', newFileName);
-const replaceRegion = (regionName: string) => (file: string) => file.replace(/%%REGION%%/g, regionName);
 
 /**
  * Will create an EC2 instance with a running Jamulus server. This server will
