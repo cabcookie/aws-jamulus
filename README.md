@@ -155,8 +155,6 @@ TODO: to be documented as described in issue [#11](https://github.com/cabcookie/
 
 In the following weeks we plan to:
 
-1. The password for user ubuntu should be created automatically
-(see [#6](https://github.com/cabcookie/aws-jamulus/issues/6))
 1. Ensure installation of Ardour works silently
 (see [#5](https://github.com/cabcookie/aws-jamulus/issues/5))
 1. Ensure installation of Zoom and other Windows component work silently

@@ -16,6 +16,7 @@
   },
   "onlineMixerSettings": {
     "ipId": "elasticIpAllocation, see above",
+    "ubuntuPassword": "super-secure-password",
     "imageId": "ami-... see above"
   },
   "zoomServerSettings": {

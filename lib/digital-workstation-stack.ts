@@ -3,12 +3,13 @@ import { createConfigBucket } from '../utilities/basic-elements/create-config-bu
 import { createVpc } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
 import { createJamulusServerInstance } from './jamulus-server/jamulus-server-instance';
-import { OnlineMixingConsole } from './online-mixing-server/online-mixing-console';
+import { OnlineMixingConsole, OnlineMixingConsoleProps } from './online-mixing-server/online-mixing-console';
 
 interface ServerProps {
   ipId?: string;
   settingsFileName?: string;
   imageId?: string;
+  ubuntuPassword?: string;
 };
 
 interface ZoomServerProps extends ServerProps {
@@ -75,6 +76,7 @@ export class DigitalWorkstation extends Stack {
       keyName,
       elasticIpAllocation: onlineMixerSettings?.ipId,
       imageId: onlineMixerSettings?.imageId,
+      ubuntuPassword: onlineMixerSettings?.ubuntuPassword,
     });
   }
 }

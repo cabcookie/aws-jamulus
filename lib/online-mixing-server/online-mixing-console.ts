@@ -5,7 +5,7 @@ import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addUserData, replaceRegion } from "../../utilities/utilities";
+import { addUserData, replaceRegion, replaceUbuntuPassword } from "../../utilities/utilities";
 
 /**
  * Interface for online mixing console properties.
@@ -46,6 +46,10 @@ export interface OnlineMixingConsoleProps {
    * If no image is provided a standard image will be used.
    */
   imageId?: string;
+  /**
+   * The password for the user `ubuntu` to be used for the RDP authentication.
+   */
+  ubuntuPassword?: string;
 };
 
 const createInstanceRole = (scope: Construct) => {
@@ -69,7 +73,7 @@ export class OnlineMixingConsole extends Construct {
   constructor(scope: Stack, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
 
-    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role } = props;
+    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword } = props;
     const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
     const mixer = new Instance(this, `${id}Instance`, {
@@ -95,6 +99,7 @@ export class OnlineMixingConsole extends Construct {
       flow(
         readFileSync,
         replaceRegion(scope.region),
+        replaceUbuntuPassword(ubuntuPassword),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };
