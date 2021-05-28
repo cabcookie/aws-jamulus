@@ -71,6 +71,7 @@ export class DigitalWorkstation extends Stack {
       jamulusBandServerIp: bandServer.instancePublicIp,
       jamulusMixingServerIp: jamulusMixingResult.instancePublicIp,
       vpc: vpcParams.vpc,
+      role: vpcParams.role,
       keyName,
       elasticIpAllocation: onlineMixerSettings?.ipId,
       imageId: onlineMixerSettings?.imageId,

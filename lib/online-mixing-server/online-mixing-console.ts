@@ -1,11 +1,11 @@
 import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, IVpc, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { Policy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { CfnOutput, Construct } from "@aws-cdk/core";
+import { CfnOutput, Construct, Stack } from "@aws-cdk/core";
 import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addUserData } from "../../utilities/utilities";
+import { addUserData, replaceRegion } from "../../utilities/utilities";
 
 /**
  * Interface for online mixing console properties.
@@ -66,13 +66,12 @@ export class OnlineMixingConsole extends Construct {
    * @param id The id for the server; will be used for the EC2 instance name.
    * @param props 
    */
-  constructor(scope: Construct, id: string, props: OnlineMixingConsoleProps) {
+  constructor(scope: Stack, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
 
     const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role } = props;
     const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
-  
     const mixer = new Instance(this, `${id}Instance`, {
       instanceName: id,
       machineImage: new GenericLinuxImage({
@@ -95,6 +94,7 @@ export class OnlineMixingConsole extends Construct {
       console.log(`${id}: Providing user data (${userDataFileName})`);
       flow(
         readFileSync,
+        replaceRegion(scope.region),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };

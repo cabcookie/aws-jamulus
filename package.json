@@ -11,9 +11,14 @@
     "fetch-logs:band": "scp -i JamulusKey.pem ubuntu@3.66.182.113:/var/log/cloud-init*.log logs/jamulus-band/",
     "clear-logs:mixer": "rm logs/jamulus-mixer/*",
     "fetch-logs:mixer": "scp -i JamulusKey.pem ubuntu@18.158.208.119:/var/log/cloud-init*.log logs/jamulus-mixer/",
-    "ssh:mixer": "ssh -i JamulusKey.pem ubuntu@18.159.223.171",
+    "clear-logs:daw": "rm logs/online-mixer/*",
+    "fetch-logs:daw": "scp -i JamulusKey.pem ubuntu@18.159.223.171:/var/log/cloud-init*.log logs/online-mixer/",
+    "ssh:daw": "ssh -i JamulusKey.pem ubuntu@18.159.223.171",
     "ssh:band": "ssh -i JamulusKey.pem ubuntu@3.66.182.113",
-    "ssh:mixresult": "ssh -i JamulusKey.pem ubuntu@18.158.208.119",
+    "ssh:mixer": "ssh -i JamulusKey.pem ubuntu@18.158.208.119",
+    "release": "standard-version",
+    "major-release": "standard-version --release-as major",
+    "push": "git push --follow-tags origin main",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
@@ -41,6 +46,7 @@
     "@aws-cdk/core": "^1.103.0",
     "@aws-cdk/custom-resources": "^1.103.0",
     "lodash": "^4.17.21",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.16",
+    "standard-version": "^9.3.0"
   }
 }

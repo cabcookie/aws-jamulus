@@ -11,3 +11,7 @@ cdk.out
 .DS_Store
 *.pem
 cdk.context.json
+
+# The settings file includes sensible information, see bin/example-config.json
+# for example settings and README.md for documentation of these settings
+bin/config.json

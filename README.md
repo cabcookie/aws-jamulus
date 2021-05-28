@@ -12,61 +12,147 @@ Ardour mixes the different instrument to create a nice and pleasant sound. The m
 
 ![architecture](./diagrams/architecture.png)
 
-## Getting Started (rough list of commands)
+## Getting Started - Prerequisites 
+
+### Get the app and install dependencies
+
+Now, clone the git repository to your local machine (`my-aws-jamulus-folder` to
+be the local folder where this repository will be copied into). These commands
+require [nodeJs](https://nodejs.org/en/) to be installed:
 
 ```bash
-git clone https://github.com/cabcookie/aws-jamulus.git
-cd aws-jamulus
-# npm install -g aws-cdk # might request sudo
-# npm install -g aws-sdk # might request sudo
+git clone https://github.com/cabcookie/aws-jamulus.git my-aws-jamulus-folder
+cd my-aws-jamulus-folder
+# install all dependencies
 npm install
-# create PEM file with name JamulusKey in EC2 and download it
-# aws configure
+```
+
+### Prepare your AWS environment
+
+If you haven't done already, setup [an AWS account](https://aws.amazon.com/de/premiumsupport/knowledge-center/create-and-activate-aws-account/),
+protect it according to the [Security Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
+and create an [Access Key for your CLI](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
+
+Let us first install the AWS command line tools and the Cloud Development Kit:
+
+```bash
+# this installs the packages global
+sudo npm install -g aws-sdk
+sudo npm install -g aws-cdk
+```
+
+In order to connect your machine with your AWS environment, run `aws configure`
+in the command line and [follow the instructions in the documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html). This will setup the
+account and the region you will use in this environment.
+
+You should be able to access your AWS Account and run commands via the CLI. The
+following command should show you all users you have created during the setup
+process:
+
+```bash
+aws iam list-users
+```
+
+If this command runs into issues, please review all steps in this section again.
+
+As a last step, we need to create a PEM file to be able to securly access our
+EC2 instances via a secure shell (SSH) or a remote desktop connection (RDP).
+Create and download your key pair with the following command:
+
+```bash
+aws ec2 create-key-pair --key-name my-key-pair --query "KeyMaterial" --output text > my-key-pair.pem
+```
+
+This will create a key pair in the region you defined before. Your will find
+your key pair in your AWS EC2 Console in the section Key Pairs:
+
+![EC2 Key Pairs](./utilities/images/key-pairs.png)
+
+When replacing `[region]` with the region you configured before
+(e.g., eu-west-1), you will find your key pairs here:
+
+`https://[region].console.aws.amazon.com/ec2/v2/home?region=[region]#KeyPairs:`
+
+### Setup your `config.json`
+
+As a last preparation step you need to create your config.json, according to the
+example in `./bin/example-config.json`. So, copy the file to a file named
+`./bin/config.json` and adjust the settings to your needs. Find more information
+on these setting in the section [Settings for your Jamulus environment](#settings-for-your-jamulus-environment).
+
+## Getting Started - Deploy your Jamulus environment
+
+Now, that you have cloned the repository, installed all tools and dependencies,
+set up your AWS environment, and have your key pair ready, you can deploy your
+Jamulus environment.
+
+As you do this the first time, you need to bootstrap your assets:
+
+```bash
 cdk bootstrap
+```
+
+You do not need to run this command later again.
+Now, to deploy your environment, you just run:
+
+```bash
 cdk deploy
 ```
 
-## TODOS for automating setup
+This will take a couple of minutes and it will let you know when its finished
+by giving you the IP addresses for the 4 servers created by the CDK:
 
-1. Start script für alle Jamulus Instanzen schreiben
-1. Ini-Dateien automatisch erstellen ()
-1. Jack aliase rauskopieren
-1. Testen, ob die Ardour Session, auch die Verbindungen wieder herstellt
-1. Windows EC2 aufsetzen und an Arved schicken (carsten) => done
-1. Windows einrichten, so dass sie sich mit Jamulus Mixing Instanz verbindet und mit Zoom (Arved)
-1. Image von Windows Instanz erstellen
-1. Password für ubuntu Mixing Instanz automatisch setzen
-1. Sicherstellen, dass die ubuntu Mixing Instanz vollständig automatisch erstellt wird
+```bash
+ ✅  DigitalWorkstation
 
-## TODOS long term
+Outputs:
+DigitalWorkstation.JamulusBandServerPublicIp = 1.2.3.4
+DigitalWorkstation.JamulusMixingServerPublicIp = 1.2.3.5
+DigitalWorkstation.JamulusZoomServerPublicIp = 1.2.3.6
+DigitalWorkstation.OnlineMixerMixingConsoleIpABCD = 1.2.3.7
+```
 
-1. Permanenter Jamulus Server für die Band
-1. Landing page mit User/pwd für Production zum Starten des Sonntags; mit automatischer Selbsttörung nach einigen Stunden
-1. Create a server to send a lot of signals to the Jamulus Band Server for testing purposes.
-1. Create pipeline to run security updates
+When you have provided Elastic IPs (see below in [Settings for your Jamulus environment](#settings-for-your-jamulus-environment)),
+these IP addresses will always be the same. Otherwise, those IP addresses will
+change whenever you destroy one of the EC2 instances and create them again. This
+happens whenever you [destroy the environment](#destroy-the-environment) or
+whenever you change something in the settings or in the startup script and you
+run `cdk deploy` again to implement the changes.
 
-## TODOS to describe what is already there
+### Destroy the environment
 
-- describe how to establish a Jamulus Server
-- describe how to establish a Mixing Console
-- create .sh files for connecting with the server and the mixing console
-- describe pre-requisites
-1. Create AWS account
-1. Creating a key pair
-1. Create two Elastic IPs so your Jamulus Server and your Mixing Console always have the same IP; copy the allocation ID
-1. Install cdk and aws cli locally
-1. Clone git repo
-1. Configure aws environment
+When you do not need the environment again, you just run this command:
 
-## Information on the CDK TypeScript project
+```bash
+cdk destroy
+```
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+This will destroy all servers and other resources created. 
 
-### Useful commands
+## Settings for your Jamulus environment
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+TODO: to be documented as described in issue [#10](https://github.com/cabcookie/aws-jamulus/issues/10).
+
+
+## Cost savings
+
+TODO: to be documented as described in issue [#11](https://github.com/cabcookie/aws-jamulus/issues/11).
+
+## Roadmap
+
+In the following weeks we plan to:
+
+1. The password for user ubuntu should be created automatically
+(see [#6](https://github.com/cabcookie/aws-jamulus/issues/6))
+1. Ensure installation of Ardour works silently
+(see [#5](https://github.com/cabcookie/aws-jamulus/issues/5))
+1. Ensure installation of Zoom and other Windows component work silently
+(see [#12](https://github.com/cabcookie/aws-jamulus/issues/12))
+1. Copy `jamulus-startup.sh` and its ini files to the online mixing instance
+(see [#7](https://github.com/cabcookie/aws-jamulus/issues/7))
+1. Create a Lambda which creates a simple AWS environment (S3 bucket)
+(see [#3](https://github.com/cabcookie/aws-jamulus/issues/3))
+1. Create a landing page where I can pre define the band members
+(see [#8](https://github.com/cabcookie/aws-jamulus/issues/8))
+1. Add wait conditions to the template so we only start investigating when the instance is ready
+(see [#9](https://github.com/cabcookie/aws-jamulus/issues/9))

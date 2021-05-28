@@ -1,0 +1,29 @@
+{
+  "env": {
+    "account": "123456789012",
+    "region": "eu-west-1"
+  },
+  "keyName": "my-key-pair",
+  "bandServerSettings": {
+    "ipId": "elasticIpAllocation, see here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-allocating",
+    "settingsFileName": "band-server-settings.sh",
+    "imageId": "ami-... a prepared image from a snapshot after everything is installed and configured; useful when your settings are always the same"
+  },
+  "mixingResultServerSettings": {
+    "ipId": "elasticIpAllocation, see above",
+    "settingsFileName": "mixing-server-settings.sh",
+    "imageId": "ami-... see above"
+  },
+  "onlineMixerSettings": {
+    "ipId": "elasticIpAllocation, see above",
+    "imageId": "ami-... see above"
+  },
+  "zoomServerSettings": {
+    "ipId": "elasticIpAllocation, see above",
+    "imageId": "ami-... see above",
+    "zoomMeeting": {
+      "meetingId": "123456789012",
+      "password": "a-super-secure-zoom-pwd"
+    }
+  }
+}
