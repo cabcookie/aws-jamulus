@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/cabcookie/aws-jamulus/compare/v1.0.1...v1.1.0) (2021-05-28)
+
+
+### Features
+
+* sets ubuntu password [#6](https://github.com/cabcookie/aws-jamulus/issues/6) ([e1bbf4b](https://github.com/cabcookie/aws-jamulus/commit/e1bbf4bdd53936b0dde3cc680d566f2650d2cb28))
+
+
+### Bug Fixes
+
+* removed test instance scripts ([8f97705](https://github.com/cabcookie/aws-jamulus/commit/8f977054defa50b9eef18f848a80b7650e7bcce3))
+
 ### [1.0.1](https://github.com/cabcookie/aws-jamulus/compare/v1.0.0...v1.0.1) (2021-05-28)
 
 ## 1.0.0 (2021-05-28)
