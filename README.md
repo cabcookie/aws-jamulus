@@ -2,6 +2,19 @@
 
 Automatically sets up a Jamulus server and a Ardour mixing console on AWS using CDK. [Jamulus](https://jamulus.io) allows bands to do jam sessions in a remote environment. [Ardour](http://ardour.org) is a digital audio workstation which supports thousands of plugins to let your mix sound nice.
 
+## Table of Content
+
+- [Architecture](#architecture)
+- [Getting Started - Prerequisites](#getting-started---prerequisites)
+  - [Get the app and install dependencies](#get-the-app-and-install-dependencies)
+  - [Prepare your AWS environment](#prepare-your-aws-environment)
+  - [Setup your `config.json`](#setup-your-config.json)
+- [Getting Started - Deploy your Jamulus environment](#getting-started---deploy-your-jamulus-environment)
+  - [Destroy the environment](#destroy-the-environment)
+- [Settings for your Jamulus environment](#settings-for-your-jamulus-environment)
+- [Cost savings](#cost-savings)
+- [Roadmap](#roadmap)
+
 ## Architecture
 
 The basic architecture is shown in the image below. We setup a Jamulus Band Server in the AWS cloud which will be available through a defined IP address. In addition, it will set up another EC2 instance prepared for being a mixing console. A third EC2 instance will run the Jamulus Mixing Server which is used to present the mixing result to an audience. A forth server (Windows) runs a Jamulus client which connects to the Jamulus Mixing Server instance, and a Zoom client which connects to the Zoom meeting which the audience is listening to.
