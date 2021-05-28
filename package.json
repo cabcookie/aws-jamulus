@@ -1,6 +1,6 @@
 {
   "name": "cdk",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "bin": {
     "cdk": "bin/cdk.js"
   },
@@ -19,6 +19,10 @@
     "release": "standard-version",
     "major-release": "standard-version --release-as major",
     "push": "git push --follow-tags origin main",
+    "clear-logs:test": "rm logs/test-mixer/*",
+    "fetch-logs:test": "scp -i JamulusKey.pem ubuntu@18.197.62.241:/var/log/cloud-init*.log logs/test-mixer/",
+    "fetch-limits:test": "scp -i JamulusKey.pem ubuntu@18.197.62.241:/etc/security/limits.conf logs/",
+    "ssh:test": "ssh -i JamulusKey.pem ubuntu@18.197.62.241",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
