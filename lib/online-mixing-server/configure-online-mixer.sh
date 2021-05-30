@@ -70,7 +70,7 @@ echo "sudo rm /etc/xdg/autostart/install-apps.desktop"  >> /home/ubuntu/bin/inst
 echo "gsettings set org.gnome.shell favorite-apps \"['firefox.desktop', 'org.gnome.Nautilus.desktop', 'jamulus-startup.desktop']\"" >> /home/ubuntu/bin/install-apps.sh
 chmod +x /home/ubuntu/bin/install-apps.sh
 
-LOG move startup app in `/etc/xdg/autostart/install-apps.desktop`
+LOG move startup app in /etc/xdg/autostart/install-apps.desktop
 sudo chown -R ubuntu /home/ubuntu/bin/
 sudo chown -R ubuntu /home/ubuntu/Documents
 echo "[Desktop Entry]" >> install-apps.desktop
