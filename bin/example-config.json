@@ -26,5 +26,12 @@
       "meetingId": "123456789012",
       "password": "a-super-secure-zoom-pwd"
     }
-  }
+  },
+  "channels": [
+    "Vocal 1",
+    "Vocal 2",
+    "Acoustic",
+    "Electric",
+    "Drums"
+  ]
 }
