@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/cabcookie/aws-jamulus/compare/v1.2.0...v1.3.0) (2021-05-30)
+
+
+### Features
+
+* added app wrapper ([#5](https://github.com/cabcookie/aws-jamulus/issues/5)) ([9c1f774](https://github.com/cabcookie/aws-jamulus/commit/9c1f774f008c8ac2289ec2d0475dae21a5e7b75d))
+
+
+### Bug Fixes
+
+* log statement should not have \` characters ([36ee0dd](https://github.com/cabcookie/aws-jamulus/commit/36ee0ddb499c3f6553bf1a26e309b2551dff7275))
+
 ## [1.2.0](https://github.com/cabcookie/aws-jamulus/compare/v1.1.0...v1.2.0) (2021-05-28)
 
 
