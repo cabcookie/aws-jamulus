@@ -153,17 +153,4 @@ TODO: to be documented as described in issue [#11](https://github.com/cabcookie/
 
 ## Roadmap
 
-In the following weeks we plan to:
-
-1. Ensure installation of Ardour works silently
-(see [#5](https://github.com/cabcookie/aws-jamulus/issues/5))
-1. Ensure installation of Zoom and other Windows component work silently
-(see [#12](https://github.com/cabcookie/aws-jamulus/issues/12))
-1. Copy `jamulus-startup.sh` and its ini files to the online mixing instance
-(see [#7](https://github.com/cabcookie/aws-jamulus/issues/7))
-1. Create a Lambda which creates a simple AWS environment (S3 bucket)
-(see [#3](https://github.com/cabcookie/aws-jamulus/issues/3))
-1. Create a landing page where I can pre define the band members
-(see [#8](https://github.com/cabcookie/aws-jamulus/issues/8))
-1. Add wait conditions to the template so we only start investigating when the instance is ready
-(see [#9](https://github.com/cabcookie/aws-jamulus/issues/9))
+Check out the roadmap of [the project on GitHub](https://github.com/cabcookie/aws-jamulus/projects/1).

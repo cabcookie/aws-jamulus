@@ -41,6 +41,10 @@ sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/ /home/ubu
 sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
 chmod +x /home/ubuntu/Documents/jamulus-startup.sh
 
+LOG create wrapper app `Audio Workstation`
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/jamulus-startup.desktop /usr/share/applications/
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/jamulus-startup.png /usr/share/icons/
+
 LOG install the CloudWatch agent
 # see download links for different OS here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html
 wget https://s3.%%REGION%%.amazonaws.com/amazoncloudwatch-agent-%%REGION%%/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
@@ -63,8 +67,10 @@ echo "sudo wget https://github.com/jamulussoftware/jamulus/releases/download/r3_
 echo "sudo apt install ./jamulus_3.7.0_ubuntu_amd64.deb" >> /home/ubuntu/bin/install-apps.sh
 echo "sudo rm ./jamulus_3.7.0_ubuntu_amd64.deb" >> /home/ubuntu/bin/install-apps.sh
 echo "sudo rm /etc/xdg/autostart/install-apps.desktop"  >> /home/ubuntu/bin/install-apps.sh
+echo "gsettings set org.gnome.shell favorite-apps \"['firefox.desktop', 'org.gnome.Nautilus.desktop', 'jamulus-startup.desktop']\"" >> /home/ubuntu/bin/install-apps.sh
 chmod +x /home/ubuntu/bin/install-apps.sh
 
+LOG move startup app in `/etc/xdg/autostart/install-apps.desktop`
 sudo chown -R ubuntu /home/ubuntu/bin/
 sudo chown -R ubuntu /home/ubuntu/Documents
 echo "[Desktop Entry]" >> install-apps.desktop
