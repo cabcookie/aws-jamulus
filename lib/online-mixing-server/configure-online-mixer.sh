@@ -35,6 +35,10 @@ sudo mv audio.conf /etc/security/limits.d/
 sudo addgroup audio
 sudo usermod -a -G audio ubuntu
 
+LOG fetch Jack configuration files
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/jack/jackdrc.conf /home/ubuntu/.jackdrc
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/jack/conf.xml /home/ubuntu/.config/jack/
+
 LOG copy configuration files to local Documents folder
 mkdir /home/ubuntu/Documents
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/ /home/ubuntu/Documents/ --recursive --exclude "*" --include "jamulus*"
