@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Audio-Anwendungen-Installation
+Exec=/home/ubuntu/bin/install-apps.sh
+Terminal=true

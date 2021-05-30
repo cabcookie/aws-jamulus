@@ -40,6 +40,7 @@ mkdir /home/ubuntu/Documents
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/ /home/ubuntu/Documents/ --recursive --exclude "*" --include "jamulus*"
 sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
 chmod +x /home/ubuntu/Documents/jamulus-startup.sh
+sudo chown -R ubuntu /home/ubuntu/Documents
 
 LOG create wrapper app `Audio Workstation`
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/jamulus-startup.desktop /usr/share/applications/
@@ -61,26 +62,12 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
 
 LOG prepare startup file to install remaining apps – Ardour and Jamulus
 mkdir /home/ubuntu/bin
-echo "setxkbmap -layout de" >> /home/ubuntu/bin/install-apps.sh
-echo "sudo apt-get -y install ardour" >> /home/ubuntu/bin/install-apps.sh
-echo "sudo wget https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_ubuntu_amd64.deb" >> /home/ubuntu/bin/install-apps.sh
-echo "sudo apt install ./jamulus_3.7.0_ubuntu_amd64.deb" >> /home/ubuntu/bin/install-apps.sh
-echo "sudo rm ./jamulus_3.7.0_ubuntu_amd64.deb" >> /home/ubuntu/bin/install-apps.sh
-echo "sudo rm /etc/xdg/autostart/install-apps.desktop"  >> /home/ubuntu/bin/install-apps.sh
-echo "gsettings set org.gnome.shell favorite-apps \"['firefox.desktop', 'org.gnome.Nautilus.desktop', 'jamulus-startup.desktop']\"" >> /home/ubuntu/bin/install-apps.sh
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/install-apps.sh /home/ubuntu/bin/
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/install-apps.desktop /etc/xdg/autostart/
 chmod +x /home/ubuntu/bin/install-apps.sh
-
-LOG move startup app in /etc/xdg/autostart/install-apps.desktop
 sudo chown -R ubuntu /home/ubuntu/bin/
-sudo chown -R ubuntu /home/ubuntu/Documents
-echo "[Desktop Entry]" >> install-apps.desktop
-echo "Type=Application" >> install-apps.desktop
-echo "Name=Audio-Anwendungen-Installation" >> install-apps.desktop
-echo "Exec=/home/ubuntu/bin/install-apps.sh" >> install-apps.desktop
-echo "Terminal=true" >> install-apps.desktop
-sudo mv install-apps.desktop /etc/xdg/autostart/
 cat /etc/xdg/autostart/install-apps.desktop
-cat home/ubuntu/bin/install-apps.sh
+cat /home/ubuntu/bin/install-apps.sh
 
 LOG create a password for user ubuntu
 echo -e "%%UBUNTU_PASSWORD%%\n%%UBUNTU_PASSWORD%%" | sudo passwd ubuntu
