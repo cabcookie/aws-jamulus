@@ -31,7 +31,10 @@ export const replaceUbuntuPassword = (password: string | undefined) => (file: st
   return file.replace(/%%UBUNTU_PASSWORD%%/g, password);
 };
 
-export const replaceIp = (serverType: SERVER_TYPES, ipType: IP_TYPES, instance: Instance) => (file: string) => file.replace(
-  serverType == SERVER_TYPES.BAND ? /%%BAND_IP%%/g : /%%MIXER_IP%%/g,
-  ipType == IP_TYPES.PRIVATE ? instance.instancePrivateIp : instance.instancePublicIp
+export const replaceIp = (serverType: SERVER_TYPES, instance: Instance) => (file: string) => file.replace(
+  serverType == SERVER_TYPES.BAND ? /%%BAND_PRIVATE_IP%%/g : /%%MIXER_PRIVATE_IP%%/g,
+  instance.instancePrivateIp
+).replace(
+  serverType == SERVER_TYPES.BAND ? /%%BAND_PUBLIC_IP%%/g : /%%MIXER_PUBLIC_IP%%/g,
+  instance.instancePublicIp
 );

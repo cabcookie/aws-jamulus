@@ -111,7 +111,7 @@ export class OnlineMixingConsole extends Construct {
         replaceRegion(scope.region),
         replaceUbuntuPassword(ubuntuPassword),
         replaceChannelsConfig(channels),
-        replaceIp(SERVER_TYPES.BAND, IP_TYPES.PRIVATE, jamulusBandServer),
+        replaceIp(SERVER_TYPES.BAND, jamulusBandServer),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };
