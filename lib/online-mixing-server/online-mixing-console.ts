@@ -50,6 +50,11 @@ export interface OnlineMixingConsoleProps {
    * The password for the user `ubuntu` to be used for the RDP authentication.
    */
   ubuntuPassword?: string;
+  /**
+   * Provide the channel names. These will be used to name the Jamulus client
+   * instances and connect those to the associated Ardour channels.
+   */
+  channels?: string[];
 };
 
 const createInstanceRole = (scope: Construct) => {
@@ -59,6 +64,11 @@ const createInstanceRole = (scope: Construct) => {
   }));
   return role;
 };
+
+const replaceChannelsConfig = (channels: string[] | undefined) => (file: string) => channels ? file.replace(
+  /%%CHANNELS%%/,
+  JSON.stringify({ channels }).replace(/"/g, String.fromCharCode(92,34))
+) : file;
 
 /**
  * A construct to create an EC2 instance with an Ardour mixing console installed.
@@ -73,7 +83,7 @@ export class OnlineMixingConsole extends Construct {
   constructor(scope: Stack, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
 
-    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword } = props;
+    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels } = props;
     const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
     const mixer = new Instance(this, `${id}Instance`, {
@@ -100,6 +110,7 @@ export class OnlineMixingConsole extends Construct {
         readFileSync,
         replaceRegion(scope.region),
         replaceUbuntuPassword(ubuntuPassword),
+        replaceChannelsConfig(channels),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };

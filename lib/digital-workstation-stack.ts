@@ -23,6 +23,7 @@ interface DigitalWorkstationProps extends StackProps {
   mixingResultServerSettings?: ServerProps;
   zoomServerSettings?: ZoomServerProps;
   onlineMixerSettings?: ServerProps;
+  channels?: string[];
 };
 
 export class DigitalWorkstation extends Stack {
@@ -33,6 +34,7 @@ export class DigitalWorkstation extends Stack {
     mixingResultServerSettings,
     onlineMixerSettings,
     zoomServerSettings,
+    channels,
     ...rest
   }: DigitalWorkstationProps) {
     super(scope, id, { ...rest });
@@ -77,6 +79,7 @@ export class DigitalWorkstation extends Stack {
       elasticIpAllocation: onlineMixerSettings?.ipId,
       imageId: onlineMixerSettings?.imageId,
       ubuntuPassword: onlineMixerSettings?.ubuntuPassword,
+      channels,
     });
   }
 }
