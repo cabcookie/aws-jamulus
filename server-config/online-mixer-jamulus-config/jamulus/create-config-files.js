@@ -43,9 +43,9 @@ const pushAPeerChannel = (channels, index, isMuted, settings, fader) => index < 
   : null;
 
 const { channels } = JSON.parse(readFileSync(`${folder}/channels.json`, 'utf-8'));
-const startJamulusLinux = `jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%FOLDER%%/%%CLIENT_NAME%%.ini" -M &`;
+const startJamulusLinux = `jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%FOLDER%%/%%CLIENT_NAME%%.ini" -M`;
 const startJamulusClientMac = `/Applications/Jamulus.app/Contents/MacOS/Jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%CLIENT_NAME%%.ini"`;
-const serverIniFolder = "/home/ubuntu/Documents/jamulus-inis/"
+const serverIniFolder = "/home/ubuntu/Documents/jamulus-inis"
 const jamulusStartup = [];
 
 channels.forEach(channel => {
@@ -78,5 +78,5 @@ channels.forEach(channel => {
   writeFileSync(`${clientFolder}/jamulus-linux.sh`, createJamulusStandardStartLine(startJamulusLinux, bandPublicIp, channel, ".").replace(" -M &", ""));
   writeFileSync(`${clientFolder}/jamulus-macOS.sh`, createJamulusStandardStartLine(startJamulusClientMac, bandPublicIp, channel, "."));
 });
-jamulusStartup.push('echo "Starting all Jamulus instances..."');
-writeFileSync(`${folder}/jamulus-startup.sh`, jamulusStartup.join('\n'));
+
+writeFileSync(`${folder}/jamulus-startup.sh`, jamulusStartup.join(' &\n'));
