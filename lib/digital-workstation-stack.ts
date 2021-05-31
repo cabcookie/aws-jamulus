@@ -71,8 +71,8 @@ export class DigitalWorkstation extends Stack {
     };
 
     new OnlineMixingConsole(this, 'OnlineMixer', {
-      jamulusBandServerIp: bandServer.instancePublicIp,
-      jamulusMixingServerIp: jamulusMixingResult.instancePublicIp,
+      jamulusBandServer: bandServer,
+      jamulusMixingServer: jamulusMixingResult,
       vpc: vpcParams.vpc,
       role: vpcParams.role,
       keyName,

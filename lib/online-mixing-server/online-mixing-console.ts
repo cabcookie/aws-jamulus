@@ -5,21 +5,21 @@ import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addUserData, replaceRegion, replaceUbuntuPassword } from "../../utilities/utilities";
+import { addUserData, IP_TYPES, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
 
 /**
  * Interface for online mixing console properties.
  */
 export interface OnlineMixingConsoleProps {
   /**
-   * The IP address for the Jamulus server where band members connect to.
+   * The Jamulus EC2 instance where the band connects to
    */
-  jamulusBandServerIp: string;
+  jamulusBandServer: Instance;
   /**
-   * The IP address for the Jamulus server where the mixing console and the
+   * The Jamulus EC2 instance where the mixing console and the
    * presenter connects to.
    */
-  jamulusMixingServerIp: string;
+  jamulusMixingServer: Instance;
   /**
    * Provide a keyname so the EC2 instance is accessible via SSH with a
    * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
@@ -83,7 +83,7 @@ export class OnlineMixingConsole extends Construct {
   constructor(scope: Stack, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
 
-    const { jamulusBandServerIp, jamulusMixingServerIp, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels } = props;
+    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels } = props;
     const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
     const mixer = new Instance(this, `${id}Instance`, {
@@ -111,6 +111,7 @@ export class OnlineMixingConsole extends Construct {
         replaceRegion(scope.region),
         replaceUbuntuPassword(ubuntuPassword),
         replaceChannelsConfig(channels),
+        replaceIp(SERVER_TYPES.BAND, IP_TYPES.PRIVATE, jamulusBandServer),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };
