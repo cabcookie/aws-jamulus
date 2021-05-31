@@ -5,7 +5,7 @@ import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addUserData, IP_TYPES, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
+import { addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
 
 /**
  * Interface for online mixing console properties.

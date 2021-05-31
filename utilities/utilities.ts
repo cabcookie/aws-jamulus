@@ -7,10 +7,6 @@ export enum SERVER_TYPES {
   BAND,
   MIXER,
 };
-export enum IP_TYPES {
-  PRIVATE,
-  PUBLIC,
-}
 
 export const defaultFn: <T extends object | unknown>(obj: T) => T = obj => obj
 export const log: (message: string) => FunctionWithFlexibleInput = (message) => (value) => {
