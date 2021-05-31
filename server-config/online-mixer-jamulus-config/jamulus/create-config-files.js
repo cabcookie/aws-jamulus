@@ -13,7 +13,7 @@ const pushAnEmptyChannel = (channels, index, settings, fader) => index >= channe
   ? settings.push(fader.replace(/%%CLIENT_NAME%%/, '').replace(/%%IS_MUTE%%/, 0))
   : null;
 
-const createMixerChannelName = (channel) => `Mixer for ${channel}`;
+const createMixerChannelName = (channel) => `Mix${channel}`;
 
 const pushAMixerChannel = (channels, index, settings, fader) => index >= channels.length && index < channels.length * 2
   ? pushAChannel(createMixerChannelName(channels[index]), true, settings, fader)
