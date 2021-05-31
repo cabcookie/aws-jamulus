@@ -1,27 +1,16 @@
-import { Bucket, BucketProps } from "@aws-cdk/aws-s3";
+import { Bucket } from "@aws-cdk/aws-s3";
 import { BucketDeployment, Source } from "@aws-cdk/aws-s3-deployment";
-import { Construct, RemovalPolicy, Stack } from "@aws-cdk/core";
-
-interface BucketWithDeleteOnStackDestroyProps extends BucketProps {
-  bucketName?: string;
-};
-
-class BucketWithDeleteOnStackDestroy extends Bucket {
-  constructor(scope: Construct, id: string, props?: BucketWithDeleteOnStackDestroyProps) {
-    super(scope, id, {
-      bucketName: props?.bucketName || 'jamulus-config-bucket',
-      removalPolicy: RemovalPolicy.DESTROY,
-      ...props,
-    })
-
-  };
-};
+import { RemovalPolicy, Stack } from "@aws-cdk/core";
 
 export const createConfigBucket = (scope: Stack, bucketName?: string) => {
-  const bucket = new BucketWithDeleteOnStackDestroy(scope, 'JamulusConfigBucket');
+  const bucket = new Bucket(scope, 'JamulusConfigBucket', {
+    bucketName: bucketName || 'jamulus-config-bucket',
+    removalPolicy: RemovalPolicy.DESTROY,
+  });
   new BucketDeployment(scope, 'BucketDeployment', {
     destinationBucket: bucket,
     sources: [Source.asset('./server-config')],
+    retainOnDelete: false,
   });
   return bucket;
 };
