@@ -51,6 +51,7 @@ sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/jamulus/ $
 
 LOG create jamulus configuration files in local Documents folder
 mkdir /home/ubuntu/Documents
+mkdir $CFGFOLD/jamulus-inis
 node $CFGFOLD/create-config-files.js $CFGFOLD/ %%BAND_IP%%
 sudo mv $CFGFOLD/jamulus* /home/ubuntu/Documents/
 chmod +x /home/ubuntu/Documents/jamulus-startup.sh

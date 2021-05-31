@@ -39,7 +39,7 @@ channels.forEach(channel => {
     pushAMixerChannel(channels, index, faderSettings, fader);
     pushAPeerChannel(channels, index, channel, faderSettings, fader);
   }
-  writeFileSync(`${folder}jamulus-inis/mixer ${channel}.ini`, serverIniFile.replace(/%%STORED_FADERS%%/, faderSettings.join('\n')));
+  writeFileSync(`${folder}jamulus-inis/${createMixerChannelName(channel)}.ini`, serverIniFile.replace(/%%STORED_FADERS%%/, faderSettings.join('\n')));
   jamulusStartup.push(startJamulusLine.replace(/%%CLIENT_NAME%%/g, createMixerChannelName(channel)));
 
   // one ini-file for the user
@@ -47,12 +47,3 @@ channels.forEach(channel => {
 });
 jamulusStartup.push('echo "Starting all Jamulus instances..."');
 writeFileSync(`${folder}jamulus-startup.sh`, jamulusStartup.join('\n'));
-
-// console.log(JSON.stringify(channels));
-// console.log(stdFader);
-
-
-
-// const clientName = "Carsten";
-// const encoded = Buffer.from(clientName, 'utf-8').toString('base64');
-// console.log(`${clientName}: ${encoded}`);
