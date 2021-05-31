@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.3](https://github.com/cabcookie/aws-jamulus/compare/v1.4.2...v1.4.3) (2021-05-31)
+
+
+### Bug Fixes
+
+* change startup order for Windows ([99c182b](https://github.com/cabcookie/aws-jamulus/commit/99c182bb63d71aea7d555115ebd702c31b3b2519))
+
 ### [1.4.2](https://github.com/cabcookie/aws-jamulus/compare/v1.4.1...v1.4.2) (2021-05-31)
 
 
