@@ -5,7 +5,7 @@ import { readFileSync } from "fs";
 import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
+import { addCloudWatchAgentInstallScript, addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
 
 /**
  * Interface for online mixing console properties.
@@ -55,6 +55,10 @@ export interface OnlineMixingConsoleProps {
    * instances and connect those to the associated Ardour channels.
    */
   channels?: string[];
+  /**
+   * Install the CloudWatch agent.
+   */
+  installCloudWatchAgent?: boolean;
 };
 
 const createInstanceRole = (scope: Construct) => {
@@ -83,7 +87,7 @@ export class OnlineMixingConsole extends Construct {
   constructor(scope: Stack, id: string, props: OnlineMixingConsoleProps) {
     super(scope, id);
 
-    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels } = props;
+    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels, installCloudWatchAgent } = props;
     const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
 
     const mixer = new Instance(this, `${id}Instance`, {
@@ -112,6 +116,7 @@ export class OnlineMixingConsole extends Construct {
         replaceUbuntuPassword(ubuntuPassword),
         replaceChannelsConfig(channels),
         replaceIp(SERVER_TYPES.BAND, jamulusBandServer),
+        addCloudWatchAgentInstallScript(installCloudWatchAgent),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };
