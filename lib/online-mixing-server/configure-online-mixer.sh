@@ -39,11 +39,24 @@ LOG fetch Jack configuration files
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/jack/jackdrc.conf /home/ubuntu/.jackdrc
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/jack/conf.xml /home/ubuntu/.config/jack/
 
-LOG copy configuration files to local Documents folder
+LOG install node
+echo y | sudo apt-get install nodejs
+
+LOG copy app to create jamulus config files to /home/ubuntu/bin
+mkdir /home/ubuntu/bin
+CFGFOLD=/home/ubuntu/bin/create-config-files
+mkdir $CFGFOLD
+echo "%%CHANNELS%%" >> $CFGFOLD/channels.json
+sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/jamulus/ $CFGFOLD/ --recursive --include "*"
+
+LOG create jamulus configuration files in local Documents folder
 mkdir /home/ubuntu/Documents
-sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/ /home/ubuntu/Documents/ --recursive --exclude "*" --include "jamulus*"
-sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
+node $CFGFOLD/create-config-files.js $CFGFOLD/ %%BAND_IP%%
+sudo mv $CFGFOLD/jamulus* /home/ubuntu/Documents/
 chmod +x /home/ubuntu/Documents/jamulus-startup.sh
+
+LOG add Ardour project to Documents
+sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
 sudo chown -R ubuntu /home/ubuntu/Documents
 
 LOG create wrapper app `Audio Workstation`
@@ -65,7 +78,6 @@ sudo mv config.json /opt/aws/amazon-cloudwatch-agent/bin/
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
 
 LOG prepare startup file to install remaining apps – Ardour and Jamulus
-mkdir /home/ubuntu/bin
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/install-apps.sh /home/ubuntu/bin/
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/install-apps.desktop /etc/xdg/autostart/
 chmod +x /home/ubuntu/bin/install-apps.sh
