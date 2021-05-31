@@ -3,7 +3,7 @@ import { createConfigBucket } from '../utilities/basic-elements/create-config-bu
 import { createVpc } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
 import { createJamulusServerInstance } from './jamulus-server/jamulus-server-instance';
-import { OnlineMixingConsole, OnlineMixingConsoleProps } from './online-mixing-server/online-mixing-console';
+import { OnlineMixingConsole } from './online-mixing-server/online-mixing-console';
 
 interface ServerProps {
   ipId?: string;
