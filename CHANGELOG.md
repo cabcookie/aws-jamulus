@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.2](https://github.com/cabcookie/aws-jamulus/compare/v1.4.1...v1.4.2) (2021-05-31)
+
+
+### Bug Fixes
+
+* bucket is deleted on `cdk destroy` ([9097968](https://github.com/cabcookie/aws-jamulus/commit/9097968f5a08c3159a7cd6c9ec57d5daec9eef2a))
+
 ### [1.4.1](https://github.com/cabcookie/aws-jamulus/compare/v1.4.0...v1.4.1) (2021-05-31)
 
 
