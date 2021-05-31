@@ -18,7 +18,7 @@ echo y | sudo apt-get install xrdp
 sudo service gdm3 start
 sudo systemctl enable xrdp
 
-LOG set real-time process permissions for `ubuntu` user
+LOG set real-time process permissions for ubuntu user
 sudo sed -i 's/# End of file/@audio          -       rtprio          99\n@audio          -       memlock         unlimited\n\n# End of file/' /etc/security/limits.conf
 echo "# Provided by the jackd package." >> audio.conf
 echo "#" >> audio.conf
@@ -56,7 +56,7 @@ node $CFGFOLD/create-config-files.js $CFGFOLD/ %%BAND_IP%%
 sudo mv $CFGFOLD/jamulus* /home/ubuntu/Documents/
 chmod +x /home/ubuntu/Documents/jamulus-startup.sh
 
-LOG show ini files and `jamulus-startup.sh`
+LOG show ini files and jamulus-startup.sh
 ls /home/ubuntu/Documents/jamulus-inis
 cat /home/ubuntu/Documents/jamulus-startup.sh
 
@@ -64,7 +64,7 @@ LOG add Ardour project to Documents
 sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
 sudo chown -R ubuntu /home/ubuntu/Documents
 
-LOG create wrapper app `Audio Workstation`
+LOG create wrapper app Audio Workstation
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/jamulus-startup.desktop /usr/share/applications/
 sudo aws s3 cp s3://jamulus-config-bucket/online-mixer-jamulus-config/app-wrapper/jamulus-startup.png /usr/share/icons/
 chmod a+x /usr/share/applications/jamulus-startup.desktop
