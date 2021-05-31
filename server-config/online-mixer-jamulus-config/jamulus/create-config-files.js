@@ -3,7 +3,14 @@ const { readFileSync, writeFileSync } = require("fs");
 const folder = process.argv[2];
 const bandIp = process.argv[3];
 const defIni = readFileSync(`${folder}/default.ini`, 'utf-8');
-const stdFader = readFileSync(`${folder}/storedfader.ini`, 'utf-8');
+const stdFader = [
+  "  <storedfadertag%%ID%%_base64>%%CLIENT_NAME%%</storedfadertag%%ID%%_base64>",
+  "  <storedfaderlevel%%ID%%>100</storedfaderlevel%%ID%%>",
+  "  <storedpanvalue%%ID%%>50</storedpanvalue%%ID%%>",
+  "  <storedfaderissolo%%ID%%>0</storedfaderissolo%%ID%%>",
+  "  <storedfaderismute%%ID%%>%%IS_MUTE%%</storedfaderismute%%ID%%>",
+  "  <storedgroupid%%ID%%>-1</storedgroupid%%ID%%>",
+].join('\n');
 
 const createEncodedName = (clientName) => Buffer.from(clientName, 'utf-8').toString('base64');
 
@@ -24,7 +31,7 @@ const pushAPeerChannel = (channels, index, channel, settings, fader) => index < 
   : null;
 
 const { channels } = JSON.parse(readFileSync(`${folder}/channels.json`, 'utf-8'));
-const startJamulusLine = `jamulus -c ${bandIp} --clientname "%%CLIENT_NAME%%" -i "jamulus-inis/%%CLIENT_NAME%%.ini" -M &`;
+const startJamulusLine = `jamulus -c ${bandIp} --clientname "%%CLIENT_NAME%%" -i "~/Documents/jamulus-inis/%%CLIENT_NAME%%.ini" -M &`;
 const jamulusStartup = [];
 
 channels.forEach(channel => {
