@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/cabcookie/aws-jamulus/compare/v1.4.0...v1.4.1) (2021-05-31)
+
+
+### Bug Fixes
+
+* clean up ([3b4538a](https://github.com/cabcookie/aws-jamulus/commit/3b4538acaf3e9c0e0cae7f18606a7adf7bd36497))
+
 ## [1.4.0](https://github.com/cabcookie/aws-jamulus/compare/v1.3.0...v1.4.0) (2021-05-31)
 
 
