@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/cabcookie/aws-jamulus/compare/v1.3.0...v1.4.0) (2021-05-31)
+
+
+### Features
+
+* create the `jamulus-startup.sh` and inis ([bee9fcc](https://github.com/cabcookie/aws-jamulus/commit/bee9fcc4d9269cc4eadc0705030c08e178cccb9e))
+* created `default.ini` file ([03f0aa2](https://github.com/cabcookie/aws-jamulus/commit/03f0aa2d009242770c53e987bfb50e503ecebccb))
+* enable replacing IP address placeholders ([2aa9fd4](https://github.com/cabcookie/aws-jamulus/commit/2aa9fd43499e02cff04cf2e043b17fa653077aa7))
+* prepare for providing channel config ([b2bca01](https://github.com/cabcookie/aws-jamulus/commit/b2bca011602f13d15769b7f4ee3a9391f666771c))
+* should create Jamulus client packages ([b7b1b3c](https://github.com/cabcookie/aws-jamulus/commit/b7b1b3c72f68225f6cf92df0484e0d426721e54b))
+* the `config.json` includes now the channels ([beeedb2](https://github.com/cabcookie/aws-jamulus/commit/beeedb29a2b31d9bb040929305f22fcdf28da2ff))
+
+
+### Bug Fixes
+
+* channel names for mixer too long ([06274cb](https://github.com/cabcookie/aws-jamulus/commit/06274cb8edcf674d975723c0d2ab188068d18af4))
+* corrected the ini file names ([2bd913b](https://github.com/cabcookie/aws-jamulus/commit/2bd913b8d96f22c9af869e8bb6530ce920404acb))
+* created Jack configuration ([99e2061](https://github.com/cabcookie/aws-jamulus/commit/99e20616b4f807af3781293484314f8c36a74c0f))
+* deleting all ini files ([078ca5c](https://github.com/cabcookie/aws-jamulus/commit/078ca5c45ed75f5ea62c0af6839ef7f1d6ddd482))
+* fix jamulus-startup.sh issues ([cf7ba79](https://github.com/cabcookie/aws-jamulus/commit/cf7ba799b24bf26ebf5e761b34911d1aa34fa03d))
+* missed " around the client name for macOS ([ddc8f45](https://github.com/cabcookie/aws-jamulus/commit/ddc8f45e0a930994d960b0490250c03d01910a9c))
+* missed the `create-config-files.js` ([7fc33a8](https://github.com/cabcookie/aws-jamulus/commit/7fc33a87205813d7939dd65783fb810dbf12b7dd))
+* refactored file creation to a fetch from S3 ([17ee4ac](https://github.com/cabcookie/aws-jamulus/commit/17ee4ac798d7568bedebba54f0145d5fcf7cf329))
+* should fix error with ini folders ([0bde2bc](https://github.com/cabcookie/aws-jamulus/commit/0bde2bccbf48caf76dbec9b6d5496732f8536146))
+
 ## [1.3.0](https://github.com/cabcookie/aws-jamulus/compare/v1.2.0...v1.3.0) (2021-05-30)
 
 
