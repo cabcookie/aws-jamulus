@@ -44,7 +44,7 @@ const pushAPeerChannel = (channels, index, isMuted, settings, fader) => index < 
 
 const { channels } = JSON.parse(readFileSync(`${folder}/channels.json`, 'utf-8'));
 const startJamulusLinux = `jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%FOLDER%%/%%CLIENT_NAME%%.ini" -M &`;
-const startJamulusClientMac = `/Applications/Jamulus.app/Contents/MacOS/Jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%% -i "%%CLIENT_NAME%%.ini"`;
+const startJamulusClientMac = `/Applications/Jamulus.app/Contents/MacOS/Jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%CLIENT_NAME%%.ini"`;
 const serverIniFolder = "/home/ubuntu/Documents/jamulus-inis/"
 const jamulusStartup = [];
 
