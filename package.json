@@ -5,7 +5,7 @@
     "cdk": "bin/cdk.js"
   },
   "scripts": {
-    "fetch:ardour": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/mosaik-live/* server-config/ardour/",
+    "fetch:ardour": "rm -rf server-config/ardour && scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/mosaik-live/ server-config/ && mv server-config/mosaik-live server-config/ardour",
     "fetch:clients": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/jamulus-clients/ temp/",
     "fetch:mixer": "scp -i JamulusKey.pem -r ubuntu@18.159.223.171:/home/ubuntu/Documents/jamulus* server-config/online-mixer-jamulus-config/",
     "logs:band": "scp -i JamulusKey.pem ubuntu@3.66.182.113:/var/log/cloud-init-output.log logs/jamulus-band-init.log",
