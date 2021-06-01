@@ -242,4 +242,4 @@ const runProdScript = () => createInisClientsAndArdourSession(
 );
 
 // runTestScript();
-// runProdScript();
+runProdScript();
