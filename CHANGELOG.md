@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/cabcookie/aws-jamulus/compare/v1.4.4...v1.5.0) (2021-06-01)
+
+
+### Features
+
+* a basic Ardour session with no settings ([30a20ea](https://github.com/cabcookie/aws-jamulus/commit/30a20eab1c20d5551497584eab7e4fe72ffd5e5e))
+* add switch for adding the CloudWatch agent or not ([58fee5c](https://github.com/cabcookie/aws-jamulus/commit/58fee5cf8a62a3c43aed9750bd0a593e2f3ac117))
+* created basic Ardour file/folder ([93d53c7](https://github.com/cabcookie/aws-jamulus/commit/93d53c7b7fa96a4d13b92bc81b68da017e49ee17))
+
+
+### Bug Fixes
+
+* `jamulus-startup.desktop` is working again ([c3054a3](https://github.com/cabcookie/aws-jamulus/commit/c3054a3b390ab3d161f4a5a1e62db987a8548724))
+* added audio connection to Ardour ([17205d9](https://github.com/cabcookie/aws-jamulus/commit/17205d9b09a16869ae28072e01c773af56e1315b))
+* Ardour works, startup script adjusted ([7e5be45](https://github.com/cabcookie/aws-jamulus/commit/7e5be45ba7d290495eef3d81b6fc9594076fbbe5))
+* cleanup of imports ([4365dbb](https://github.com/cabcookie/aws-jamulus/commit/4365dbbd6a3678f8ba00032932fcf5aaa9e3f436))
+* ensuring the language pack is permanent ([c462ce5](https://github.com/cabcookie/aws-jamulus/commit/c462ce554f12f5e1707aaef31effd48155c56439))
+* released all ardour connections ([945df1f](https://github.com/cabcookie/aws-jamulus/commit/945df1fd6f4e0a512c88208d8ff6c18321aa43b9))
+* renaming some scripts in package.json ([5c7237e](https://github.com/cabcookie/aws-jamulus/commit/5c7237e5a6faa107ac3dd5eb88cf7c7216aae400))
+* some clean up ([3c2d742](https://github.com/cabcookie/aws-jamulus/commit/3c2d74236ffbf5b3956a09bac5e057708b45ecc3))
+
 ### [1.4.4](https://github.com/cabcookie/aws-jamulus/compare/v1.4.3...v1.4.4) (2021-05-31)
 
 
