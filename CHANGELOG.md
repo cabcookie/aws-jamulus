@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/cabcookie/aws-jamulus/compare/v1.5.0...v1.5.1) (2021-06-01)
+
+
+### Bug Fixes
+
+* **ardour:** adding and connecting channels ([b8af8c5](https://github.com/cabcookie/aws-jamulus/commit/b8af8c5e850758cf3c8a8a40a1b734b813be000d))
+* **ardour:** master connects to system:playback ([eb2bdf2](https://github.com/cabcookie/aws-jamulus/commit/eb2bdf2251bb582d888077b48eb334ed03b356cf))
+* starting Ardour with the session file ([904fcec](https://github.com/cabcookie/aws-jamulus/commit/904fcec26ae51e63e9f3c1ba320df4a761b88a38))
+
 ## [1.5.0](https://github.com/cabcookie/aws-jamulus/compare/v1.4.4...v1.5.0) (2021-06-01)
 
 
