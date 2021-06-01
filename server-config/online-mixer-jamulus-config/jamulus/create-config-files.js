@@ -79,5 +79,5 @@ channels.forEach(channel => {
   writeFileSync(`${clientFolder}/jamulus-macOS.sh`, createJamulusStandardStartLine(startJamulusClientMac, bandPublicIp, channel, "."));
 });
 
-jamulusStartup.push('ardour5');
+jamulusStartup.push('ardour5 /home/ubuntu/Documents/mosaik-live/mosaik-live.ardour');
 writeFileSync(`${folder}/jamulus-startup.sh`, jamulusStartup.join(' &\n'));

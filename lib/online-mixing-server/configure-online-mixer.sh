@@ -47,8 +47,8 @@ node $CFGFOLD/create-config-files.js $CFGFOLD %%BAND_PRIVATE_IP%% %%BAND_PUBLIC_
 mv $CFGFOLD/jamulus* /home/ubuntu/Documents/
 chmod +x /home/ubuntu/Documents/jamulus-startup.sh
 
-# LOG add Ardour project to Documents
-# sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
+LOG add Ardour project to Documents
+sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
 sudo chown -R ubuntu /home/ubuntu/Documents
 
 SHOW_FILE /home/ubuntu/Documents/jamulus-startup.sh
