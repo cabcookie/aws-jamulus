@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/cabcookie/aws-jamulus/compare/v1.5.1...v1.6.0) (2021-06-01)
+
+
+### Features
+
+* Ardour session is created automatically ([665b1e4](https://github.com/cabcookie/aws-jamulus/commit/665b1e476e83fd72b47e9bbdcf4afe2a7589d175))
+* full Ardour session with 10 channels ([46936a8](https://github.com/cabcookie/aws-jamulus/commit/46936a8cf7be56d8093ea000947e582dc8a17170))
+
+
+### Bug Fixes
+
+* cleanup for production ([29d0dc0](https://github.com/cabcookie/aws-jamulus/commit/29d0dc07887ecef1f46b1585e8bf606639f501ca))
+* used wrong folder in `runProdScript()` ([9bb8a15](https://github.com/cabcookie/aws-jamulus/commit/9bb8a159bb3b6d20861d0c323dd74c5be5535a1a))
+* **template:** replacing all ids ([e73cea7](https://github.com/cabcookie/aws-jamulus/commit/e73cea7c3e63fd28722082187b63b2bc56b5f98e))
+* **template:** this is the desired result ([f6c1e78](https://github.com/cabcookie/aws-jamulus/commit/f6c1e785af94781b3e87e22d5978e79b29356171))
+* **template:** works well now ([e796871](https://github.com/cabcookie/aws-jamulus/commit/e796871910d5c2ca140106f4d62b2af2a8e34a94))
+
 ### [1.5.1](https://github.com/cabcookie/aws-jamulus/compare/v1.5.0...v1.5.1) (2021-06-01)
 
 
