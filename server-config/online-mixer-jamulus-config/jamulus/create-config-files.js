@@ -232,14 +232,17 @@ const runTestScript = () => {
  );
 };
 
-const runProdScript = () => createInisClientsAndArdourSession(
-  process.argv[2],
-  process.argv[3],
-  process.argv[4],
-  '/home/ubuntu/Documents',
-  JSON.parse(readFileSync(`${folder}/channels.json`, 'utf-8')).channels,
-  readFileSync(`${folder}/default.ini`, 'utf-8'),
-);
+const runProdScript = () => {
+  const folder = process.argv[2];
+  createInisClientsAndArdourSession(
+    folder,
+    process.argv[3],
+    process.argv[4],
+    '/home/ubuntu/Documents',
+    JSON.parse(readFileSync(`${folder}/channels.json`, 'utf-8')).channels,
+    readFileSync(`${folder}/default.ini`, 'utf-8'),
+  );
+};
 
 // runTestScript();
 runProdScript();
