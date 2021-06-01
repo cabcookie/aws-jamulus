@@ -45,8 +45,8 @@ const pushAPeerChannel = (channels, index, isMuted, settings, fader) => index < 
 const { channels } = JSON.parse(readFileSync(`${folder}/channels.json`, 'utf-8'));
 const startJamulusLinux = `jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%FOLDER%%/%%CLIENT_NAME%%.ini" -M`;
 const startJamulusClientMac = `/Applications/Jamulus.app/Contents/MacOS/Jamulus -c %%BAND_IP%% --clientname "%%CLIENT_NAME%%" -i "%%CLIENT_NAME%%.ini"`;
-const serverIniFolder = "/home/ubuntu/Documents/jamulus-inis"
-const jamulusStartup = [];
+const serverIniFolder = '/home/ubuntu/Documents/jamulus-inis';
+const jamulusStartup = ['/usr/bin/jackd -ddummy -r48000 -p1024'];
 
 channels.forEach(channel => {
   // for each channel we will create two ini-files
@@ -79,4 +79,5 @@ channels.forEach(channel => {
   writeFileSync(`${clientFolder}/jamulus-macOS.sh`, createJamulusStandardStartLine(startJamulusClientMac, bandPublicIp, channel, "."));
 });
 
+jamulusStartup.push('ardour5');
 writeFileSync(`${folder}/jamulus-startup.sh`, jamulusStartup.join(' &\n'));

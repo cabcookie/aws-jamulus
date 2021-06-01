@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
-Name=Audio-Anwendungen-Installation
+Name=Workstation Autostart
 Exec=/home/ubuntu/bin/install-apps.sh
 Terminal=true
