@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Session version="3002" name="mosaik-live" sample-rate="48000" end-is-free="1" id-counter="218" name-counter="1" event-counter="2" vca-counter="1">
+<Session version="3002" name="mosaik-live" sample-rate="48000" end-is-free="1" id-counter="382" name-counter="1" event-counter="4" vca-counter="1">
   <ProgramVersion created-with="Ardour 1:5.12.0-3ubuntu4" modified-with="Ardour 1:5.12.0-3ubuntu4"/>
   <MIDIPorts>
     <Port name="MIDI Clock in" direction="input"/>
@@ -161,7 +161,7 @@
       <Controllable name="solo-safe" id="175" flags="Toggle" value="0" solo-safe="0"/>
       <IO name="Acoustic" id="187" direction="Input" default-type="audio" user-latency="0">
         <Port type="audio" name="Acoustic/audio_in 1">
-          <Connection other="system:capture_1"/>
+          <Connection other="Jamulus MixAcoustic:output left"/>
         </Port>
       </IO>
       <IO name="Acoustic" id="188" direction="Output" default-type="audio" user-latency="0">
