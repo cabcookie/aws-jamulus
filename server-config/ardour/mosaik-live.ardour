@@ -82,29 +82,29 @@
       <Controllable name="solo-safe" id="70" flags="Toggle" value="0" solo-safe="0"/>
       <IO name="Master" id="82" direction="Input" default-type="audio" user-latency="0">
         <Port type="audio" name="Master/audio_in 1">
-          <Connection other="Channel 1/audio_out 1"/>
+          <Connection other="Channel 01/audio_out 1"/>
+          <Connection other="Channel 02/audio_out 1"/>
+          <Connection other="Channel 03/audio_out 1"/>
+          <Connection other="Channel 04/audio_out 1"/>
+          <Connection other="Channel 05/audio_out 1"/>
+          <Connection other="Channel 06/audio_out 1"/>
+          <Connection other="Channel 07/audio_out 1"/>
+          <Connection other="Channel 08/audio_out 1"/>
+          <Connection other="Channel 09/audio_out 1"/>
           <Connection other="Channel 10/audio_out 1"/>
-          <Connection other="Channel 2/audio_out 1"/>
-          <Connection other="Channel 3/audio_out 1"/>
-          <Connection other="Channel 4/audio_out 1"/>
-          <Connection other="Channel 5/audio_out 1"/>
-          <Connection other="Channel 6/audio_out 1"/>
-          <Connection other="Channel 7/audio_out 1"/>
-          <Connection other="Channel 8/audio_out 1"/>
-          <Connection other="Channel 9/audio_out 1"/>
           <Connection other="Reverb/audio_out 1"/>
         </Port>
         <Port type="audio" name="Master/audio_in 2">
-          <Connection other="Channel 1/audio_out 2"/>
+          <Connection other="Channel 01/audio_out 2"/>
+          <Connection other="Channel 02/audio_out 2"/>
+          <Connection other="Channel 03/audio_out 2"/>
+          <Connection other="Channel 04/audio_out 2"/>
+          <Connection other="Channel 05/audio_out 2"/>
+          <Connection other="Channel 06/audio_out 2"/>
+          <Connection other="Channel 07/audio_out 2"/>
+          <Connection other="Channel 08/audio_out 2"/>
+          <Connection other="Channel 09/audio_out 2"/>
           <Connection other="Channel 10/audio_out 2"/>
-          <Connection other="Channel 2/audio_out 2"/>
-          <Connection other="Channel 3/audio_out 2"/>
-          <Connection other="Channel 4/audio_out 2"/>
-          <Connection other="Channel 5/audio_out 2"/>
-          <Connection other="Channel 6/audio_out 2"/>
-          <Connection other="Channel 7/audio_out 2"/>
-          <Connection other="Channel 8/audio_out 2"/>
-          <Connection other="Channel 9/audio_out 2"/>
           <Connection other="Reverb/audio_out 2"/>
         </Port>
       </IO>
@@ -219,21 +219,21 @@
       </Processor>
       <Slavable/>
     </Route>
-    <Route id="159" name="Channel 1" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="159" name="Channel 01" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="1" flags="AudioTrack,OrderSet" color="2732956927"/>
       <Controllable name="solo" id="167" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="173" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="175" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 1" id="187" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 1/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 01" id="187" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 01/audio_in 1">
+          <Connection other="Jamulus MixChannel 01:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 1" id="188" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 1/audio_out 1">
+      <IO name="Channel 01" id="188" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 01/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 1/audio_out 2">
+        <Port type="audio" name="Channel 01/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -453,7 +453,7 @@
         </Processor>
       </Processor>
       <Processor id="191" name="meter-Audio" active="1" user-latency="0" type="meter"/>
-      <Processor id="192" name="Channel 1" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 1" type="main-outs" role="Main">
+      <Processor id="192" name="Channel 01" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 01" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="178" flags="" value="0.5"/>
@@ -474,23 +474,23 @@
       <Controllable name="monitor" id="199" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="197" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="195" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 1" name="Channel 1" id="200" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 01" name="Channel 01" id="200" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="553" name="Channel 2" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="553" name="Channel 02" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="2" flags="AudioTrack,OrderSet" color="4222009087"/>
       <Controllable name="solo" id="561" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="567" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="569" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 2" id="581" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 2/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 02" id="581" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 02/audio_in 1">
+          <Connection other="Jamulus MixChannel 02:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 2" id="582" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 2/audio_out 1">
+      <IO name="Channel 02" id="582" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 02/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 2/audio_out 2">
+        <Port type="audio" name="Channel 02/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -710,7 +710,7 @@
         </Processor>
       </Processor>
       <Processor id="585" name="meter-Mix 1" active="1" user-latency="0" type="meter"/>
-      <Processor id="586" name="Channel 2" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 2" type="main-outs" role="Main">
+      <Processor id="586" name="Channel 02" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 02" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="572" flags="" value="0.5"/>
@@ -731,23 +731,23 @@
       <Controllable name="monitor" id="593" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="591" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="589" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 2" name="Channel 2" id="594" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 02" name="Channel 02" id="594" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="601" name="Channel 3" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="601" name="Channel 03" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="3" flags="AudioTrack,OrderSet" color="2732956927"/>
       <Controllable name="solo" id="609" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="615" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="617" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 3" id="629" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 3/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 03" id="629" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 03/audio_in 1">
+          <Connection other="Jamulus MixChannel 03:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 3" id="630" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 3/audio_out 1">
+      <IO name="Channel 03" id="630" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 03/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 3/audio_out 2">
+        <Port type="audio" name="Channel 03/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -967,7 +967,7 @@
         </Processor>
       </Processor>
       <Processor id="633" name="meter-Mix 2" active="1" user-latency="0" type="meter"/>
-      <Processor id="634" name="Channel 3" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 3" type="main-outs" role="Main">
+      <Processor id="634" name="Channel 03" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 03" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="620" flags="" value="0.5"/>
@@ -988,23 +988,23 @@
       <Controllable name="monitor" id="641" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="639" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="637" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 3" name="Channel 3" id="642" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 03" name="Channel 03" id="642" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="649" name="Channel 4" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="649" name="Channel 04" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="4" flags="AudioTrack,OrderSet" color="1921902079"/>
       <Controllable name="solo" id="657" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="663" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="665" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 4" id="677" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 4/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 04" id="677" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 04/audio_in 1">
+          <Connection other="Jamulus MixChannel 04:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 4" id="678" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 4/audio_out 1">
+      <IO name="Channel 04" id="678" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 04/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 4/audio_out 2">
+        <Port type="audio" name="Channel 04/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -1224,7 +1224,7 @@
         </Processor>
       </Processor>
       <Processor id="681" name="meter-Mix 3" active="1" user-latency="0" type="meter"/>
-      <Processor id="682" name="Channel 4" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 4" type="main-outs" role="Main">
+      <Processor id="682" name="Channel 04" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 04" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="668" flags="" value="0.5"/>
@@ -1245,23 +1245,23 @@
       <Controllable name="monitor" id="689" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="687" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="685" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 4" name="Channel 4" id="690" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 04" name="Channel 04" id="690" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="697" name="Channel 5" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="697" name="Channel 05" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="5" flags="AudioTrack,OrderSet" color="1927538175"/>
       <Controllable name="solo" id="705" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="711" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="713" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 5" id="725" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 5/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 05" id="725" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 05/audio_in 1">
+          <Connection other="Jamulus MixChannel 05:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 5" id="726" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 5/audio_out 1">
+      <IO name="Channel 05" id="726" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 05/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 5/audio_out 2">
+        <Port type="audio" name="Channel 05/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -1475,7 +1475,7 @@
         </Processor>
       </Processor>
       <Processor id="729" name="meter-Mix 4" active="1" user-latency="0" type="meter"/>
-      <Processor id="730" name="Channel 5" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 5" type="main-outs" role="Main">
+      <Processor id="730" name="Channel 05" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 05" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="716" flags="" value="0.5"/>
@@ -1496,23 +1496,23 @@
       <Controllable name="monitor" id="737" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="735" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="733" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 5" name="Channel 5" id="738" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 05" name="Channel 05" id="738" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="1971" name="Channel 6" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="1971" name="Channel 06" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="6" flags="AudioTrack,OrderSet" color="2732956927"/>
       <Controllable name="solo" id="1979" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="1985" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="1987" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 6" id="1999" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 6/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 06" id="1999" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 06/audio_in 1">
+          <Connection other="Jamulus MixChannel 06:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 6" id="2000" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 6/audio_out 1">
+      <IO name="Channel 06" id="2000" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 06/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 6/audio_out 2">
+        <Port type="audio" name="Channel 06/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -1731,8 +1731,8 @@
           <Controllable name="gaincontrol" id="2961" flags="GainLike" value="0"/>
         </Processor>
       </Processor>
-      <Processor id="2003" name="meter-Channel 6" active="1" user-latency="0" type="meter"/>
-      <Processor id="2004" name="Channel 6" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 6" type="main-outs" role="Main">
+      <Processor id="2003" name="meter-Audio" active="1" user-latency="0" type="meter"/>
+      <Processor id="2004" name="Channel 06" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 06" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="1990" flags="" value="0.5"/>
@@ -1753,23 +1753,23 @@
       <Controllable name="monitor" id="2011" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="2009" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="2007" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 6.1" name="Channel 6" id="2012" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 06" name="Channel 06" id="2012" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="2019" name="Channel 7" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="2019" name="Channel 07" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="7" flags="AudioTrack,OrderSet" color="1921902079"/>
       <Controllable name="solo" id="2027" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="2033" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="2035" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 7" id="2047" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 7/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 07" id="2047" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 07/audio_in 1">
+          <Connection other="Jamulus MixChannel 07:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 7" id="2048" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 7/audio_out 1">
+      <IO name="Channel 07" id="2048" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 07/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 7/audio_out 2">
+        <Port type="audio" name="Channel 07/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -1982,8 +1982,8 @@
           <Controllable name="gaincontrol" id="2961" flags="GainLike" value="0"/>
         </Processor>
       </Processor>
-      <Processor id="2051" name="meter-Channel 7" active="1" user-latency="0" type="meter"/>
-      <Processor id="2052" name="Channel 7" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 7" type="main-outs" role="Main">
+      <Processor id="2051" name="meter-Audio" active="1" user-latency="0" type="meter"/>
+      <Processor id="2052" name="Channel 07" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 07" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="2038" flags="" value="0.5"/>
@@ -2004,23 +2004,23 @@
       <Controllable name="monitor" id="2059" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="2057" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="2055" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 7.1" name="Channel 7" id="2060" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 07" name="Channel 07" id="2060" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="2067" name="Channel 8" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="2067" name="Channel 08" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="8" flags="AudioTrack,OrderSet" color="1927538175"/>
       <Controllable name="solo" id="2075" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="2081" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="2083" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 8" id="2095" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 8/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 08" id="2095" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 08/audio_in 1">
+          <Connection other="Jamulus MixChannel 08:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 8" id="2096" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 8/audio_out 1">
+      <IO name="Channel 08" id="2096" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 08/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 8/audio_out 2">
+        <Port type="audio" name="Channel 08/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -2233,8 +2233,8 @@
           <Controllable name="gaincontrol" id="2961" flags="GainLike" value="0"/>
         </Processor>
       </Processor>
-      <Processor id="2099" name="meter-Channel 8" active="1" user-latency="0" type="meter"/>
-      <Processor id="2100" name="Channel 8" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 8" type="main-outs" role="Main">
+      <Processor id="2099" name="meter-Audio" active="1" user-latency="0" type="meter"/>
+      <Processor id="2100" name="Channel 08" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 08" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="2086" flags="" value="0.5"/>
@@ -2255,23 +2255,23 @@
       <Controllable name="monitor" id="2107" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="2105" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="2103" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 8.1" name="Channel 8" id="2108" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 08" name="Channel 08" id="2108" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
-    <Route id="2115" name="Channel 9" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
+    <Route id="2115" name="Channel 09" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="9" flags="AudioTrack,OrderSet" color="3856109311"/>
       <Controllable name="solo" id="2123" flags="Toggle,RealTime" value="0" self-solo="0" soloed-by-upstream="0" soloed-by-downstream="0"/>
       <Controllable name="solo-iso" id="2129" flags="Toggle,RealTime" value="0" solo-isolated="0"/>
       <Controllable name="solo-safe" id="2131" flags="Toggle" value="0" solo-safe="0"/>
-      <IO name="Channel 9" id="2143" direction="Input" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 9/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+      <IO name="Channel 09" id="2143" direction="Input" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 09/audio_in 1">
+          <Connection other="Jamulus MixChannel 09:output left"/>
         </Port>
       </IO>
-      <IO name="Channel 9" id="2144" direction="Output" default-type="audio" user-latency="0">
-        <Port type="audio" name="Channel 9/audio_out 1">
+      <IO name="Channel 09" id="2144" direction="Output" default-type="audio" user-latency="0">
+        <Port type="audio" name="Channel 09/audio_out 1">
           <Connection other="Master/audio_in 1"/>
         </Port>
-        <Port type="audio" name="Channel 9/audio_out 2">
+        <Port type="audio" name="Channel 09/audio_out 2">
           <Connection other="Master/audio_in 2"/>
         </Port>
       </IO>
@@ -2484,8 +2484,8 @@
           <Controllable name="gaincontrol" id="2961" flags="GainLike" value="0"/>
         </Processor>
       </Processor>
-      <Processor id="2147" name="meter-Channel 9" active="1" user-latency="0" type="meter"/>
-      <Processor id="2148" name="Channel 9" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 9" type="main-outs" role="Main">
+      <Processor id="2147" name="meter-Audio" active="1" user-latency="0" type="meter"/>
+      <Processor id="2148" name="Channel 09" active="1" user-latency="0" own-input="1" own-output="0" output="Channel 09" type="main-outs" role="Main">
         <PannerShell bypassed="0" user-panner="" linked-to-route="1"/>
         <Pannable>
           <Controllable name="pan-azimuth" id="2134" flags="" value="0.5"/>
@@ -2506,7 +2506,7 @@
       <Controllable name="monitor" id="2155" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="2153" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="2151" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 9.1" name="Channel 9" id="2156" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 09" name="Channel 09" id="2156" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
     <Route id="2163" name="Channel 10" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak" saved-meter-point="MeterPostFader" mode="Normal">
       <PresentationInfo order="10" flags="AudioTrack,OrderSet" color="2632307967"/>
@@ -2515,7 +2515,7 @@
       <Controllable name="solo-safe" id="2179" flags="Toggle" value="0" solo-safe="0"/>
       <IO name="Channel 10" id="2191" direction="Input" default-type="audio" user-latency="0">
         <Port type="audio" name="Channel 10/audio_in 1">
-          <Connection other="Jamulus MixAcoustic:output left"/>
+          <Connection other="Jamulus MixChannel 10:output left"/>
         </Port>
       </IO>
       <IO name="Channel 10" id="2192" direction="Output" default-type="audio" user-latency="0">
@@ -2757,7 +2757,7 @@
       <Controllable name="monitor" id="2203" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="2201" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="2199" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 10.1" name="Channel 10" id="2204" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 10" name="Channel 10" id="2204" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
     <Route id="2826" name="Reverb" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak">
       <PresentationInfo order="11" flags="AudioBus,OrderSet" color="3856104703"/>
@@ -2974,16 +2974,16 @@
     </Route>
   </Routes>
   <Playlists>
-    <Playlist id="201" name="Channel 1" type="audio" orig-track-id="159" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="595" name="Channel 2" type="audio" orig-track-id="553" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="643" name="Channel 3" type="audio" orig-track-id="601" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="691" name="Channel 4" type="audio" orig-track-id="649" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="739" name="Channel 5" type="audio" orig-track-id="697" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="2013" name="Channel 6.1" type="audio" orig-track-id="1971" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="2061" name="Channel 7.1" type="audio" orig-track-id="2019" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="2109" name="Channel 8.1" type="audio" orig-track-id="2067" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="2157" name="Channel 9.1" type="audio" orig-track-id="2115" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="2205" name="Channel 10.1" type="audio" orig-track-id="2163" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="201" name="Channel 01" type="audio" orig-track-id="159" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="595" name="Channel 02" type="audio" orig-track-id="553" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="643" name="Channel 03" type="audio" orig-track-id="601" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="691" name="Channel 04" type="audio" orig-track-id="649" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="739" name="Channel 05" type="audio" orig-track-id="697" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="2013" name="Channel 06" type="audio" orig-track-id="1971" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="2061" name="Channel 07" type="audio" orig-track-id="2019" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="2109" name="Channel 08" type="audio" orig-track-id="2067" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="2157" name="Channel 09" type="audio" orig-track-id="2115" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="2205" name="Channel 10" type="audio" orig-track-id="2163" shared-with-ids="" frozen="0" combine-ops="0"/>
   </Playlists>
   <UnusedPlaylists/>
   <RouteGroups/>
