@@ -83,11 +83,9 @@ export class DigitalWorkstation extends Stack {
       createZoomServer(this, 'WindowsZoomServer', {
         jamulusMixingInstance: mixingServer,
         jamulusBandInstance: bandServer,
-        vpcParams,
-        elasticIpAllocation: zoomServerSettings.elasticIpAllocation,
-        imageId: zoomServerSettings.imageId,
-        zoomMeeting: zoomServerSettings.zoomMeeting,
         keyName,
+        vpcParams,
+        ...zoomServerSettings,
       });
     };
 
@@ -96,9 +94,7 @@ export class DigitalWorkstation extends Stack {
       jamulusMixingServer: mixingServer,
       vpcParams,
       keyName,
-      elasticIpAllocation: audioWorkstationSettings?.elasticIpAllocation,
-      imageId: audioWorkstationSettings?.imageId,
-      ubuntuPassword: audioWorkstationSettings?.ubuntuPassword,
+      ...audioWorkstationSettings,
       channels,
     });
   }
