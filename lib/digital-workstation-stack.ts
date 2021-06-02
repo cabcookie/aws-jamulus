@@ -1,11 +1,11 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { createConfigBucket } from '../utilities/basic-elements/create-config-bucket';
-import { createVpc } from '../utilities/basic-elements/create-vpc';
+import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
-import { createJamulusServerInstance } from './jamulus-server/jamulus-server-instance';
-import { AudioWorkstation, AudioWorkstationProps } from './audio-workstation/audio-workstation';
+import { createJamulusServerInstance, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
+import { AudioWorkstation } from './audio-workstation/audio-workstation';
 
-interface StandardServerSettings {
+export interface StandardServerSettings {
   /**
    * Provides an allocation ID for an Elastic IP so that this server will
    * always be available under the same public IP address.
@@ -18,23 +18,6 @@ interface StandardServerSettings {
    * server instance.
    */
   imageId?: string;
-};
-
-export interface JamulusServerSettings extends StandardServerSettings {
-  /**
-   * If no image is provided a server settings file name should be provided.
-   * This file should be available on an S3 bucket as the user data will try to
-   * copy the file from there. The user data file will include a line comparable
-   * to this:
-   * 
-   * ```bash
-   * aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
-   * ```
-   * 
-   * So, you need to ensure the mentioned file name exists on the represented
-   * bucket.
-   */
-  settingsFileName?: string;
 };
 
 export interface AudioWorkstationSettings extends StandardServerSettings {
@@ -50,6 +33,19 @@ export interface ZoomServerSettings extends StandardServerSettings {
    * signal to.
    */
   zoomMeeting: ZoomMeetingProps;
+};
+
+export interface StandardServerProps {
+  /**
+   * Provide a keyname so the EC2 instance is accessible via SSH with a
+   * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
+   */
+   keyName: string;
+   /**
+    * Provide the details for the VPC, the Security Group to be used and the
+    * IAM Instance Role so that the EC2 instance can access other resources.
+    */
+   vpcParams: VpcProperties; 
 };
 
 interface DigitalWorkstationProps extends StackProps {
@@ -81,22 +77,18 @@ export class DigitalWorkstation extends Stack {
     const bandServer = createJamulusServerInstance(this, 'JamulusBandServer', {
       vpcParams,
       keyName,
-      elasticIpAllocation: bandServerSettings?.elasticIpAllocation,
-      jamulusServerSettingsFileName: bandServerSettings?.settingsFileName,
-      imageId: bandServerSettings?.imageId,
+      ...bandServerSettings,
     });
 
-    const jamulusMixingResult = createJamulusServerInstance(this, 'JamulusMixingServer', {
+    const mixingServer = createJamulusServerInstance(this, 'JamulusMixingServer', {
       vpcParams,
       keyName,
-      elasticIpAllocation: mixingServerSettings?.elasticIpAllocation,
-      jamulusServerSettingsFileName: mixingServerSettings?.settingsFileName,
-      imageId: mixingServerSettings?.imageId,
+      ...mixingServerSettings,
     });
 
     if (zoomServerSettings) {
       createZoomServer(this, 'WindowsZoomServer', {
-        jamulusMixingInstance: jamulusMixingResult,
+        jamulusMixingInstance: mixingServer,
         jamulusBandInstance: bandServer,
         vpcParams,
         elasticIpAllocation: zoomServerSettings.elasticIpAllocation,
@@ -106,9 +98,9 @@ export class DigitalWorkstation extends Stack {
       });
     };
 
-    const mixingConsoleProps: AudioWorkstationProps = {
+    new AudioWorkstation(this, 'AudioWorkstation', {
       jamulusBandServer: bandServer,
-      jamulusMixingServer: jamulusMixingResult,
+      jamulusMixingServer: mixingServer,
       vpc: vpcParams.vpc,
       role: vpcParams.role,
       keyName,
@@ -116,7 +108,6 @@ export class DigitalWorkstation extends Stack {
       imageId: audioWorkstationSettings?.imageId,
       ubuntuPassword: audioWorkstationSettings?.ubuntuPassword,
       channels,
-    };
-    new AudioWorkstation(this, 'AudioWorkstation', mixingConsoleProps);
+    });
   }
 }

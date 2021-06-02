@@ -1,54 +1,38 @@
 import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
-import { VpcProperties } from "../../utilities/basic-elements/create-vpc";
 import { readFileSync } from "fs";
 import { flow } from 'lodash/fp';
 import { addUserData, replaceRegion } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
+import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+
+export interface JamulusServerSettings extends StandardServerSettings {
+  /**
+   * If no image is provided a server settings file name should be provided.
+   * This file should be available on an S3 bucket as the user data will try to
+   * copy the file from there. The user data file will include a line comparable
+   * to this:
+   * 
+   * ```bash
+   * aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
+   * ```
+   * 
+   * So, you need to ensure the mentioned file name exists on the represented
+   * bucket.
+   */
+  settingsFileName?: string;
+};
 
 /**
  * Interface for Jamalus server properties.
  */
-export interface JamulusServerProps {
-  /**
-   * Provides an allocation ID for an Elastic IP so that this server will
-   * always be available under the same public IP address.
-   */
-  elasticIpAllocation?: string;
-  /**
-   * Provide a keyname so the EC2 instance is accessible via SSH with a
-   * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
-   */
-  keyName: string;
-  /**
-   * Provide the details for the VPC, the Security Group to be used and the
-   * IAM Instance Role so that the EC2 instance can access other resources.
-   */
-  vpcParams: VpcProperties;
-  /**
-   * Provide an AMI ID if you have created an image with a running Jamulus
-   * server already. This image will then be used instead of running a
-   * launch script (i.e., user data) to install and configure the Jamulus
-   * server instance.
-   */
-  imageId?: string;
-  /**
-   * If no image is provided a server settings file name should be provided.
-   * This file should be available on an S3 bucket as the user data will try to
-   * copy the file from there. The user data file name is
-   * `./lib/configure.jamulus.sh` and it will include a line comparable to this:
-   *   aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
-   * So, you need to ensure the mentioned file name exists on the represented
-   * bucket.
-   */
-  jamulusServerSettingsFileName?: string;
-};
+export interface JamulusServerProps extends JamulusServerSettings, StandardServerProps {};
 
 const replaceServerSettingsFileName = (newFileName: string) => (file: string) => file.replace('%%SERVER-SETTINGS-FILE-NAME%%', newFileName);
 
 /**
  * Will create an EC2 instance with a running Jamulus server. This server will
- * be created either by providing a `jamulusServerSettingsFileName` which
+ * be created either by providing a `settingsFileName` which
  * results in creating user data (i.e., a launch script) which installs the
  * Jamulus server and its dependencies and starts it as a service with the
  * provided configuration file.
@@ -63,12 +47,12 @@ const replaceServerSettingsFileName = (newFileName: string) => (file: string) =>
  */
 export const createJamulusServerInstance = (scope: Stack, id: string, props: JamulusServerProps): Instance => {
   const {
-    elasticIpAllocation, keyName, vpcParams, imageId, jamulusServerSettingsFileName
+    elasticIpAllocation, keyName, vpcParams, imageId, settingsFileName
   } = props;
   const userDataFileName = './lib/jamulus-server/configure-jamulus.sh';
 
-  if (imageId && jamulusServerSettingsFileName) console.log(`${id}: If both an imageId and a jamulusServerSettingsFileName is provided, only the imageId is considered and the settings from the configuration file are ignored.`);
-  if (!imageId && !jamulusServerSettingsFileName) throw(new TypeError(`${id}: You should either provide an AMI ID or a server settings file name`));
+  if (imageId && settingsFileName) console.log(`${id}: If both an imageId and a settingsFileName is provided, only the imageId is considered and the settings from the configuration file are ignored.`);
+  if (!imageId && !settingsFileName) throw(new TypeError(`${id}: You should either provide an AMI ID or a server settings file name`));
 
   const host = new Instance(scope, id, {
     instanceName: id,
@@ -84,11 +68,11 @@ export const createJamulusServerInstance = (scope: Stack, id: string, props: Jam
     userDataCausesReplacement: true,
   });
 
-  if (!imageId && jamulusServerSettingsFileName) {
+  if (!imageId && settingsFileName) {
     console.log(`${id}: Providing user data (${userDataFileName})`);
     flow(
       readFileSync,
-      replaceServerSettingsFileName(jamulusServerSettingsFileName),
+      replaceServerSettingsFileName(settingsFileName),
       replaceRegion(scope.region),
       addUserData(host),
     )(userDataFileName, 'utf8');
