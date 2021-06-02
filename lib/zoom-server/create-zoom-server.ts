@@ -5,6 +5,7 @@ import { flow, replace } from "lodash/fp";
 import { addUserData } from "../../utilities/utilities";
 import { VpcProperties } from "../../utilities/basic-elements/create-vpc";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
+import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 
 /**
  * Settings for the Zoom meeting this instance should connect and send the
@@ -21,15 +22,18 @@ export interface ZoomMeetingProps {
   password?: string;
 };
 
+export interface ZoomServerSettings extends StandardServerSettings {
+  /**
+   * The Zoom meeting properties this instance should connect and send the mixed
+   * signal to.
+   */
+  zoomMeeting: ZoomMeetingProps;
+};
+
 /**
  * Interface for server sending the mixed signal to a Zoom session.
  */
-export interface ZoomServerProps {
-  /**
-   * Provides an allocation ID for an Elastic IP so that this server will
-   * always be available under the same public IP address.
-   */
-   elasticIpAllocation?: string;
+export interface ZoomServerProps extends ZoomServerSettings, StandardServerProps {
   /**
    * The EC2 instance where the Jamulus server is running where the band
    * members will connect to.
@@ -41,30 +45,6 @@ export interface ZoomServerProps {
    * instance to send its signal to the Zoom instance it connects to.
    */
   jamulusMixingInstance: Instance;
-  /**
-   * Provide a keyname so the EC2 instance is accessible via SSH with a
-   * PEM key or via a remote desktop connection (see details here:
-   * https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/connecting_to_windows_instance.html).
-   */
-  keyName: string;
-   /**
-   * The Zoom meeting properties this instance should connect and send the mixed
-   * signal to.
-   */
-  zoomMeeting: ZoomMeetingProps;
-  /**
-   * Provide the details for the VPC, the Security Group to be used and the
-   * IAM Instance Role so that the EC2 instance can access other resources.
-   */
-   vpcParams: VpcProperties;
-   /**
-    * Provide an AMI ID if you have created an image with a running Jamulus
-    * client and a Zoom client already. This image will then be used instead of
-    * running a launch script (i.e., user data) to install and configure the
-    * Zoom server instance.
-    */
-   imageId?: string;
- 
 };
 
 const replaceParameters = (
@@ -83,6 +63,7 @@ const replaceParameters = (
  * The Jamulus client will connect to the Jamulus server which provides the 
  * mixed signal. The Zoom client will connect to the meeting where the
  * mixed signal should be send to.
+ * 
  * @param scope Parent stack, usually an `App` or a `Stage`, but could be any construct.
  * @param id The id for the Zoom server; will be used for the EC2 instance name.
  * @param props Properties for the Zoom server

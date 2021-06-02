@@ -1,4 +1,4 @@
-import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, IVpc, Port, Protocol } from "@aws-cdk/aws-ec2";
+import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { Policy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { CfnOutput, Construct, Stack } from "@aws-cdk/core";
 import { readFileSync } from "fs";
@@ -6,11 +6,19 @@ import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
 import { addCloudWatchAgentInstallScript, addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
+import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+
+export interface AudioWorkstationSettings extends StandardServerSettings {
+  /**
+   * The password for the user `ubuntu` to be used for the RDP authentication.
+   */
+  ubuntuPassword?: string;
+};
 
 /**
  * Interface for online mixing console properties.
  */
-export interface AudioWorkstationProps {
+export interface AudioWorkstationProps extends AudioWorkstationSettings, StandardServerProps {
   /**
    * The Jamulus EC2 instance where the band connects to
    */
@@ -21,44 +29,10 @@ export interface AudioWorkstationProps {
    */
   jamulusMixingServer: Instance;
   /**
-   * Provide a keyname so the EC2 instance is accessible via SSH with a
-   * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
-   */
-  keyName: string;
-  /**
-   * Provides an allocation ID for an Elastic IP so that this mixing console will
-   * always be available under the same public IP address.
-   */
-  elasticIpAllocation?: string;
-  /**
-   * Instance role to define access to relevant resources.
-   */
-  role?: Role;
-  /**
-   * Provide the VPC where the online mixing console should be created in.
-   */
-  vpc: IVpc;
-  /**
-   * Provide an AMI ID if you have created an image with a running Jamulus
-   * server already. This image will then be used instead of running a
-   * launch script (i.e., user data) to install and configure the Jamulus
-   * server instance.
-   * If no image is provided a standard image will be used.
-   */
-  imageId?: string;
-  /**
-   * The password for the user `ubuntu` to be used for the RDP authentication.
-   */
-  ubuntuPassword?: string;
-  /**
    * Provide the channel names. These will be used to name the Jamulus client
    * instances and connect those to the associated Ardour channels.
    */
   channels?: string[];
-  /**
-   * Install the CloudWatch agent.
-   */
-  installCloudWatchAgent?: boolean;
 };
 
 const createInstanceRole = (scope: Construct) => {
@@ -89,7 +63,8 @@ export class AudioWorkstation extends Construct {
   constructor(scope: Stack, id: string, props: AudioWorkstationProps) {
     super(scope, id);
 
-    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels, installCloudWatchAgent } = props;
+    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpcParams, imageId, ubuntuPassword, channels, installCloudWatchAgent } = props;
+    const { vpc, role } = vpcParams;
     const userDataFileName = './lib/audio-workstation/configure-audio-workstation.sh';
 
     const mixer = new Instance(this, `${id}Instance`, {

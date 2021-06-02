@@ -1,9 +1,9 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { ConfigBucket } from '../utilities/basic-elements/config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
-import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
+import { createZoomServer, ZoomServerSettings } from './zoom-server/create-zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
-import { AudioWorkstation } from './audio-workstation/audio-workstation';
+import { AudioWorkstation, AudioWorkstationSettings } from './audio-workstation/audio-workstation';
 import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucket-deployment';
 
 export interface StandardServerSettings {
@@ -19,21 +19,10 @@ export interface StandardServerSettings {
    * server instance.
    */
   imageId?: string;
-};
-
-export interface AudioWorkstationSettings extends StandardServerSettings {
   /**
-   * The password for the user `ubuntu` to be used for the RDP authentication.
+   * Install the CloudWatch agent.
    */
-  ubuntuPassword?: string;
-};
-
-export interface ZoomServerSettings extends StandardServerSettings {
-  /**
-   * The Zoom meeting properties this instance should connect and send the mixed
-   * signal to.
-   */
-  zoomMeeting: ZoomMeetingProps;
+  installCloudWatchAgent?: boolean;
 };
 
 export interface StandardServerProps {
@@ -41,7 +30,7 @@ export interface StandardServerProps {
    * Provide a keyname so the EC2 instance is accessible via SSH with a
    * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
    */
-   keyName: string;
+  keyName: string;
   /**
    * Provide the details for the VPC, the Security Group to be used and the
    * IAM Instance Role so that the EC2 instance can access other resources.
@@ -105,8 +94,7 @@ export class DigitalWorkstation extends Stack {
     new AudioWorkstation(this, 'AudioWorkstation', {
       jamulusBandServer: bandServer,
       jamulusMixingServer: mixingServer,
-      vpc: vpcParams.vpc,
-      role: vpcParams.role,
+      vpcParams,
       keyName,
       elasticIpAllocation: audioWorkstationSettings?.elasticIpAllocation,
       imageId: audioWorkstationSettings?.imageId,
