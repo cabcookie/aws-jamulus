@@ -1,7 +1,7 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { ConfigBucket } from '../utilities/basic-elements/config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
-import { createZoomServer, ZoomServerSettings } from './zoom-server/zoom-server';
+import { ZoomServer, ZoomServerSettings } from './zoom-server/zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation, AudioWorkstationSettings } from './audio-workstation/audio-workstation';
 import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucket-deployment';
@@ -80,7 +80,7 @@ export class DigitalWorkstation extends Stack {
     });
 
     if (zoomServerSettings) {
-      createZoomServer(this, 'WindowsZoomServer', {
+      new ZoomServer(this, 'WindowsZoomServer', {
         jamulusMixingInstance: mixingServer,
         jamulusBandInstance: bandServer,
         keyName,
