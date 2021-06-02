@@ -1,7 +1,7 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { ConfigBucket } from '../utilities/basic-elements/config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
-import { createZoomServer, ZoomServerSettings } from './zoom-server/create-zoom-server';
+import { createZoomServer, ZoomServerSettings } from './zoom-server/zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation, AudioWorkstationSettings } from './audio-workstation/audio-workstation';
 import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucket-deployment';
