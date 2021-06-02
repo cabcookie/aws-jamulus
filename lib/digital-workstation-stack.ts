@@ -1,5 +1,5 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
-import { createConfigBucket } from '../utilities/basic-elements/config-bucket';
+import { ConfigBucket } from '../utilities/basic-elements/config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
@@ -72,8 +72,8 @@ export class DigitalWorkstation extends Stack {
   }: DigitalWorkstationProps) {
     super(scope, id, { ...rest });
 
-    const configBucket = createConfigBucket(this, configBucketName);
-    new ConfigBucketDeployment(scope, 'ConfigBucketDeployment', {
+    const configBucket = new ConfigBucket(this, 'ConfigBucket', configBucketName);
+    new ConfigBucketDeployment(this, 'ConfigBucketDeployment', {
       bucket: configBucket,
     });
     const vpcParams = createVpc(this, configBucket);
