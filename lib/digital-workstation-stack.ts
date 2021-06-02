@@ -1,5 +1,5 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
-import { createConfigBucket } from '../utilities/basic-elements/create-config-bucket';
+import { createConfigBucket } from '../utilities/basic-elements/config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
@@ -41,11 +41,11 @@ export interface StandardServerProps {
    * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
    */
    keyName: string;
-   /**
-    * Provide the details for the VPC, the Security Group to be used and the
-    * IAM Instance Role so that the EC2 instance can access other resources.
-    */
-   vpcParams: VpcProperties; 
+  /**
+   * Provide the details for the VPC, the Security Group to be used and the
+   * IAM Instance Role so that the EC2 instance can access other resources.
+   */
+  vpcParams: VpcProperties; 
 };
 
 interface DigitalWorkstationProps extends StackProps {
