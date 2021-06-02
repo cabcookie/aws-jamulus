@@ -20,9 +20,9 @@ interface DigitalWorkstationProps extends StackProps {
   keyName: string;
   configBucketName?: string;
   bandServerSettings?: ServerProps;
-  mixingResultServerSettings?: ServerProps;
+  mixingServerSettings?: ServerProps;
   zoomServerSettings?: ZoomServerProps;
-  onlineMixerSettings?: ServerProps;
+  audioWorkstationSettings?: ServerProps;
   channels?: string[];
 };
 
@@ -31,8 +31,8 @@ export class DigitalWorkstation extends Stack {
     keyName,
     configBucketName,
     bandServerSettings,
-    mixingResultServerSettings,
-    onlineMixerSettings,
+    mixingServerSettings,
+    audioWorkstationSettings,
     zoomServerSettings,
     channels,
     ...rest
@@ -53,9 +53,9 @@ export class DigitalWorkstation extends Stack {
     const jamulusMixingResult = createJamulusServerInstance(this, 'JamulusMixingServer', {
       vpcParams,
       keyName,
-      elasticIpAllocation: mixingResultServerSettings?.ipId,
-      jamulusServerSettingsFileName: mixingResultServerSettings?.settingsFileName,
-      imageId: mixingResultServerSettings?.imageId,
+      elasticIpAllocation: mixingServerSettings?.ipId,
+      jamulusServerSettingsFileName: mixingServerSettings?.settingsFileName,
+      imageId: mixingServerSettings?.imageId,
     });
 
     if (zoomServerSettings) {
@@ -76,9 +76,9 @@ export class DigitalWorkstation extends Stack {
       vpc: vpcParams.vpc,
       role: vpcParams.role,
       keyName,
-      elasticIpAllocation: onlineMixerSettings?.ipId,
-      imageId: onlineMixerSettings?.imageId,
-      ubuntuPassword: onlineMixerSettings?.ubuntuPassword,
+      elasticIpAllocation: audioWorkstationSettings?.ipId,
+      imageId: audioWorkstationSettings?.imageId,
+      ubuntuPassword: audioWorkstationSettings?.ubuntuPassword,
       channels,
     };
     new AudioWorkstation(this, 'AudioWorkstation', mixingConsoleProps);
