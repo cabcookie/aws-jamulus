@@ -2,7 +2,7 @@ import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { createConfigBucket } from '../utilities/basic-elements/create-config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
-import { createJamulusServerInstance, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
+import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation } from './audio-workstation/audio-workstation';
 
 export interface StandardServerSettings {
@@ -74,13 +74,13 @@ export class DigitalWorkstation extends Stack {
     const configBucket = createConfigBucket(this, configBucketName);
     const vpcParams = createVpc(this, configBucket);
 
-    const bandServer = createJamulusServerInstance(this, 'JamulusBandServer', {
+    const bandServer = new JamulusServer(this, 'JamulusBandServer', {
       vpcParams,
       keyName,
       ...bandServerSettings,
     });
 
-    const mixingServer = createJamulusServerInstance(this, 'JamulusMixingServer', {
+    const mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
       vpcParams,
       keyName,
       ...mixingServerSettings,
