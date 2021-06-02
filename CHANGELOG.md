@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/cabcookie/aws-jamulus/compare/v1.6.0...v1.6.1) (2021-06-02)
+
+
+### Bug Fixes
+
+* **doc:** `ConfigBucketDeployment` constructor ([3ff0a6a](https://github.com/cabcookie/aws-jamulus/commit/3ff0a6aa381fedd1487927690fcabf06e152eeec))
+* **doc:** document server settings ([a074bf6](https://github.com/cabcookie/aws-jamulus/commit/a074bf6696151d884a4db9b9bbd6016a59f6fa7a))
+* **doc:** documenting constructors and properties ([9f37fa1](https://github.com/cabcookie/aws-jamulus/commit/9f37fa1c69bad61a0ab1cf56bc6d49e79681022f))
+* **infra:** better naming for servers ([5a96fef](https://github.com/cabcookie/aws-jamulus/commit/5a96fef1aa43a2663e404055a6f066e51580613d))
+* **infra:** renaming of files to reflect changes ([5330a75](https://github.com/cabcookie/aws-jamulus/commit/5330a7599b29429ccfc41f248c00f0f2c1dcd1e8))
+* **refactor:** `create-config-bucket.ts` renamed ([027e86c](https://github.com/cabcookie/aws-jamulus/commit/027e86c8c8d0f35c48e39278dfc94876eb47c3d5))
+* **refactor:** `ZoomServer` as a class ([55dae2e](https://github.com/cabcookie/aws-jamulus/commit/55dae2eda5a4e53fbdd3ecf276b5bd4dbaa0d586))
+* **refactor:** bucket deployment in separate class ([427a91c](https://github.com/cabcookie/aws-jamulus/commit/427a91ce0212f8c8384213ee8f1836717c0aed72))
+* **refactor:** creation of Jamulus server ([cdfdb7d](https://github.com/cabcookie/aws-jamulus/commit/cdfdb7d955611304011faf57dccd79f03bded9d8))
+* **refactor:** make `ConfigBucket`a class ([a7bc152](https://github.com/cabcookie/aws-jamulus/commit/a7bc152a1e300d9d8c4c0b7303e358085216b2e5))
+* **refactor:** make `JamulusServer` class ([501880f](https://github.com/cabcookie/aws-jamulus/commit/501880f00beb0a5fca30b6a9839c8ebb61773d0c))
+* **refactor:** renamed `create-zoom-server.ts` to ([a338266](https://github.com/cabcookie/aws-jamulus/commit/a338266b46b5d88da389a1dd86381d0303162e5c))
+* **refactor:** renamed some properties ([4aa613d](https://github.com/cabcookie/aws-jamulus/commit/4aa613d6c2a0cae7d1ade4b30f46e94e38f865f2))
+* **refactor:** renamed some settings ([c19cb70](https://github.com/cabcookie/aws-jamulus/commit/c19cb704ecd6c78bbc0bb5f26a95188c734ef6b3))
+* **refactor:** reuse settings for resource props ([5c551ad](https://github.com/cabcookie/aws-jamulus/commit/5c551ad52c6810c6b55d1efbfab88cbe93a2ce86))
+* **refactor:** settings and properties ([93b0d66](https://github.com/cabcookie/aws-jamulus/commit/93b0d66066deac10814089ddabb2a5b60453a532))
+
 ## [1.6.0](https://github.com/cabcookie/aws-jamulus/compare/v1.5.1...v1.6.0) (2021-06-01)
 
 
