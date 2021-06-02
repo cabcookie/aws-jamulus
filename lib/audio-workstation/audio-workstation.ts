@@ -10,7 +10,7 @@ import { addCloudWatchAgentInstallScript, addUserData, replaceIp, replaceRegion,
 /**
  * Interface for online mixing console properties.
  */
-export interface OnlineMixingConsoleProps {
+export interface AudioWorkstationProps {
   /**
    * The Jamulus EC2 instance where the band connects to
    */
@@ -77,18 +77,18 @@ const replaceChannelsConfig = (channels: string[] | undefined) => (file: string)
 /**
  * A construct to create an EC2 instance with an Ardour mixing console installed.
  */
-export class OnlineMixingConsole extends Construct {
+export class AudioWorkstation extends Construct {
   /**
    * 
    * @param scope Parent stack, usually an `App` or a `Stage`, but could be any construct.
    * @param id The id for the server; will be used for the EC2 instance name.
    * @param props 
    */
-  constructor(scope: Stack, id: string, props: OnlineMixingConsoleProps) {
+  constructor(scope: Stack, id: string, props: AudioWorkstationProps) {
     super(scope, id);
 
     const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpc, imageId, role, ubuntuPassword, channels, installCloudWatchAgent } = props;
-    const userDataFileName = './lib/online-mixing-server/configure-online-mixer.sh';
+    const userDataFileName = './lib/audio-workstation/configure-audio-workstation.sh';
 
     const mixer = new Instance(this, `${id}Instance`, {
       instanceName: id,

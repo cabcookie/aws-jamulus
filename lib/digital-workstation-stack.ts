@@ -3,7 +3,7 @@ import { createConfigBucket } from '../utilities/basic-elements/create-config-bu
 import { createVpc } from '../utilities/basic-elements/create-vpc';
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
 import { createJamulusServerInstance } from './jamulus-server/jamulus-server-instance';
-import { OnlineMixingConsole, OnlineMixingConsoleProps } from './online-mixing-server/online-mixing-console';
+import { AudioWorkstation, AudioWorkstationProps } from './audio-workstation/audio-workstation';
 
 interface ServerProps {
   ipId?: string;
@@ -70,7 +70,7 @@ export class DigitalWorkstation extends Stack {
       });
     };
 
-    const mixingConsoleProps: OnlineMixingConsoleProps = {
+    const mixingConsoleProps: AudioWorkstationProps = {
       jamulusBandServer: bandServer,
       jamulusMixingServer: jamulusMixingResult,
       vpc: vpcParams.vpc,
@@ -81,6 +81,6 @@ export class DigitalWorkstation extends Stack {
       ubuntuPassword: onlineMixerSettings?.ubuntuPassword,
       channels,
     };
-    new OnlineMixingConsole(this, 'AudioWorkstation', mixingConsoleProps);
+    new AudioWorkstation(this, 'AudioWorkstation', mixingConsoleProps);
   }
 }

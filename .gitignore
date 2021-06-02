@@ -18,8 +18,4 @@ bin/config.json
 # do not sync experimentation files
 temp
 logs/*
-server-config/online-mixer-jamulus-config/jamulus/inis
-server-config/online-mixer-jamulus-config/jamulus/channels.json
-server-config/online-mixer-jamulus-config/jamulus/example-jamulus-startup.sh
-server-config/online-mixer-jamulus-config/jamulus/jamulus-startup.sh
 server-config/ardour/mosaik-live.ardour.bak

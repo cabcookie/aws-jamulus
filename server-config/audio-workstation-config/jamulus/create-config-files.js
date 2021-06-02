@@ -228,7 +228,7 @@ const runTestScript = () => {
     '3.66.182.113',
     appFolder,
     ['Vocal Jane', 'Vocal Jon', 'Acoustic', 'Electric', 'Drums'],
-    readFileSync('./server-config/online-mixer-jamulus-config/jamulus/default.ini', 'utf-8'),
+    readFileSync('./server-config/audio-workstation-config/jamulus/default.ini', 'utf-8'),
  );
 };
 
