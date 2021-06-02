@@ -6,19 +6,49 @@ import { createJamulusServerInstance } from './jamulus-server/jamulus-server-ins
 import { AudioWorkstation, AudioWorkstationProps } from './audio-workstation/audio-workstation';
 
 interface StandardServerSettings {
+  /**
+   * Provides an allocation ID for an Elastic IP so that this server will
+   * always be available under the same public IP address.
+   */
   elasticIpAllocation?: string;
+  /**
+   * Provide an AMI ID if you have created an image with a running Jamulus
+   * server already. This image will then be used instead of running a
+   * launch script (i.e., user data) to install and configure the Jamulus
+   * server instance.
+   */
   imageId?: string;
 };
 
 export interface JamulusServerSettings extends StandardServerSettings {
+  /**
+   * If no image is provided a server settings file name should be provided.
+   * This file should be available on an S3 bucket as the user data will try to
+   * copy the file from there. The user data file will include a line comparable
+   * to this:
+   * 
+   * ```bash
+   * aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
+   * ```
+   * 
+   * So, you need to ensure the mentioned file name exists on the represented
+   * bucket.
+   */
   settingsFileName?: string;
 };
 
 export interface AudioWorkstationSettings extends StandardServerSettings {
+  /**
+   * The password for the user `ubuntu` to be used for the RDP authentication.
+   */
   ubuntuPassword?: string;
 };
 
 export interface ZoomServerSettings extends StandardServerSettings {
+  /**
+   * The Zoom meeting properties this instance should connect and send the mixed
+   * signal to.
+   */
   zoomMeeting: ZoomMeetingProps;
 };
 
