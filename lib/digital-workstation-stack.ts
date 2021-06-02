@@ -4,6 +4,7 @@ import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc
 import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation } from './audio-workstation/audio-workstation';
+import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucket-deployment';
 
 export interface StandardServerSettings {
   /**
@@ -72,6 +73,9 @@ export class DigitalWorkstation extends Stack {
     super(scope, id, { ...rest });
 
     const configBucket = createConfigBucket(this, configBucketName);
+    new ConfigBucketDeployment(scope, 'ConfigBucketDeployment', {
+      bucket: configBucket,
+    });
     const vpcParams = createVpc(this, configBucket);
 
     const bandServer = new JamulusServer(this, 'JamulusBandServer', {
