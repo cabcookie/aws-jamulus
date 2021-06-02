@@ -17,6 +17,7 @@ interface ConfigBucketDeploymentProps {
 
 export class ConfigBucketDeployment extends BucketDeployment {
   /**
+   * Deploys source files and folders into a defined bucket.
    * 
    * @param scope The parent `App`, `Stack` or `Construct`.
    * @param id unique identifier of the component

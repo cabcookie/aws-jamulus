@@ -79,6 +79,8 @@ const replaceChannelsConfig = (channels: string[] | undefined) => (file: string)
  */
 export class AudioWorkstation extends Construct {
   /**
+   * Creates an audio workstation with Jack, Jamulus, and Ardour installed
+   * and everything interconnected.
    * 
    * @param scope Parent stack, usually an `App` or a `Stage`, but could be any construct.
    * @param id The id for the server; will be used for the EC2 instance name.
