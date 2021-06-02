@@ -5,24 +5,30 @@ import { createZoomServer, ZoomMeetingProps } from './zoom-server/create-zoom-se
 import { createJamulusServerInstance } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation, AudioWorkstationProps } from './audio-workstation/audio-workstation';
 
-interface ServerProps {
-  ipId?: string;
-  settingsFileName?: string;
+interface StandardServerSettings {
+  elasticIpAllocation?: string;
   imageId?: string;
+};
+
+export interface JamulusServerSettings extends StandardServerSettings {
+  settingsFileName?: string;
+};
+
+export interface AudioWorkstationSettings extends StandardServerSettings {
   ubuntuPassword?: string;
 };
 
-interface ZoomServerProps extends ServerProps {
+export interface ZoomServerSettings extends StandardServerSettings {
   zoomMeeting: ZoomMeetingProps;
 };
 
 interface DigitalWorkstationProps extends StackProps {
   keyName: string;
   configBucketName?: string;
-  bandServerSettings?: ServerProps;
-  mixingServerSettings?: ServerProps;
-  zoomServerSettings?: ZoomServerProps;
-  audioWorkstationSettings?: ServerProps;
+  bandServerSettings?: JamulusServerSettings;
+  mixingServerSettings?: JamulusServerSettings;
+  zoomServerSettings?: ZoomServerSettings;
+  audioWorkstationSettings?: AudioWorkstationSettings;
   channels?: string[];
 };
 
@@ -45,7 +51,7 @@ export class DigitalWorkstation extends Stack {
     const bandServer = createJamulusServerInstance(this, 'JamulusBandServer', {
       vpcParams,
       keyName,
-      elasticIpAllocation: bandServerSettings?.ipId,
+      elasticIpAllocation: bandServerSettings?.elasticIpAllocation,
       jamulusServerSettingsFileName: bandServerSettings?.settingsFileName,
       imageId: bandServerSettings?.imageId,
     });
@@ -53,7 +59,7 @@ export class DigitalWorkstation extends Stack {
     const jamulusMixingResult = createJamulusServerInstance(this, 'JamulusMixingServer', {
       vpcParams,
       keyName,
-      elasticIpAllocation: mixingServerSettings?.ipId,
+      elasticIpAllocation: mixingServerSettings?.elasticIpAllocation,
       jamulusServerSettingsFileName: mixingServerSettings?.settingsFileName,
       imageId: mixingServerSettings?.imageId,
     });
@@ -63,7 +69,7 @@ export class DigitalWorkstation extends Stack {
         jamulusMixingInstance: jamulusMixingResult,
         jamulusBandInstance: bandServer,
         vpcParams,
-        elasticIpAllocation: zoomServerSettings.ipId,
+        elasticIpAllocation: zoomServerSettings.elasticIpAllocation,
         imageId: zoomServerSettings.imageId,
         zoomMeeting: zoomServerSettings.zoomMeeting,
         keyName,
@@ -76,7 +82,7 @@ export class DigitalWorkstation extends Stack {
       vpc: vpcParams.vpc,
       role: vpcParams.role,
       keyName,
-      elasticIpAllocation: audioWorkstationSettings?.ipId,
+      elasticIpAllocation: audioWorkstationSettings?.elasticIpAllocation,
       imageId: audioWorkstationSettings?.imageId,
       ubuntuPassword: audioWorkstationSettings?.ubuntuPassword,
       channels,

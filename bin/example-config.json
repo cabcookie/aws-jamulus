@@ -5,22 +5,22 @@
   },
   "keyName": "my-key-pair",
   "bandServerSettings": {
-    "ipId": "elasticIpAllocation, see here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-allocating",
+    "elasticIpAllocation": "elasticIpAllocation, see here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-allocating",
     "settingsFileName": "band-server-settings.sh",
     "imageId": "ami-... a prepared image from a snapshot after everything is installed and configured; useful when your settings are always the same"
   },
   "mixingServerSettings": {
-    "ipId": "elasticIpAllocation, see above",
+    "elasticIpAllocation": "elasticIpAllocation, see above",
     "settingsFileName": "mixing-server-settings.sh",
     "imageId": "ami-... see above"
   },
   "audioWorkstationSettings": {
-    "ipId": "elasticIpAllocation, see above",
+    "elasticIpAllocation": "elasticIpAllocation, see above",
     "ubuntuPassword": "super-secure-password",
     "imageId": "ami-... see above"
   },
   "zoomServerSettings": {
-    "ipId": "elasticIpAllocation, see above",
+    "elasticIpAllocation": "elasticIpAllocation, see above",
     "imageId": "ami-... see above",
     "zoomMeeting": {
       "meetingId": "123456789012",
