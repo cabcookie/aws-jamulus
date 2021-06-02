@@ -59,7 +59,7 @@ export class DigitalWorkstation extends Stack {
     });
 
     if (zoomServerSettings) {
-      createZoomServer(this, 'JamulusZoomServer', {
+      createZoomServer(this, 'WindowsZoomServer', {
         jamulusMixingInstance: jamulusMixingResult,
         jamulusBandInstance: bandServer,
         vpcParams,
@@ -81,6 +81,6 @@ export class DigitalWorkstation extends Stack {
       ubuntuPassword: onlineMixerSettings?.ubuntuPassword,
       channels,
     };
-    new OnlineMixingConsole(this, 'OnlineMixer', mixingConsoleProps);
+    new OnlineMixingConsole(this, 'AudioWorkstation', mixingConsoleProps);
   }
 }
