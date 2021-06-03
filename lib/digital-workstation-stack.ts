@@ -1,12 +1,13 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
 import { ConfigBucket, ConfigBucketName } from '../utilities/basic-elements/config-bucket';
-import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
 import { ZoomServer, ZoomServerSettings } from './zoom-server/zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation, AudioWorkstationSettings } from './audio-workstation/audio-workstation';
 import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucket-deployment';
+import { Vpc } from '@aws-cdk/aws-ec2';
+import { DetailedServerMetricsSettings, Ec2InstanceRoleProps } from '../utilities/basic-elements/instance-role';
 
-export interface StandardServerSettings {
+export interface StandardServerSettings extends DetailedServerMetricsSettings {
   /**
    * Provides an allocation ID for an Elastic IP so that this server will
    * always be available under the same public IP address.
@@ -19,10 +20,6 @@ export interface StandardServerSettings {
    * server instance.
    */
   imageId?: string;
-  /**
-   * Install the CloudWatch agent.
-   */
-  detailedServerMetrics?: boolean;
 };
 
 interface KeyNameProp {
@@ -33,12 +30,12 @@ interface KeyNameProp {
   keyName?: string;
 };
 
-export interface StandardServerProps extends KeyNameProp {
+export interface StandardServerProps extends KeyNameProp, Ec2InstanceRoleProps {
   /**
-   * Provide the details for the VPC, the Security Group to be used and the
-   * IAM Instance Role so that the EC2 instance can access other resources.
+   * Provide the VPC where the resources should be created in. If no VPC is
+   * provided, the standard VPC will be used.
    */
-  vpcParams: VpcProperties; 
+  vpc?: Vpc;
 };
 
 interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketName {
@@ -97,10 +94,8 @@ export class DigitalWorkstation extends Stack {
     new ConfigBucketDeployment(this, 'ConfigBucketDeployment', {
       bucket: configBucket,
     });
-    const vpcParams = createVpc(this, configBucket);
 
     const bandServer = new JamulusServer(this, 'JamulusBandServer', {
-      vpcParams,
       keyName,
       ...bandServerSettings,
     });
@@ -108,7 +103,6 @@ export class DigitalWorkstation extends Stack {
     let mixingServer;
     if (mixingServerSettings) {
       mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
-        vpcParams,
         keyName,
         ...mixingServerSettings,
       });
@@ -118,7 +112,6 @@ export class DigitalWorkstation extends Stack {
       new AudioWorkstation(this, 'AudioWorkstation', {
         jamulusBandServer: bandServer,
         jamulusMixingServer: mixingServer,
-        vpcParams,
         keyName,
         ...audioWorkstationSettings,
         channels,
@@ -130,7 +123,6 @@ export class DigitalWorkstation extends Stack {
         jamulusMixingInstance: mixingServer,
         jamulusBandInstance: bandServer,
         keyName,
-        vpcParams,
         ...zoomServerSettings,
       });
     };

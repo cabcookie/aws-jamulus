@@ -2,9 +2,11 @@ import { CfnEIPAssociation, GenericWindowsImage, Instance, InstanceClass, Instan
 import { CfnOutput, Stack } from "@aws-cdk/core";
 import { readFileSync } from "fs";
 import { flow, replace } from "lodash/fp";
-import { addUserData } from "../../utilities/utilities";
+import { addCloudWatchAgentInstallScript, addUserData } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
+import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 
 /**
  * Settings for the Zoom meeting this instance should connect and send the
@@ -73,12 +75,17 @@ export class ZoomServer extends Instance {
     jamulusMixingInstance,
     jamulusBandInstance,
     zoomMeeting,
-    vpcParams,
     imageId,
     elasticIpAllocation,
     keyName,
+    bucket,
+    detailedServerMetrics,
+    policyStatments,
+    vpc,
   }: ZoomServerProps) {
     const userDataFileName = './lib/zoom-server/configure-zoom-server.ps1';
+    const defindedVpc = vpc || getStandardVpc(scope, id);
+
     super(scope, id, {
       instanceName: id,
       instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.MEDIUM),
@@ -86,9 +93,9 @@ export class ZoomServer extends Instance {
         // use the provided custom image Id, or a standard Windows 2019 server
         'eu-central-1': imageId || 'ami-086d0be14ab5129e1',
       }),
-      vpc: vpcParams.vpc,
-      role: vpcParams.role,
-      securityGroup: createSecurityGroup(scope, `${id}Sg`, vpcParams.vpc),
+      vpc: defindedVpc,
+      role: new Ec2InstanceRole(scope, id, { policyStatments, detailedServerMetrics, bucket }),
+      securityGroup: createSecurityGroup(scope, `${id}Sg`, defindedVpc),
       userDataCausesReplacement: true,
       keyName,  
     });
@@ -98,6 +105,8 @@ export class ZoomServer extends Instance {
       flow(
         readFileSync,
         replaceParameters(jamulusMixingInstance, jamulusBandInstance, zoomMeeting),
+        // need to figure out how to install the CloudWatch Agent on Windows
+        // addCloudWatchAgentInstallScript(detailedServerMetrics),
         addUserData(this),
       )(userDataFileName, 'utf8');
     }

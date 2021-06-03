@@ -2,9 +2,11 @@ import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, Instance
 import { CfnOutput, Stack } from "@aws-cdk/core";
 import { readFileSync } from "fs";
 import { flow } from 'lodash/fp';
-import { addUserData, replaceRegion } from "../../utilities/utilities";
+import { addCloudWatchAgentInstallScript, addUserData, replaceRegion } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+import { getStandardVpc } from '../../utilities/basic-elements/get-standard-vpc';
+import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 
 export interface JamulusServerSettings extends StandardServerSettings {
   /**
@@ -46,15 +48,16 @@ export class JamulusServer extends Instance {
    * @param props Properties for the Jamulus server
    * @returns The EC2 instance and its properties
    */
-  constructor(scope: Stack, id: string, props: JamulusServerProps) {
-    const {
-      elasticIpAllocation, keyName, vpcParams, imageId, settingsFileName,
-    } = props;
+  constructor(scope: Stack, id: string, {
+    elasticIpAllocation, keyName, imageId, settingsFileName, detailedServerMetrics, policyStatments, bucket, vpc,
+  }: JamulusServerProps) {
     const userDataFileName = './lib/jamulus-server/configure-jamulus.sh';
+    const definedVpc = vpc || getStandardVpc(scope, id);
 
     if (imageId && settingsFileName) console.log(`${id}: If both an imageId and a settingsFileName is provided, only the imageId is considered and the settings from the configuration file are ignored.`);
     if (!imageId && !settingsFileName) throw(new TypeError(`${id}: You should either provide an AMI ID or a server settings file name`));
 
+  
     super(scope, id, {
       instanceName: id,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
@@ -62,9 +65,9 @@ export class JamulusServer extends Instance {
         // use the provided custom image with a running Jamulus server or an Ubuntu 18.04 arm64 standard image
         'eu-central-1': imageId || 'ami-01bced7e7239dbd82',
       }),
-      vpc: vpcParams.vpc,
-      role: vpcParams.role,
-      securityGroup: createSecurityGroup(scope, `${id}Sg`, vpcParams.vpc),
+      vpc: definedVpc,
+      role: new Ec2InstanceRole(scope, id, { bucket, detailedServerMetrics, policyStatments }),
+      securityGroup: createSecurityGroup(scope, `${id}Sg`, definedVpc),
       keyName,
       userDataCausesReplacement: true,      
     });
@@ -75,6 +78,7 @@ export class JamulusServer extends Instance {
         readFileSync,
         replaceServerSettingsFileName(settingsFileName),
         replaceRegion(scope.region),
+        addCloudWatchAgentInstallScript(detailedServerMetrics),
         addUserData(this),
       )(userDataFileName, 'utf8');
     };

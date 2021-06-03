@@ -267,7 +267,20 @@ channels: [
 - **Description**: The password for the user `ubuntu` to be used for the 
 RDP authentication.
 
+### `DetailedServerMetrics`
+
+**`detailedServerMetrics`**
+
+- **Type**: `boolean`
+- **Required**: No
+- **Default**: false
+- **Description**: Provide `true` if you want to have detailed metrics about 
+the state of your servers (i.e., memory usage, disk space etc.). The CloudWatch 
+Agent will be installed on the server to retrieve those detailed metrics.
+
 ### `JamulusServerSettings`
+
+*extends [`StandardServerSettings`](#StandardServerSettings)*
 
 **`settingsFileName`**
 
@@ -285,6 +298,8 @@ aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.servi
 ```
 
 ### `StandardServerSettings`
+
+*extends [`DetailedServerMetrics`](#DetailedServerMetrics)*
 
 **`elasticIpAllocation`**
 
@@ -317,15 +332,6 @@ Elastic IPs to ensure your servers always have the same IP address. See
 [details on creating an image](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/tkv-create-ami-from-instance.html) 
 and then provide the AMI ID in this parameter.
 
-**`detailedServerMetrics`**
-
-- **Type**: `boolean`
-- **Required**: No
-- **Default**: false
-- **Description**: Provide `true` if you want to have detailed metrics about 
-the state of your servers (i.e., memory usage, disk space etc.). The CloudWatch 
-Agent will be installed on the server to retrieve those detailed metrics.
-
 ### `ZoomMeetingProps`
 
 **`meetingId`**
@@ -343,6 +349,8 @@ Agent will be installed on the server to retrieve those detailed metrics.
 - **Description**: The Zoom meeting password.
 
 ### `ZoomServerSettings`
+
+*extends [`StandardServerSettings`](#StandardServerSettings)*
 
 **`zoomMeeting`**
 
