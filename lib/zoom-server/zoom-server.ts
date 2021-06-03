@@ -99,13 +99,7 @@ export class ZoomServer extends Instance {
       if (bucket) new ConfigBucketDeployment(scope, `${id}BucketDeploy`, {
         bucket,
         sources: createSources({
-          baseFolder: 'zoom-server-config',
-          staticPathes: [
-            'JamulusToZoomServer.xml',
-            'Jamulus_Startup.bat',
-            'jamulus-inis/JamulusFromZoom.ini',
-            'jamulus-inis/JamulusToZoom.ini',
-          ],
+          staticPathes: ['zoom-server-config'],
         }),
       });
       createUserData({

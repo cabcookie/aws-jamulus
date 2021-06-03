@@ -76,10 +76,7 @@ export class JamulusServer extends Instance {
       if (bucket) new ConfigBucketDeployment(this, `${id}BucketDeploy`, {
         bucket,
         sources: createSources({
-          staticPathes: [
-            settingsFileName,
-            cloudWatchSettingsFileName,
-          ],
+          staticPathes: ['/'],
         }),
       });
       console.log(`${id}: Providing user data (${userDataFileName})`);
