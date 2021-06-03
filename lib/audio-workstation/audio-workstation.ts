@@ -7,7 +7,7 @@ import { createSecurityGroup } from "../../utilities/basic-elements/create-secur
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addCloudWatchAgentInstallScript, addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, SERVER_TYPES } from "../../utilities/utilities";
+import { addCloudWatchAgentInstallScript, addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, replaceVersion, SERVER_TYPES } from "../../utilities/utilities";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 
 export interface AudioWorkstationSettings extends StandardServerSettings {
@@ -92,6 +92,7 @@ export class AudioWorkstation extends Instance {
       console.log(`${id}: Providing user data (${userDataFileName})`);
       flow(
         readFileSync,
+        replaceVersion(),
         replaceRegion(scope.region),
         replaceUbuntuPassword(ubuntuPassword),
         replaceChannelsConfig(channels),

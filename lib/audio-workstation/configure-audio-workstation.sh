@@ -7,7 +7,7 @@ SHOW_FILE() {
     command cat $@
 }
 
-LOG v1.5.1
+LOG %%VERSION%%
 LOG update packages
 sudo apt-get update
 echo y | sudo apt-get install awscli

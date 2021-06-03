@@ -1,4 +1,7 @@
 <powershell>
+  $scriptVersion = "%%VERSION%%"
+  Write-Output $scriptVersion
+  
   # The name of your S3 Bucket
   $bucket = "jamulus-config-bucket"
   

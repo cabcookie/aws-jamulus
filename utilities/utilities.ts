@@ -19,9 +19,8 @@ export const log: (message: string) => FunctionWithFlexibleInput = (message) => 
 };
 
 export const addUserData = (instance: Instance) => (commands: string) => instance.addUserData(commands);
-
+export const replaceVersion = () => (file: string) => file.replace(/%%VERSION%%/g, require('../package.json').version);
 export const replaceRegion = (regionName: string) => (file: string) => file.replace(/%%REGION%%/g, regionName);
-
 export const replaceUbuntuPassword = (password: string) => (file: string) => file.replace(/%%UBUNTU_PASSWORD%%/g, password);
 
 // see download links for different OS here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html

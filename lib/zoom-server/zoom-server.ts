@@ -2,7 +2,7 @@ import { CfnEIPAssociation, GenericWindowsImage, Instance, InstanceClass, Instan
 import { CfnOutput, Stack } from "@aws-cdk/core";
 import { readFileSync } from "fs";
 import { flow, replace } from "lodash/fp";
-import { addCloudWatchAgentInstallScript, addUserData } from "../../utilities/utilities";
+import { addUserData, replaceVersion } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
@@ -104,6 +104,7 @@ export class ZoomServer extends Instance {
       console.log(`${id}: Providing user data (${userDataFileName})`);
       flow(
         readFileSync,
+        replaceVersion(),
         replaceParameters(jamulusMixingInstance, jamulusBandInstance, zoomMeeting),
         // need to figure out how to install the CloudWatch Agent on Windows
         // addCloudWatchAgentInstallScript(detailedServerMetrics),
