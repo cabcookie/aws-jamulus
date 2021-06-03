@@ -71,6 +71,7 @@ export class ZoomServer extends Instance {
     detailedServerMetrics,
     policyStatments,
     vpc,
+    timezone,
   }: ZoomServerProps) {
     const userDataFileName = './lib/zoom-server/configure-zoom-server.ps1';
     const defindedVpc = vpc || getStandardVpc(scope, id);
@@ -97,6 +98,7 @@ export class ZoomServer extends Instance {
         detailedServerMetrics,
         bandServer: jamulusBandInstance,
         mixingServer: jamulusMixingInstance,
+        timezone,
         additionalProcessFn: flow(
           replace('%%MEETING_ID%%', zoomMeeting.meetingId),
           replace('%%MEETING_PASSWORD%%', zoomMeeting.password ? `?pwd=${zoomMeeting.password}` : ''),

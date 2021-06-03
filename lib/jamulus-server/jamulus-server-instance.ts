@@ -47,7 +47,7 @@ export class JamulusServer extends Instance {
    * @returns The EC2 instance and its properties
    */
   constructor(scope: Stack, id: string, {
-    elasticIpAllocation, keyName, imageId, settingsFileName, detailedServerMetrics, policyStatments, bucket, vpc,
+    elasticIpAllocation, keyName, imageId, settingsFileName, detailedServerMetrics, policyStatments, bucket, vpc, timezone,
   }: JamulusServerProps) {
     const userDataFileName = './lib/jamulus-server/configure-jamulus.sh';
     const definedVpc = vpc || getStandardVpc(scope, id);
@@ -76,6 +76,7 @@ export class JamulusServer extends Instance {
         instance: this,
         region: scope.region,
         filename: userDataFileName,
+        timezone,
         detailedServerMetrics,
         additionalProcessFn: replaceServerSettingsFileName(settingsFileName),
       });

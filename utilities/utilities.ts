@@ -23,6 +23,7 @@ export const log: (message: string) => FunctionWithFlexibleInput = (message) => 
 };
 
 const addUserData = (instance: Instance) => (commands: string) => instance.addUserData(commands);
+const replaceTimezone = (timezone?: string) => (file: string) => file.replace(/%%TIMEZONE%%/g, timezone || 'UTC');
 const replaceVersion = (file: string) => file.replace(/%%VERSION%%/g, require('../package.json').version);
 const replaceRegion = (regionName?: string) => (file: string) => regionName ? file.replace(/%%REGION%%/g, regionName) : file;
 export const replaceUbuntuPassword = (password: string) => (file: string) => file.replace(/%%UBUNTU_PASSWORD%%/g, password);
@@ -53,6 +54,11 @@ interface UserDataProps extends DetailedServerMetricsSettings {
    * to.
    */
   mixingServer?: JamulusServer;
+  /**
+   * Provide the timezone. Searches for the string %%TIMEZONE%% in the instance
+   * initialization script.
+   */
+  timezone?: string;
 };
 
 const stdStrFn = (str: string) => str;
@@ -66,12 +72,14 @@ export const createUserData = ({
   region,
   bandServer,
   mixingServer,
+  timezone,
 }: UserDataProps) => flow(
   readFileSync,
   replaceVersion,
   replaceIp(SERVER_TYPES.BAND, bandServer),
   replaceIp(SERVER_TYPES.MIXER, mixingServer),
   replaceRegion(region),
+  replaceTimezone(timezone),
   addCloudWatchAgentInstallScript(detailedServerMetrics),
   returnInputWhenFnIsNull(additionalProcessFn),
   addUserData(instance),

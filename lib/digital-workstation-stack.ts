@@ -30,7 +30,14 @@ interface KeyNameProp {
   keyName?: string;
 };
 
-export interface StandardServerProps extends KeyNameProp, Ec2InstanceRoleProps {
+interface TimeZoneProp {
+  /**
+   * Provide the timezone for your server instance.
+   */
+  timezone?: string;
+};
+
+export interface StandardServerProps extends KeyNameProp, Ec2InstanceRoleProps, TimeZoneProp {
   /**
    * Provide the VPC where the resources should be created in. If no VPC is
    * provided, the standard VPC will be used.
@@ -38,7 +45,7 @@ export interface StandardServerProps extends KeyNameProp, Ec2InstanceRoleProps {
   vpc?: Vpc;
 };
 
-interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketName {
+interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketName, TimeZoneProp {
   /**
    * The settings for the Jamulus server the band members connect to.
    */
@@ -79,6 +86,7 @@ export class DigitalWorkstation extends Stack {
     mixingServerSettings,
     audioWorkstationSettings,
     zoomServerSettings,
+    timezone,
     channels,
     ...rest
   }: DigitalWorkstationProps) {
@@ -98,6 +106,7 @@ export class DigitalWorkstation extends Stack {
     const bandServer = new JamulusServer(this, 'JamulusBandServer', {
       keyName,
       ...bandServerSettings,
+      timezone,
       bucket: configBucket,
     });
 
@@ -106,6 +115,7 @@ export class DigitalWorkstation extends Stack {
       mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
         keyName,
         ...mixingServerSettings,
+        timezone,
         bucket: configBucket,
       });
     }
@@ -116,6 +126,7 @@ export class DigitalWorkstation extends Stack {
         jamulusMixingServer: mixingServer,
         keyName,
         ...audioWorkstationSettings,
+        timezone,
         channels,
         bucket: configBucket,
       });

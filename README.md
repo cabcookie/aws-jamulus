@@ -231,6 +231,13 @@ from there to feed it into the Zoom meeting.
 be running. Zoom will connect to the Zoom meeting and will feed the 
 mixed signal to it.
 
+**`timezone`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: `UTC`
+- **Description**: Set the timezone for your servers.
+
 **`channels`**
 
 - **Type**: `string[]` (an Array of strings)

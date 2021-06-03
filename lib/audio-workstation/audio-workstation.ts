@@ -63,6 +63,7 @@ export class AudioWorkstation extends Instance {
     bucket,
     policyStatments,
     vpc,
+    timezone,
   }: AudioWorkstationProps) {
     const userDataFileName = './lib/audio-workstation/configure-audio-workstation.sh';
     const defindedVpc = vpc || getStandardVpc(scope, id);
@@ -92,6 +93,7 @@ export class AudioWorkstation extends Instance {
         region: scope.region,
         filename: userDataFileName,
         detailedServerMetrics,
+        timezone,
         bandServer: jamulusBandServer,
         additionalProcessFn: flow(
           replaceUbuntuPassword(ubuntuPassword),

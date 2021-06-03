@@ -27,6 +27,7 @@
       "password": "a-super-secure-zoom-pwd"
     }
   },
+  "timezone": "UTC",
   "channels": [
     "Vocal 1",
     "Vocal 2",

@@ -20,6 +20,10 @@
   New-Item -Path $localInstallPath -ItemType Directory
   New-Item -Path $localVoiceMeeterConfig -ItemType Directory
   
+  # Set the timezone to Europe/Berlin; should be optimized later
+  # (needs mapping between Ubuntu timezones and PowerShell timezones)
+  Set-TimeZone -Id "Central European Standard Time" -PassThru
+  
   Function Get-Url-File {
     Param ($url, $fileName)
     Invoke-WebRequest $url/$fileName -UseBasicParsing -Outfile $localInstallPath\$fileName

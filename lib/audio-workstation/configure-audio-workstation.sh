@@ -8,6 +8,10 @@ SHOW_FILE() {
 }
 
 LOG %%VERSION%%
+
+LOG set timezone
+timedatectl set-timezone %%TIMEZONE%%
+
 LOG update packages
 sudo apt-get update
 echo y | sudo apt-get install awscli
