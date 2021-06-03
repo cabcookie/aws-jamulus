@@ -42,16 +42,20 @@ interface UserDataProps extends DetailedServerMetricsSettings {
    */
   additionalProcessFn?: (file: string) => string;
   /**
-   * Provide the region that should be replaced.
+   * Provide the region that should be replaced. Expects the string %%REGION%%
+   * in the instance initialization script.
    */
   region?: string;
   /**
-   * The Jamulus server instance where the band connects to.
+   * The Jamulus server instance where the band connects to. Searches for the
+   * strings %%BAND_PRIVATE_IP%% and %%BAND_PUBLIC_IP%% in the instance 
+   * initialization script.
    */
   bandServer?: JamulusServer;
   /**
    * The Jamulus mixing server where Zoom and the audio workstation connects
-   * to.
+   * to. Searches for the strings %%MIXER_PRIVATE_IP%% and %%MIXER_PUBLIC_IP%%
+   * in the instance initialization script.
    */
   mixingServer?: JamulusServer;
   /**
