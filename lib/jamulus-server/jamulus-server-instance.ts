@@ -1,12 +1,13 @@
 import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
-import { cloudWatchSettingsFileName, createUserData } from "../../utilities/utilities";
+import { createUserData } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 import { getStandardVpc } from '../../utilities/basic-elements/get-standard-vpc';
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { ConfigBucketDeployment } from "../../utilities/basic-elements/config-bucket-deployment";
-import { createSources } from "../../utilities/basic-elements/create-sources";
+import { flow } from "lodash";
+import { replace } from "lodash/fp";
 
 export interface JamulusServerSettings extends StandardServerSettings {
   /**
@@ -75,9 +76,7 @@ export class JamulusServer extends Instance {
     if (!imageId && settingsFileName) {
       if (bucket) new ConfigBucketDeployment(this, `${id}BucketDeploy`, {
         bucket,
-        sources: createSources({
-          staticPathes: ['/'],
-        }),
+        path: id,
       });
       console.log(`${id}: Providing user data (${userDataFileName})`);
       createUserData({
@@ -86,7 +85,10 @@ export class JamulusServer extends Instance {
         filename: userDataFileName,
         timezone,
         detailedServerMetrics,
-        additionalProcessFn: replaceServerSettingsFileName(settingsFileName),
+        additionalProcessFn: flow(
+          replaceServerSettingsFileName(settingsFileName),
+          replace(/%%INSTANCE_FOLDER%%/g, id),
+        ),
       });
     };
   

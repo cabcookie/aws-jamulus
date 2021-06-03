@@ -50,7 +50,7 @@ sudo mkdir /var/log/jamulus
 sudo chown jamulus:nogroup /var/log/jamulus
 
 LOG copy the jamulus start script from S3
-aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
+aws s3 cp s3://jamulus-config-bucket/%%INSTANCE_FOLDER%%/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
 
 LOG move the script to the systems folder
 sudo mv jamulus.service /etc/systemd/system/
@@ -68,7 +68,7 @@ echo yes | sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
 rm amazon-cloudwatch-agent.deb
 
 LOG load and show the config file
-aws s3 cp s3://jamulus-config-bucket/cloudwatch-linux-settings.json config.json
+aws s3 cp s3://jamulus-config-bucket/%%INSTANCE_FOLDER%%/cloudwatch-linux-settings.json config.json
 SHOW_FILE config.json
 
 LOG move the config file and start the CloudWatch agent

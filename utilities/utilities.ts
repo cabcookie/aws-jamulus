@@ -68,7 +68,7 @@ interface UserDataProps extends DetailedServerMetricsSettings {
 };
 
 const stdStrFn = (str: string) => str;
-const returnInputWhenFnIsNull = (fn?: (param: string) => string) => fn || stdStrFn;
+export const returnInputWhenFnIsNull = (fn?: (param: string) => string) => fn || stdStrFn;
 
 export const createUserData = ({
   instance,

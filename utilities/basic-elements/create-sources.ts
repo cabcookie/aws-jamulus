@@ -1,38 +1,53 @@
 import { ISource, Source } from "@aws-cdk/aws-s3-deployment";
+import { existsSync } from "fs";
 import { flow } from "lodash/fp";
 
-interface SourcePathType {
+type DynamicFileCreation = (targetFolder: string) => void;
+
+export interface SourcePathType {
   /**
-   * Define the root folder for the assets you list. The default folder is ''.
+   * The directory from which the static and the dynamic files are picked.
+   * The static files are fetched from `./server-config/${path}/`.
+   * The dynamic files will be fetched from
+   * `./build-bucket-deployment/${path}/`.
    */
-  baseFolder?: string;
+  path: string;
   /**
-   * A list of static files or directories. The static files will be fetched
-   * from `./server-config/${basefolder}/`.
+   * Function which creates the dynamic files. It will have to put the files
+   * in the folder `./build-bucket-deployment/${path}/`.
+   * 
+   * @param targetFolder The path where the function will deploy the files
+   * that are to be transferred to the S3 bucket.
    */
-  staticPathes?: string[];
-  /**
-   * A list of dynamic files or directories which will be created during the
-   * creation of the AWS resources. The dynamic files will be fetched
-   * from `./build-bucket-deployment/${basefolder}/`.
-   */
-  dynamicPathes?: string[];
+  createDynamicFiles?: DynamicFileCreation;
 };
 
 const pushSource = (sources: ISource[]) => (newSource: ISource) => [...sources, newSource];
-const makePath = (rootFolder: string, baseFolder?: string) => (file: string) => `${rootFolder}/${baseFolder || ''}/${file}`.replace(/\/+/g, '/');
-const addSource = (rootFolder: string, baseFolder?: string) => (prev: ISource[], curr: string) => flow(
-  makePath(rootFolder, baseFolder),
-  Source.asset,
-  pushSource(prev)
-)(curr);
+
+const makePath = (rootFolder: string) => (folder: string) => `${rootFolder}/${folder}`.replace(/\/+/g, '/');
+
+const addSourceIfPathExists = (sources: ISource[]) => (path: string) => existsSync(path)
+  ? flow(
+    Source.asset,
+    pushSource(sources)
+  )(path)
+  : sources;
+
+const addSource = (rootFolder: string, path: string) => (sources: ISource[]) => flow(
+  makePath(rootFolder),
+  addSourceIfPathExists(sources),
+)(path);
+
+const createDynamicFilesAndReturnSources = (path: string, createDynamicFiles?: DynamicFileCreation) => (sources: ISource[]) => {
+  const rootName = './build-bucket-deployment';
+  const baseFolder = makePath(rootName)(path);
+  if (createDynamicFiles) createDynamicFiles(baseFolder);
+  return addSource(rootName, path)(sources)
+};
+
 export const createSources = ({
-  baseFolder, dynamicPathes, staticPathes,
-}: SourcePathType) => [
-  ...(staticPathes
-    ? staticPathes.reduce(addSource('./server-config', baseFolder), [])
-    : []),
-  ...(dynamicPathes
-    ? dynamicPathes.reduce(addSource('./build-bucket-deployment', baseFolder), [])
-    : []),
-];
+  path, createDynamicFiles,
+}: SourcePathType) => flow(
+  addSource('./server-config', path),
+  createDynamicFilesAndReturnSources(path, createDynamicFiles),
+)([]);

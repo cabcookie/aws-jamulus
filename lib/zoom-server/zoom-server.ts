@@ -8,7 +8,6 @@ import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc"
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { JamulusServer } from "../jamulus-server/jamulus-server-instance";
 import { ConfigBucketDeployment } from "../../utilities/basic-elements/config-bucket-deployment";
-import { createSources } from "../../utilities/basic-elements/create-sources";
 
 /**
  * Settings for the Zoom meeting this instance should connect and send the
@@ -98,9 +97,7 @@ export class ZoomServer extends Instance {
       console.log(`${id}: Providing user data (${userDataFileName})`);
       if (bucket) new ConfigBucketDeployment(scope, `${id}BucketDeploy`, {
         bucket,
-        sources: createSources({
-          staticPathes: ['zoom-server-config'],
-        }),
+        path: id
       });
       createUserData({
         instance: this,

@@ -3,7 +3,6 @@ import { CfnOutput, Stack } from "@aws-cdk/core";
 import { flow } from "lodash/fp";
 import { ConfigBucketDeployment } from "../../utilities/basic-elements/config-bucket-deployment";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
-import { createSources } from "../../utilities/basic-elements/create-sources";
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { createUserData, replaceUbuntuPassword } from "../../utilities/utilities";
@@ -92,13 +91,7 @@ export class AudioWorkstation extends Instance {
       console.log(`${id}: Providing user data (${userDataFileName})`);
       if (bucket) new ConfigBucketDeployment(scope, `${id}BucketDeploy`, {
         bucket,
-        sources: createSources({
-          staticPathes: [
-            'audio-workstation-config/',
-            'ardour/',
-            'audio-workstation-config/app-wrapper/',
-          ],
-        }),
+        path: id,
       });
       createUserData({
         instance: this,

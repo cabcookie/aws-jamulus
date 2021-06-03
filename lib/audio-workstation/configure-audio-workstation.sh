@@ -29,7 +29,7 @@ sudo service gdm3 start
 sudo systemctl enable xrdp
 
 LOG fetch Jack configuration files
-sudo aws s3 cp s3://jamulus-config-bucket/audio-workstation-config/jack/jackdrc.conf /home/ubuntu/.jackdrc
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/jack/jackdrc.conf /home/ubuntu/.jackdrc
 sudo chown -R ubuntu /home/ubuntu/.jackdrc
 
 SHOW_FILE /home/ubuntu/.jackdrc
@@ -42,10 +42,10 @@ mkdir /home/ubuntu/bin
 CFGFOLD=/home/ubuntu/bin/create-config-files
 mkdir $CFGFOLD
 echo "%%CHANNELS%%" >> $CFGFOLD/channels.json
-sudo aws s3 cp s3://jamulus-config-bucket/audio-workstation-config/jamulus/ $CFGFOLD/ --recursive --include "*"
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/jamulus/ $CFGFOLD/ --recursive --include "*"
 
 LOG add Ardour project to Documents
-sudo aws s3 cp s3://jamulus-config-bucket/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
 
 LOG create jamulus configuration files in local Documents folder
 mkdir /home/ubuntu/Documents
@@ -57,14 +57,14 @@ sudo chown -R ubuntu /home/ubuntu/Documents
 SHOW_FILE /home/ubuntu/Documents/jamulus-startup.sh
 
 LOG create wrapper app Audio Workstation
-sudo aws s3 cp s3://jamulus-config-bucket/audio-workstation-config/app-wrapper/jamulus-startup.desktop /usr/share/applications/
-sudo aws s3 cp s3://jamulus-config-bucket/audio-workstation-config/app-wrapper/jamulus-startup.png /usr/share/icons/
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/jamulus-startup.desktop /usr/share/applications/
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/jamulus-startup.png /usr/share/icons/
 
 SHOW_FILE /usr/share/applications/jamulus-startup.desktop
 
 LOG prepare startup file to install remaining apps – Ardour and Jamulus
-sudo aws s3 cp s3://jamulus-config-bucket/audio-workstation-config/app-wrapper/install-apps.sh /home/ubuntu/bin/
-sudo aws s3 cp s3://jamulus-config-bucket/audio-workstation-config/app-wrapper/workstation-autostart.desktop /etc/xdg/autostart/
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/install-apps.sh /home/ubuntu/bin/
+sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/workstation-autostart.desktop /etc/xdg/autostart/
 chmod +x /home/ubuntu/bin/install-apps.sh
 sudo chown -R ubuntu /home/ubuntu/bin/
 

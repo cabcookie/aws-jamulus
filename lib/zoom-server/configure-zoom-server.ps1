@@ -1,12 +1,13 @@
 <powershell>
   $scriptVersion = "%%VERSION%%"
   Write-Output $scriptVersion
-  
+
   # The name of your S3 Bucket
-  $bucket = "jamulus-config-bucket"
+  $bucket = "%%CONFIG_BUCKET_NAME%%"
   
-  # The folder in your bucket to copy, including trailing slash. Leave blank to copy the entire bucket
-  $bucketDir = "zoom-server-config"
+  # The folder in your bucket to copy, without a trailing slash. Leave blank to copy the entire bucket
+  $bucketDir = "WindowsZoomServer"
+
   
   # The local file paths where files should be copied
   $localJamulusPath = "C:\Users\Administrator\Desktop\Jamulus"
