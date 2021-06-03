@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.2](https://github.com/cabcookie/aws-jamulus/compare/v1.6.1...v1.6.2) (2021-06-03)
+
+
+### Bug Fixes
+
+* **doc:** documented settings in `config.json` [#10](https://github.com/cabcookie/aws-jamulus/issues/10) ([6ac75d4](https://github.com/cabcookie/aws-jamulus/commit/6ac75d4dc53b5b262c8d3d690b6e033b1d93f583))
+
 ### [1.6.1](https://github.com/cabcookie/aws-jamulus/compare/v1.6.0...v1.6.1) (2021-06-02)
 
 
