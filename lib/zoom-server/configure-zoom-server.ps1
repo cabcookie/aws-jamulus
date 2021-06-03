@@ -42,8 +42,8 @@
   Get-From-S3 $bucketDir/jamulus-inis JamulusToZoom.ini $localJamulusIniPath
 
   $content = Get-Content -Path $localJamulusPath\Jamulus_Startup.bat
-  $content = $content -replace '%JAMULUS_MIXER_IP%', '%%JAMULUS_MIXER_IP%%'
-  $content = $content -replace '%JAMULUS_BAND_IP%', '%%JAMULUS_BAND_IP%%'
+  $content = $content -replace '%JAMULUS_MIXER_IP%', '%%MIXER_PRIVATE_IP%%'
+  $content = $content -replace '%JAMULUS_BAND_IP%', '%%BAND_PRIVATE_IP%%'
   $content = $content -replace '%MEETING_ID%', '%%MEETING_ID%%'
   $content = $content -replace '%MEETING_PASSWORD%', '%%MEETING_PASSWORD%%'
   $content | Set-Content -Path $localJamulusPath\Jamulus_Startup.bat

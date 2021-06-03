@@ -1,8 +1,6 @@
 import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
-import { readFileSync } from "fs";
-import { flow } from 'lodash/fp';
-import { addCloudWatchAgentInstallScript, addUserData, replaceRegion, replaceVersion } from "../../utilities/utilities";
+import { createUserData } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 import { getStandardVpc } from '../../utilities/basic-elements/get-standard-vpc';
@@ -74,14 +72,13 @@ export class JamulusServer extends Instance {
 
     if (!imageId && settingsFileName) {
       console.log(`${id}: Providing user data (${userDataFileName})`);
-      flow(
-        readFileSync,
-        replaceVersion(),
-        replaceServerSettingsFileName(settingsFileName),
-        replaceRegion(scope.region),
-        addCloudWatchAgentInstallScript(detailedServerMetrics),
-        addUserData(this),
-      )(userDataFileName, 'utf8');
+      createUserData({
+        instance: this,
+        region: scope.region,
+        filename: userDataFileName,
+        detailedServerMetrics,
+        additionalProcessFn: replaceServerSettingsFileName(settingsFileName),
+      });
     };
   
     this.connections.allowFromAnyIpv4(new Port({

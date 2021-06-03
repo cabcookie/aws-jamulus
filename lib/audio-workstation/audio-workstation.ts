@@ -1,13 +1,10 @@
 import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
-import { Policy, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { CfnOutput, Construct, Stack } from "@aws-cdk/core";
-import { readFileSync } from "fs";
+import { CfnOutput, Stack } from "@aws-cdk/core";
 import { flow } from "lodash/fp";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
-import { createSsmPermissions } from "../../utilities/policies/ssm-permissions";
-import { addCloudWatchAgentInstallScript, addUserData, replaceIp, replaceRegion, replaceUbuntuPassword, replaceVersion, SERVER_TYPES } from "../../utilities/utilities";
+import { createUserData, replaceUbuntuPassword } from "../../utilities/utilities";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 
 export interface AudioWorkstationSettings extends StandardServerSettings {
@@ -90,16 +87,17 @@ export class AudioWorkstation extends Instance {
 
     if (!imageId) {
       console.log(`${id}: Providing user data (${userDataFileName})`);
-      flow(
-        readFileSync,
-        replaceVersion(),
-        replaceRegion(scope.region),
-        replaceUbuntuPassword(ubuntuPassword),
-        replaceChannelsConfig(channels),
-        replaceIp(SERVER_TYPES.BAND, jamulusBandServer),
-        addCloudWatchAgentInstallScript(detailedServerMetrics),
-        addUserData(this),
-      )(userDataFileName, 'utf8');
+      createUserData({
+        instance: this,
+        region: scope.region,
+        filename: userDataFileName,
+        detailedServerMetrics,
+        bandServer: jamulusBandServer,
+        additionalProcessFn: flow(
+          replaceUbuntuPassword(ubuntuPassword),
+          replaceChannelsConfig(channels),
+        ),
+      });
     };
   
     this.connections.allowFromAnyIpv4(new Port({
