@@ -12,7 +12,7 @@ export interface AudioWorkstationSettings extends StandardServerSettings {
   /**
    * The password for the user `ubuntu` to be used for the RDP authentication.
    */
-  ubuntuPassword?: string;
+  ubuntuPassword: string;
 };
 
 /**
@@ -63,7 +63,7 @@ export class AudioWorkstation extends Construct {
   constructor(scope: Stack, id: string, props: AudioWorkstationProps) {
     super(scope, id);
 
-    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpcParams, imageId, ubuntuPassword, channels, installCloudWatchAgent } = props;
+    const { jamulusBandServer, jamulusMixingServer, elasticIpAllocation, keyName, vpcParams, imageId, ubuntuPassword, channels, detailedServerMetrics } = props;
     const { vpc, role } = vpcParams;
     const userDataFileName = './lib/audio-workstation/configure-audio-workstation.sh';
 
@@ -93,7 +93,7 @@ export class AudioWorkstation extends Construct {
         replaceUbuntuPassword(ubuntuPassword),
         replaceChannelsConfig(channels),
         replaceIp(SERVER_TYPES.BAND, jamulusBandServer),
-        addCloudWatchAgentInstallScript(installCloudWatchAgent),
+        addCloudWatchAgentInstallScript(detailedServerMetrics),
         addUserData(mixer),
       )(userDataFileName, 'utf8');
     };

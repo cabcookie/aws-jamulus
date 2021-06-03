@@ -1,5 +1,5 @@
 import { Stack, Construct, StackProps } from '@aws-cdk/core';
-import { ConfigBucket } from '../utilities/basic-elements/config-bucket';
+import { ConfigBucket, ConfigBucketName } from '../utilities/basic-elements/config-bucket';
 import { createVpc, VpcProperties } from '../utilities/basic-elements/create-vpc';
 import { ZoomServer, ZoomServerSettings } from './zoom-server/zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
@@ -22,15 +22,18 @@ export interface StandardServerSettings {
   /**
    * Install the CloudWatch agent.
    */
-  installCloudWatchAgent?: boolean;
+  detailedServerMetrics?: boolean;
 };
 
-export interface StandardServerProps {
+interface KeyNameProp {
   /**
    * Provide a keyname so the EC2 instance is accessible via SSH with a
    * PEM key (see details here: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
    */
-  keyName: string;
+  keyName?: string;
+};
+
+export interface StandardServerProps extends KeyNameProp {
   /**
    * Provide the details for the VPC, the Security Group to be used and the
    * IAM Instance Role so that the EC2 instance can access other resources.
@@ -38,13 +41,36 @@ export interface StandardServerProps {
   vpcParams: VpcProperties; 
 };
 
-interface DigitalWorkstationProps extends StackProps {
-  keyName: string;
-  configBucketName?: string;
-  bandServerSettings?: JamulusServerSettings;
-  mixingServerSettings?: JamulusServerSettings;
-  zoomServerSettings?: ZoomServerSettings;
+interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketName {
+  /**
+   * The settings for the Jamulus server the band members connect to.
+   */
+  bandServerSettings: JamulusServerSettings;
+  /**
+   * The settings for the audio workstation which is routing the signals of
+   * every band member into separate channels in a Digital Workstation (i.e.,
+   * Ardour), so it can be mixed live. The mixed signal is routed to the Zoom
+   * server through the Jamulus mixing server.
+   */
   audioWorkstationSettings?: AudioWorkstationSettings;
+  /**
+   * The settings for the Jamulus mixing server where the mixed signal will be
+   * routed to. The Zoom server will take the signal from there to feed it into
+   * the Zoom meeting.
+   */
+  mixingServerSettings?: JamulusServerSettings;
+  /**
+   * The settings for the Windows server where Zoom will be running. Zoom will
+   * connect to the Zoom meeting and will feed the mixed signal to it.
+   */
+  zoomServerSettings?: ZoomServerSettings;
+  /**
+   * The channels that should be created in the Ardour session (i.e., the
+   * Digital Audio Workstation). This setting also creates the `ini` files for
+   * the Jamulus instances and adds the launch of one Jamulus instance per
+   * channel to only route the signal of such particular band member into its
+   * dedicated channel in Ardour.
+   */
   channels?: string[];
 };
 

@@ -132,6 +132,20 @@ happens whenever you [destroy the environment](#destroy-the-environment) or
 whenever you change something in the settings or in the startup script and you
 run `cdk deploy` again to implement the changes.
 
+### Test your environment
+
+If you change any code or settings in your
+[`config.json`](#Settings-for-your-Digital-Workstation-environment) and you want
+to test those before you create the resources in the AWS Cloud, run the
+following command:
+
+```bash
+cdk synth
+```
+
+This will create the CloudFormation template based on your settings and it will
+tell you if it runs into any issues down the line.
+
 ### Destroy the environment
 
 When you do not need the environment again, you just run this command:
@@ -142,10 +156,201 @@ cdk destroy
 
 This will destroy all servers and other resources created. 
 
-## Settings for your Jamulus environment
+## Settings for your Digital Workstation environment
 
-TODO: to be documented as described in issue [#10](https://github.com/cabcookie/aws-jamulus/issues/10).
+The Digital Workstation can be as small as just a Jamulus server for the band
+or as big as a full virtual concert hall setup with a live console (or digital
+audio workstation or live mixer) and an audience following the performance on
+Zoom. You decide by setting the parameters for your environment.
 
+To configure your environment you provide a file with the name `config.json` and
+you put it in the folder `bin` of the project. If you cloned the project from
+GitHub the file `.gitignore` ensures you never push the file back to GitHub as
+it can include some sensible information. The `example-config.json` shows you
+an example structure of the file.
+
+The settings are described in the following sections.
+
+### Settings in `config.json`
+
+**`configBucketName`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: `jamulus-config-bucket`
+- **Description**: The name for the bucket where the configuration and
+installation files for the EC2 instances should be hosted. This name
+must be unique in the region and across all AWS Accounts. If no name is
+provided it will create a bucket with the name `jamulus-config-bucket`.
+
+**`keyName`**
+
+- **Type**: `string`
+- **Required**: No, if you do not setup a `ZoomServer`.
+- **Default**: -
+- **Description**: Provide a keyname so you can access created servers 
+via a secure shell (i.e., SSH) or (in case of the Windows Server) to 
+retrieve the password of the Windows machine. You first have to create a 
+PEM key manually and store the key file locally (see details here: 
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
+You then provide the name of this key file through this parameter.
+
+**`bandServerSettings`**
+
+- **Type**: [`JamulusServerSettings`](#JamulusServerSettings)
+- **Required**: Yes
+- **Default**: -
+- **Description**: The settings for the Jamulus server the band members 
+connect to.
+
+**`audioWorkstationSettings`**
+
+- **Type**: [`AudioWorkstationSettings`](#AudioWorkstationSettings)
+- **Required**: No
+- **Default**: -
+- **Description**: The settings for the audio workstation which is 
+routing the signals of every band member into separate channels in a 
+Digital Workstation (i.e., Ardour), so it can be mixed live. The mixed 
+signal is routed to the Zoom server through the Jamulus mixing server. 
+
+**`mixingServerSettings`**
+
+- **Type**: [`JamulusServerSettings`](#JamulusServerSettings)
+- **Required**: No
+- **Default**: -
+- **Description**: The settings for the Jamulus mixing server where the 
+mixed signal will be routed to. The Zoom server will take the signal 
+from there to feed it into the Zoom meeting.
+
+**`zoomServerSettings`**
+
+- **Type**: [`ZoomServerSettings`](#ZoomServerSettings)
+- **Required**: No
+- **Default**: -
+- **Description**: The settings for the Windows server where Zoom will 
+be running. Zoom will connect to the Zoom meeting and will feed the 
+mixed signal to it.
+
+**`channels`**
+
+- **Type**: `string[]` (an Array of strings)
+- **Required**: No
+- **Default**: -
+- **Description**: The channels that should be created in the Ardour 
+session (i.e., the Digital Audio Workstation). This setting also creates 
+the `ini` files for the Jamulus instances and adds the launch of one 
+Jamulus instance per channel to only route the signal of such particular 
+band member into its dedicated channel in Ardour.
+
+*Example*:
+
+```json
+channels: [
+  "Vocal Jane",
+  "Vocal Jon",
+  "Acoustic",
+  "Drums"
+]
+```
+
+## Details on the types mentioned in [Settings for your Digital Workstation environment](#settings-for-your-digital-workstation-environment)
+
+### `AudioWorkstationSettings`
+
+*extends [`StandardServerSettings`](#StandardServerSettings)*
+
+**`ubuntuPassword`**
+
+- **Type**: `string`
+- **Required**: Yes
+- **Default**: -
+- **Description**: The password for the user `ubuntu` to be used for the 
+RDP authentication.
+
+### `JamulusServerSettings`
+
+**`settingsFileName`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: -
+- **Description**: If no image is provided a server settings file name should 
+be provided. This file should be available on an S3 bucket as the user data 
+will try to copy the file from there. The user data file will include a line 
+comparable to the below example. So, you need to ensure the mentioned file name 
+exists on the represented bucket.
+
+```bash
+aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.service
+```
+
+### `StandardServerSettings`
+
+**`elasticIpAllocation`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: -
+- **Description**: Provides an allocation ID for an Elastic IP so that this 
+server will always be available under the same public IP address. If you do not
+provide an Elastic IP the server will always have a new IP address. However, as
+the packages for the clients (the band members) are generated automatically
+each time you change settings, these client packages will always connect to
+the correct IP Address. Learn how to [setup your Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+and provide the Allocation ID in this parameter.
+
+**`imageId`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: A standard image for the instace type.
+- **Description**: Provide an AMI ID if you have created an image with a 
+running server already. This image will then be used instead of running a 
+launch script (i.e., user data) to install and configure the server instance.
+If you run your rehearsals or performance always with the same team or band, you
+can save setup time of the whole system by creating a snapshot/image after the
+initialization of all servers. When you finished your session and you destroy
+your environment, you save costs as your not having any running servers or
+assigned disks and still have a fast setup time. However, the snapshot/image
+comes with costs and you can also only use an image if you are also using
+Elastic IPs to ensure your servers always have the same IP address. See
+[details on creating an image](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/tkv-create-ami-from-instance.html) 
+and then provide the AMI ID in this parameter.
+
+**`detailedServerMetrics`**
+
+- **Type**: `boolean`
+- **Required**: No
+- **Default**: false
+- **Description**: Provide `true` if you want to have detailed metrics about 
+the state of your servers (i.e., memory usage, disk space etc.). The CloudWatch 
+Agent will be installed on the server to retrieve those detailed metrics.
+
+### `ZoomMeetingProps`
+
+**`meetingId`**
+
+- **Type**: `string`
+- **Required**: Yes
+- **Default**: -
+- **Description**: The Zoom meeting ID.
+
+**`password`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: -
+- **Description**: The Zoom meeting password.
+
+### `ZoomServerSettings`
+
+**`zoomMeeting`**
+
+- **Type**: [`ZoomMeetingProps`](#ZoomMeetingProps)
+- **Required**: Yes
+- **Default**: -
+- **Description**: The Zoom meeting properties this instance should connect and 
+send the mixed signal to.
 
 ## Cost savings
 

@@ -22,10 +22,7 @@ export const addUserData = (instance: Instance) => (commands: string) => instanc
 
 export const replaceRegion = (regionName: string) => (file: string) => file.replace(/%%REGION%%/g, regionName);
 
-export const replaceUbuntuPassword = (password: string | undefined) => (file: string) => {
-  if (!password) return file;
-  return file.replace(/%%UBUNTU_PASSWORD%%/g, password);
-};
+export const replaceUbuntuPassword = (password: string) => (file: string) => file.replace(/%%UBUNTU_PASSWORD%%/g, password);
 
 // see download links for different OS here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html
 const cloudWatchAgentInstallationScript = [
