@@ -7,6 +7,8 @@ import { StandardServerProps, StandardServerSettings } from "../digital-workstat
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { JamulusServer } from "../jamulus-server/jamulus-server-instance";
+import { ConfigBucketDeployment } from "../../utilities/basic-elements/config-bucket-deployment";
+import { createSources } from "../../utilities/basic-elements/create-sources";
 
 /**
  * Settings for the Zoom meeting this instance should connect and send the
@@ -76,6 +78,8 @@ export class ZoomServer extends Instance {
     const userDataFileName = './lib/zoom-server/configure-zoom-server.ps1';
     const defindedVpc = vpc || getStandardVpc(scope, id);
 
+    if (!imageId && !bucket) throw(new TypeError(`${id}: When no machine image ID is provided, a bucket must be provided where the configuration files can be deployed to`));
+
     super(scope, id, {
       instanceName: id,
       instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.MEDIUM),
@@ -92,6 +96,18 @@ export class ZoomServer extends Instance {
 
     if (!imageId) {
       console.log(`${id}: Providing user data (${userDataFileName})`);
+      if (bucket) new ConfigBucketDeployment(scope, `${id}BucketDeploy`, {
+        bucket,
+        sources: createSources({
+          baseFolder: 'zoom-server-config',
+          staticPathes: [
+            'JamulusToZoomServer.xml',
+            'Jamulus_Startup.bat',
+            'jamulus-inis/JamulusFromZoom.ini',
+            'jamulus-inis/JamulusToZoom.ini',
+          ],
+        }),
+      });
       createUserData({
         instance: this,
         filename: userDataFileName,

@@ -1,10 +1,12 @@
 import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from "@aws-cdk/aws-ec2";
 import { CfnOutput, Stack } from "@aws-cdk/core";
-import { createUserData } from "../../utilities/utilities";
+import { cloudWatchSettingsFileName, createUserData } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
 import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 import { getStandardVpc } from '../../utilities/basic-elements/get-standard-vpc';
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
+import { ConfigBucketDeployment } from "../../utilities/basic-elements/config-bucket-deployment";
+import { createSources } from "../../utilities/basic-elements/create-sources";
 
 export interface JamulusServerSettings extends StandardServerSettings {
   /**
@@ -54,7 +56,7 @@ export class JamulusServer extends Instance {
 
     if (imageId && settingsFileName) console.log(`${id}: If both an imageId and a settingsFileName is provided, only the imageId is considered and the settings from the configuration file are ignored.`);
     if (!imageId && !settingsFileName) throw(new TypeError(`${id}: You should either provide an AMI ID or a server settings file name`));
-
+    if(!imageId && settingsFileName && !bucket) throw(new TypeError(`${id}: If an instance should be initialized with a settings file, a bucket needs to be provided where the settings file can be found.`));
   
     super(scope, id, {
       instanceName: id,
@@ -71,6 +73,15 @@ export class JamulusServer extends Instance {
     });
 
     if (!imageId && settingsFileName) {
+      if (bucket) new ConfigBucketDeployment(this, `${id}BucketDeploy`, {
+        bucket,
+        sources: createSources({
+          staticPathes: [
+            settingsFileName,
+            cloudWatchSettingsFileName,
+          ],
+        }),
+      });
       console.log(`${id}: Providing user data (${userDataFileName})`);
       createUserData({
         instance: this,

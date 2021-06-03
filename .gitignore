@@ -19,3 +19,6 @@ bin/config.json
 temp
 logs/*
 server-config/ardour/mosaik-live.ardour.bak
+
+# ignore the bucket deployment preparation folder
+build-bucket-deployment

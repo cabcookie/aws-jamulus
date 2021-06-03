@@ -4,6 +4,8 @@ import { flow } from "lodash";
 import { JamulusServer } from "../lib/jamulus-server/jamulus-server-instance";
 import { DetailedServerMetricsSettings } from "./basic-elements/instance-role";
 
+export const cloudWatchSettingsFileName = 'cloudwatch-linux-settings.json';
+
 type Primitive = string | number | boolean | bigint | undefined | null;
 type AcceptedLogValues = Primitive | Function | Date | Error | object;
 type FunctionWithFlexibleInput = <T extends AcceptedLogValues>(value: T) => T;

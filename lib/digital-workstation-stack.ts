@@ -99,10 +99,7 @@ export class DigitalWorkstation extends Stack {
     );
 
     const configBucket = new ConfigBucket(this, 'ConfigBucket', configBucketName);
-    new ConfigBucketDeployment(this, 'ConfigBucketDeployment', {
-      bucket: configBucket,
-    });
-
+    
     const bandServer = new JamulusServer(this, 'JamulusBandServer', {
       keyName,
       ...bandServerSettings,
