@@ -98,6 +98,7 @@ export class DigitalWorkstation extends Stack {
     const bandServer = new JamulusServer(this, 'JamulusBandServer', {
       keyName,
       ...bandServerSettings,
+      bucket: configBucket,
     });
 
     let mixingServer;
@@ -105,6 +106,7 @@ export class DigitalWorkstation extends Stack {
       mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
         keyName,
         ...mixingServerSettings,
+        bucket: configBucket,
       });
     }
 
@@ -115,6 +117,7 @@ export class DigitalWorkstation extends Stack {
         keyName,
         ...audioWorkstationSettings,
         channels,
+        bucket: configBucket,
       });
     }
 
@@ -124,6 +127,7 @@ export class DigitalWorkstation extends Stack {
         jamulusBandInstance: bandServer,
         keyName,
         ...zoomServerSettings,
+        bucket: configBucket,
       });
     };
   }
