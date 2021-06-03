@@ -86,6 +86,12 @@ export class DigitalWorkstation extends Stack {
     ...rest
   }: DigitalWorkstationProps) {
     super(scope, id, { ...rest });
+    if (zoomServerSettings && !mixingServerSettings) throw new TypeError(
+      `${id}: When setting up a Zoom server you also need to setup a Jamulus mixing server`
+    );
+    if (mixingServerSettings && !audioWorkstationSettings) throw new TypeError(
+      `${id}: It only makes sense to have a Jamulus mixing server if you have an audio workstation as well`
+    );
 
     const configBucket = new ConfigBucket(this, 'ConfigBucket', configBucketName);
     new ConfigBucketDeployment(this, 'ConfigBucketDeployment', {
@@ -99,13 +105,27 @@ export class DigitalWorkstation extends Stack {
       ...bandServerSettings,
     });
 
-    const mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
-      vpcParams,
-      keyName,
-      ...mixingServerSettings,
-    });
+    let mixingServer;
+    if (mixingServerSettings) {
+      mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
+        vpcParams,
+        keyName,
+        ...mixingServerSettings,
+      });
+    }
 
-    if (zoomServerSettings) {
+    if (audioWorkstationSettings) {
+      new AudioWorkstation(this, 'AudioWorkstation', {
+        jamulusBandServer: bandServer,
+        jamulusMixingServer: mixingServer,
+        vpcParams,
+        keyName,
+        ...audioWorkstationSettings,
+        channels,
+      });
+    }
+
+    if (zoomServerSettings && mixingServer) {
       new ZoomServer(this, 'WindowsZoomServer', {
         jamulusMixingInstance: mixingServer,
         jamulusBandInstance: bandServer,
@@ -114,14 +134,5 @@ export class DigitalWorkstation extends Stack {
         ...zoomServerSettings,
       });
     };
-
-    new AudioWorkstation(this, 'AudioWorkstation', {
-      jamulusBandServer: bandServer,
-      jamulusMixingServer: mixingServer,
-      vpcParams,
-      keyName,
-      ...audioWorkstationSettings,
-      channels,
-    });
   }
 }

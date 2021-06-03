@@ -27,7 +27,7 @@ export interface AudioWorkstationProps extends AudioWorkstationSettings, Standar
    * The Jamulus EC2 instance where the mixing console and the
    * presenter connects to.
    */
-  jamulusMixingServer: Instance;
+  jamulusMixingServer?: Instance;
   /**
    * Provide the channel names. These will be used to name the Jamulus client
    * instances and connect those to the associated Ardour channels.
