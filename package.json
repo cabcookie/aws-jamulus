@@ -1,6 +1,6 @@
 {
   "name": "cdk",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "bin": {
     "cdk": "bin/cdk.js"
   },

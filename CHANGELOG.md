@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.4](https://github.com/cabcookie/aws-jamulus/compare/v1.6.3...v1.6.4) (2021-06-03)
+
+
+### Bug Fixes
+
+* **doc:** describe placeholders ([84d8253](https://github.com/cabcookie/aws-jamulus/commit/84d82531ab46e9230b8c3c8525748c14eeaab21c))
+* **log:** adding app version number to logging ([fdbec7f](https://github.com/cabcookie/aws-jamulus/commit/fdbec7f184e06fe2e7a81aa21d43e1f19226bba6))
+* **refactor:** foundation for deploying resources ([b1efd3f](https://github.com/cabcookie/aws-jamulus/commit/b1efd3f5db42d5173af6adc17508be242987bbb8))
+* **refactor:** getting standard vpc, instance role ([51ac4e4](https://github.com/cabcookie/aws-jamulus/commit/51ac4e4887293f457e808e67b73ba3670f6ca5c9))
+* **refactor:** moved CloudWatch Linux settings ([828654b](https://github.com/cabcookie/aws-jamulus/commit/828654b16b4e85021b422232b20e56448f21da40))
+* **refactor:** need to add the `configBucket` ([260ba9e](https://github.com/cabcookie/aws-jamulus/commit/260ba9ee13315a2136521c33816b6edd40a7c5a5))
+* **refactor:** only folders are allowed as assets ([55a0f9d](https://github.com/cabcookie/aws-jamulus/commit/55a0f9d0d685fbdef1318a910b08af2278c13789))
+* **refactor:** provide config data on demand ([e360ec4](https://github.com/cabcookie/aws-jamulus/commit/e360ec4060833f4cefe5ad338f0ab6eeedcb01f5))
+* adjusted timezone of instances ([1adc4e3](https://github.com/cabcookie/aws-jamulus/commit/1adc4e3867f545fac9e9516af9cd3d253202af9f))
+* **refactor:** simplified user data creation ([2278d77](https://github.com/cabcookie/aws-jamulus/commit/2278d7726460578c1b4b280a502e9d4cb93fcc03))
+
 ### [1.6.3](https://github.com/cabcookie/aws-jamulus/compare/v1.6.2...v1.6.3) (2021-06-03)
 
 
