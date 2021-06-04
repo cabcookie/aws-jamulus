@@ -3,7 +3,7 @@ import { CfnOutput, Stack } from "@aws-cdk/core";
 import { flow, replace } from "lodash/fp";
 import { createUserData } from "../../utilities/utilities";
 import { createSecurityGroup } from "../../utilities/basic-elements/create-security-group";
-import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+import { JamulusInstancesProps, StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { JamulusServer } from "../jamulus-server/jamulus-server-instance";
@@ -35,19 +35,7 @@ export interface ZoomServerSettings extends StandardServerSettings {
 /**
  * Interface for server sending the mixed signal to a Zoom session.
  */
-export interface ZoomServerProps extends ZoomServerSettings, StandardServerProps {
-  /**
-   * The EC2 instance where the Jamulus server is running where the band
-   * members will connect to.
-   */
-  jamulusBandInstance: JamulusServer,
-  /**
-   * The EC2 instance where the Jamulus server with the mixed signal is
-   * running. The local Jamulus client will connect to this Jamulus
-   * instance to send its signal to the Zoom instance it connects to.
-   */
-  jamulusMixingInstance: JamulusServer;
-};
+export interface ZoomServerProps extends ZoomServerSettings, StandardServerProps, JamulusInstancesProps {};
 
 export class ZoomServer extends Instance {
   /**
@@ -62,8 +50,8 @@ export class ZoomServer extends Instance {
    * @returns The EC2 instance and its properties
    */
   constructor(scope: Stack, id: string, {
-    jamulusMixingInstance,
-    jamulusBandInstance,
+    jamulusMixingServer,
+    jamulusBandServer,
     zoomMeeting,
     imageId,
     elasticIpAllocation,
@@ -103,8 +91,8 @@ export class ZoomServer extends Instance {
         instance: this,
         filename: userDataFileName,
         detailedServerMetrics,
-        bandServer: jamulusBandInstance,
-        mixingServer: jamulusMixingInstance,
+        jamulusBandServer,
+        jamulusMixingServer,
         timezone,
         additionalProcessFn: flow(
           replace('%%MEETING_ID%%', zoomMeeting.meetingId),

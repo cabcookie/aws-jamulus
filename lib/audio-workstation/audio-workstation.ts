@@ -6,7 +6,7 @@ import { createSecurityGroup } from "../../utilities/basic-elements/create-secur
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { createUserData, replaceUbuntuPassword } from "../../utilities/utilities";
-import { StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+import { ChannelsSetting, JamulusInstancesProps, StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 
 export interface AudioWorkstationSettings extends StandardServerSettings {
   /**
@@ -18,22 +18,7 @@ export interface AudioWorkstationSettings extends StandardServerSettings {
 /**
  * Interface for online mixing console properties.
  */
-export interface AudioWorkstationProps extends AudioWorkstationSettings, StandardServerProps {
-  /**
-   * The Jamulus EC2 instance where the band connects to
-   */
-  jamulusBandServer: Instance;
-  /**
-   * The Jamulus EC2 instance where the mixing console and the
-   * presenter connects to.
-   */
-  jamulusMixingServer?: Instance;
-  /**
-   * Provide the channel names. These will be used to name the Jamulus client
-   * instances and connect those to the associated Ardour channels.
-   */
-  channels?: string[];
-};
+export interface AudioWorkstationProps extends AudioWorkstationSettings, StandardServerProps, ChannelsSetting, JamulusInstancesProps {};
 
 const replaceChannelsConfig = (channels: string[] | undefined) => (file: string) => channels ? file.replace(
   /%%CHANNELS%%/,
@@ -99,7 +84,7 @@ export class AudioWorkstation extends Instance {
         filename: userDataFileName,
         detailedServerMetrics,
         timezone,
-        bandServer: jamulusBandServer,
+        jamulusBandServer,
         additionalProcessFn: flow(
           replaceUbuntuPassword(ubuntuPassword),
           replaceChannelsConfig(channels),

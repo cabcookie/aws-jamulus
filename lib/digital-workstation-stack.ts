@@ -7,6 +7,18 @@ import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucke
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { DetailedServerMetricsSettings, Ec2InstanceRoleProps } from '../utilities/basic-elements/instance-role';
 
+export interface JamulusInstancesProps {
+  /**
+   * The Jamulus EC2 instance where the band connects to
+   */
+  jamulusBandServer?: JamulusServer;
+  /**
+   * The Jamulus EC2 instance where the mixing console and the
+   * presenter connects to.
+   */
+  jamulusMixingServer?: JamulusServer;
+};
+
 export interface StandardServerSettings extends DetailedServerMetricsSettings {
   /**
    * Provides an allocation ID for an Elastic IP so that this server will
@@ -45,7 +57,18 @@ export interface StandardServerProps extends KeyNameProp, Ec2InstanceRoleProps, 
   vpc?: Vpc;
 };
 
-interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketName, TimeZoneProp {
+export interface ChannelsSetting {
+  /**
+   * The channels that should be created in the Ardour session (i.e., the
+   * Digital Audio Workstation). This setting also creates the `ini` files for
+   * the Jamulus instances and adds the launch of one Jamulus instance per
+   * channel to only route the signal of such particular band member into its
+   * dedicated channel in Ardour.
+   */
+   channels?: string[];
+};
+
+interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketName, TimeZoneProp, ChannelsSetting {
   /**
    * The settings for the Jamulus server the band members connect to.
    */
@@ -68,14 +91,6 @@ interface DigitalWorkstationProps extends StackProps, KeyNameProp, ConfigBucketN
    * connect to the Zoom meeting and will feed the mixed signal to it.
    */
   zoomServerSettings?: ZoomServerSettings;
-  /**
-   * The channels that should be created in the Ardour session (i.e., the
-   * Digital Audio Workstation). This setting also creates the `ini` files for
-   * the Jamulus instances and adds the launch of one Jamulus instance per
-   * channel to only route the signal of such particular band member into its
-   * dedicated channel in Ardour.
-   */
-  channels?: string[];
 };
 
 export class DigitalWorkstation extends Stack {
@@ -131,8 +146,8 @@ export class DigitalWorkstation extends Stack {
 
     if (zoomServerSettings && mixingServer) {
       new ZoomServer(this, 'WindowsZoomServer', {
-        jamulusMixingInstance: mixingServer,
-        jamulusBandInstance: bandServer,
+        jamulusBandServer: bandServer,
+        jamulusMixingServer: mixingServer,
         keyName,
         ...zoomServerSettings,
         bucket: configBucket,

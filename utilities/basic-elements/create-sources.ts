@@ -1,6 +1,7 @@
 import { ISource, Source } from "@aws-cdk/aws-s3-deployment";
 import { existsSync } from "fs";
 import { flow } from "lodash/fp";
+import { makePath } from "../file-handling";
 
 type DynamicFileCreation = (targetFolder: string) => void;
 
@@ -23,8 +24,6 @@ export interface SourcePathType {
 };
 
 const pushSource = (sources: ISource[]) => (newSource: ISource) => [...sources, newSource];
-
-const makePath = (rootFolder: string) => (folder: string) => `${rootFolder}/${folder}`.replace(/\/+/g, '/');
 
 const addSourceIfPathExists = (sources: ISource[]) => (path: string) => existsSync(path)
   ? flow(
