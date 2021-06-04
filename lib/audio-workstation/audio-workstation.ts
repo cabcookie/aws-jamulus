@@ -84,7 +84,7 @@ export class AudioWorkstation extends Instance {
       if (bucket) new ConfigBucketDeployment(scope, `${id}BucketDeploy`, {
         bucket,
         path: id,
-        createDynamicFiles: prepareConfigurationFiles(channels),
+        createDynamicFiles: prepareConfigurationFiles(jamulusBandServer, channels),
       });
       createUserData({
         instance: this,

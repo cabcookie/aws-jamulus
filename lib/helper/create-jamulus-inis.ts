@@ -99,7 +99,7 @@ export const createJamulusServerInis = (targetFolder: string, channels: string[]
   )(channel));
 };
 
-export const createJamulusClientIni = (targetFolder: string, channels: string[], defaultIni: string) => (channel: string) => flow(
+export const createJamulusClientIni = (targetFolder: string, channels: string[], defaultIni: string, channel: string) => flow(
   createIniFile({
     channelName: channel,
     channels,
@@ -111,11 +111,3 @@ export const createJamulusClientIni = (targetFolder: string, channels: string[],
     fileName: `${channel}.ini`,
   }),
 )(channel)
-
-const makeJamulusIniIpReplaceStatementFromChannel = (channelName: string) => `echo "creating an sed -i replace statement for ${channelName}"`;
-
-export const createReplaceStatementForJamulusInis = ({
-  channels,
-  jamulusBandServer,
-  jamulusMixingServer,
-}: AdjustPlaceholdersProps) => concat(channels?.map(makeJamulusIniIpReplaceStatementFromChannel));
