@@ -1,5 +1,5 @@
-import { flow, get, join, trim, } from "lodash/fp";
-import { createEmptyFolders, toFile } from "../../utilities/file-handling";
+import { flow, get, isEmpty, join, reject } from "lodash/fp";
+import { makeFolders, toFile } from "../../utilities/file-handling";
 import { filter, lowerCaseStringComparator, make2Digit, pushItem, reduce, sortStrArr, stringComparator, map } from "../../utilities/utilities";
 
 export const ARDOUR_SESSION_PATH = './lib/audio-workstation/assets/mosaik-live.ardour';
@@ -85,7 +85,7 @@ const cleanUpArdourSession = (ardourSessionArr: string[]) => (playlist: string) 
   reduce(
     ({ skipLines, result }: CleanUpProps, line: string) => {
       if (skipLines) {
-        if (isPlaylistsEnd(line)) return { skipLines: false, result: `${result}${line}\n` };
+        if (isPlaylistsEnd(line)) return { skipLines: false, result: `${result}\n${line}\n` };
         if (isRouteEnd(line)) return { skipLines: false, result };
         return { skipLines, result };
       }
@@ -107,13 +107,13 @@ const renameChannelInPlaylist = (channels: string[]) => (line: string, index: nu
 const restructurePlaylist = (channels: string[]) => (ardourSessionArr: string[]) => flow(
   filter((line: string) => (line.match(new RegExp(playlistLine)) || '').length > 0),
   map(renameChannelInPlaylist(channels)),
+  reject(isEmpty),
   join('\n'),
-  trim,
   cleanUpArdourSession(ardourSessionArr),
 )(ardourSessionArr);
 
 export const createArdourSession = (targetFolder: string, channels: string[], ardourSession: string) => {
-  createEmptyFolders({
+  makeFolders({
     rootFolderName: targetFolder,
     folderNames: [
       'analysis',

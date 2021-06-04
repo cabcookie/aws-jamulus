@@ -1,5 +1,5 @@
 import { flow, join } from "lodash/fp";
-import { emptyAndCreateFolder, makePath, toFile } from "../../utilities/file-handling";
+import { makeFolders, makePath, toFile } from "../../utilities/file-handling";
 import { IP_TYPES } from "../../utilities/utilities";
 import { createMixerChannelName, INSTANCE_TARGET_DIR, S3_DIR } from "../audio-workstation/prepare-configuration-files";
 import { JamulusInstancesProps } from "../digital-workstation-stack";
@@ -48,7 +48,7 @@ export const createJamulusStartupServerSh = (targetFolder: string, channels: str
     `ardour5 ${makePath(INSTANCE_TARGET_DIR)(ardourFolderName)}/mosaik-live.ardour`,
   ];
   
-  emptyAndCreateFolder(false)(targetFolder);
+  makeFolders({folderNames: [targetFolder]});
   flow(
     join(' &\n'),
     toFile({ folderName: targetFolder, fileName: 'jamulus-startup.sh' }),

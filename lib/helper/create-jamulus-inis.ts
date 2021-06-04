@@ -1,6 +1,6 @@
-import { concat, flow, join, replace } from "lodash/fp";
-import { createEmptyFolders, toFile } from "../../utilities/file-handling";
-import { AdjustPlaceholdersProps, createMixerChannelName } from "../audio-workstation/prepare-configuration-files";
+import { flow, join, replace } from "lodash/fp";
+import { makeFolders, toFile } from "../../utilities/file-handling";
+import { createMixerChannelName } from "../audio-workstation/prepare-configuration-files";
 
 export const DEFAULTINI_PATH = './lib/audio-workstation/assets/default.ini';
 const STANDARD_FADER = [
@@ -84,7 +84,7 @@ const createIniFile = ({
 )(defaultIni);
 
 export const createJamulusServerInis = (targetFolder: string, channels: string[], defaultIni: string) => {
-  createEmptyFolders({ folderNames: [targetFolder] });
+  makeFolders({ folderNames: [targetFolder] });
   channels.forEach((channel) => flow(
     createIniFile({
       defaultIni,

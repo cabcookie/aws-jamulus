@@ -1,6 +1,6 @@
-import { mkdirSync, readFileSync } from "fs"
+import { readFileSync } from "fs"
 import { flow, join } from "lodash/fp";
-import { createEmptyFolders, makePath } from "../../utilities/file-handling";
+import { deleteFolder, makeFolders, makePath } from "../../utilities/file-handling";
 import { ChannelsSetting, JamulusInstancesProps } from "../digital-workstation-stack";
 import { createArdourSession, ARDOUR_SESSION_PATH } from "../helper/create-ardour-session";
 import { createJamulusStartupClientSh, createJamulusStartupServerSh, createReplaceStatementForJamulusStartupSh } from "../helper/create-jamulus-startup-sh";
@@ -14,7 +14,7 @@ export const INSTANCE_TARGET_DIR = `${USER_DIR}/Documents`;
 export const createMixerChannelName = (channel: string) => `Mix${channel}`;
 
 const createJamulusClientPackages = (targetFolder: string, channels: string[], defaultIni: string, jamulusBandServer: JamulusServer) => {
-  createEmptyFolders({
+  makeFolders({
     rootFolderName: targetFolder,
     folderNames: channels,
   })
@@ -42,15 +42,15 @@ export const adjustPlaceholders = ({
 const createRemoteDesktopConfigFile = () => {};
 
 export const prepareConfigurationFiles = (jamulusBandServer: JamulusServer, channels?: string[]) => (targetFolder: string) => {
-  mkdirSync(targetFolder, { recursive: true });
+  deleteFolder(targetFolder);
   const serverIniFolder = 'jamulus-inis';
   const ardourFolderName = 'mosaik-live';
   const defaultIni = readFileSync(DEFAULTINI_PATH, 'utf8');
   const ardourSession = readFileSync(ARDOUR_SESSION_PATH, 'utf8');
 
   if (channels) {
-    createJamulusServerInis(`${targetFolder}/jamulus/${serverIniFolder}`, channels, defaultIni);
     createJamulusStartupServerSh(makePath(targetFolder)('jamulus'), channels, serverIniFolder, ardourFolderName);
+    createJamulusServerInis(`${targetFolder}/jamulus/${serverIniFolder}`, channels, defaultIni);
     createJamulusClientPackages(`${targetFolder}/jamulus-clients`, channels, defaultIni, jamulusBandServer);
     createArdourSession(makePath(targetFolder)(ardourFolderName), channels, ardourSession);
     createRemoteDesktopConfigFile();
