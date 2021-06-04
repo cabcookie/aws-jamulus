@@ -1,5 +1,5 @@
 *.js
-!create-config-files.js
+!fetch-command.js
 !jest.config.js
 *.d.ts
 node_modules
