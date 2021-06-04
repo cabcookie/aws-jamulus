@@ -7,6 +7,7 @@ import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc"
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
 import { createUserData, replaceUbuntuPassword } from "../../utilities/utilities";
 import { ChannelsSetting, JamulusInstancesProps, StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
+import { adjustPlaceholders, prepareConfigurationFiles } from "./prepare-configuration-files";
 
 export interface AudioWorkstationSettings extends StandardServerSettings {
   /**
@@ -77,6 +78,7 @@ export class AudioWorkstation extends Instance {
       if (bucket) new ConfigBucketDeployment(scope, `${id}BucketDeploy`, {
         bucket,
         path: id,
+        createDynamicFiles: prepareConfigurationFiles(channels),
       });
       createUserData({
         instance: this,
@@ -88,6 +90,11 @@ export class AudioWorkstation extends Instance {
         additionalProcessFn: flow(
           replaceUbuntuPassword(ubuntuPassword),
           replaceChannelsConfig(channels),
+          adjustPlaceholders({
+            channels,
+            jamulusBandServer,
+            jamulusMixingServer,
+          }),
         ),
       });
     };
