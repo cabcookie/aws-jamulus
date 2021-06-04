@@ -113,19 +113,7 @@ const restructurePlaylist = (channels: string[]) => (ardourSessionArr: string[])
 )(ardourSessionArr);
 
 export const createArdourSession = (targetFolder: string, channels: string[], ardourSession: string) => {
-  makeFolders({
-    rootFolderName: targetFolder,
-    folderNames: [
-      'analysis',
-      'dead',
-      'export',
-      'externals',
-      'interchange/mosaik-live/audiofiles',
-      'interchange/mosaik-live/midifiles',
-      'peaks',
-      'plugins',
-    ],
-  });
+  makeFolders({ folderNames: [targetFolder] });
   flow(
     renameMasterConnections(channels),
     removeUnusedChannelsInMasterConnection(channels),

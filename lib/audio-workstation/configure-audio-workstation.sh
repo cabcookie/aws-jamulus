@@ -28,48 +28,52 @@ echo y | sudo apt-get install xrdp
 sudo service gdm3 start
 sudo systemctl enable xrdp
 
-LOG fetch Jack configuration files
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/jack/jackdrc.conf /home/ubuntu/.jackdrc
-sudo chown -R ubuntu /home/ubuntu/.jackdrc
+LOG fetch all files from S3
+USERDIR=/home/ubuntu
+TEMPS3=$USERDIR/.temp-s3
+BINDIR=$USERDIR/bin
+DOCUMENTSDIR=$USERDIR/Documents
+mkdir $TEMPS3
+aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/ $TEMPS3 --recursive --include "*"
 
-SHOW_FILE /home/ubuntu/.jackdrc
+LOG create all target directories
+mkdir $BINDIR
+mkdir $DOCUMENTSDIR
 
-LOG install node
-echo y | sudo apt-get install nodejs
+LOG adjust placeholders
+%%ADJUST_PLACEHOLDERS%%
 
-LOG copy app to create jamulus config files to /home/ubuntu/bin
-mkdir /home/ubuntu/bin
-CFGFOLD=/home/ubuntu/bin/create-config-files
-mkdir $CFGFOLD
-echo "%%CHANNELS%%" >> $CFGFOLD/channels.json
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/jamulus/ $CFGFOLD/ --recursive --include "*"
+LOG move all files in the correct directories
+mv $TEMPS3/jack/jackdrc.conf $USERDIR/.jackdrc
+mv $TEMPS3/jamulus* $DOCUMENTSDIR/
+mv $TEMPS3/mosaik-live $DOCUMENTSDIR/
+mkdir $DOCUMENTSDIR/mosaik-live/analysis
+mkdir $DOCUMENTSDIR/mosaik-live/dead
+mkdir $DOCUMENTSDIR/mosaik-live/export
+mkdir $DOCUMENTSDIR/mosaik-live/externals
+mkdir $DOCUMENTSDIR/mosaik-live/interchange
+mkdir $DOCUMENTSDIR/mosaik-live/interchange/mosaik-live
+mkdir $DOCUMENTSDIR/mosaik-live/interchange/mosaik-live/audiofiles
+mkdir $DOCUMENTSDIR/mosaik-live/interchange/mosaik-live/midifiles
+mkdir $DOCUMENTSDIR/mosaik-live/peaks
+mkdir $DOCUMENTSDIR/mosaik-live/plugins
+mv $TEMPS3/app-wrapper/jamulus-startup.desktop /usr/share/applications/
+mv $TEMPS3/app-wrapper/jamulus-startup.png /usr/share/icons/
+mv $TEMPS3/app-wrapper/install-apps.sh $BINDIR/
+mv $TEMPS3/app-wrapper/workstation-autostart.desktop /etc/xdg/autostart/
 
-LOG add Ardour project to Documents
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/ardour/ /home/ubuntu/Documents/mosaik-live/ --recursive --include "*"
+LOG adjust permissions and ownerships
+sudo chown -R ubuntu $BINDIR/
+sudo chown -R ubuntu $DOCUMENTSDIR
+sudo chown -R ubuntu $USERDIR/.jackdrc
+chmod +x $BINDIR/install-apps.sh
+chmod +x $DOCUMENTSDIR/jamulus/jamulus-startup.sh
 
-LOG create jamulus configuration files in local Documents folder
-mkdir /home/ubuntu/Documents
-node $CFGFOLD/create-config-files.js $CFGFOLD %%BAND_PRIVATE_IP%% %%BAND_PUBLIC_IP%%
-mv $CFGFOLD/jamulus* /home/ubuntu/Documents/
-chmod +x /home/ubuntu/Documents/jamulus-startup.sh
-sudo chown -R ubuntu /home/ubuntu/Documents
-
-SHOW_FILE /home/ubuntu/Documents/jamulus-startup.sh
-
-LOG create wrapper app Audio Workstation
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/jamulus-startup.desktop /usr/share/applications/
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/jamulus-startup.png /usr/share/icons/
-
-SHOW_FILE /usr/share/applications/jamulus-startup.desktop
-
-LOG prepare startup file to install remaining apps – Ardour and Jamulus
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/install-apps.sh /home/ubuntu/bin/
-sudo aws s3 cp s3://jamulus-config-bucket/AudioWorkstation/app-wrapper/workstation-autostart.desktop /etc/xdg/autostart/
-chmod +x /home/ubuntu/bin/install-apps.sh
-sudo chown -R ubuntu /home/ubuntu/bin/
-
+LOG Show all files
 SHOW_FILE /etc/xdg/autostart/workstation-autostart.desktop
-SHOW_FILE /home/ubuntu/bin/install-apps.sh
+SHOW_FILE $USERDIR/.jackdrc
+SHOW_FILE $BINDIR/install-apps.sh
+SHOW_FILE $DOCUMENTSDIR/jamulus/jamulus-startup.sh
 SHOW_FILE /usr/share/applications/jamulus-startup.desktop
 
 %%CLOUDWATCH_AGENT%%
