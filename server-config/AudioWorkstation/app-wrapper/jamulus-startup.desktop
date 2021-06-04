@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Audio Workstation
 Comment=Start QJackCtl, Jamulus, and Ardour and connect all cables.
-Exec=/home/ubuntu/Documents/jamulus-startup.sh
+Exec=/home/ubuntu/Documents/jamulus/jamulus-startup.sh
 Icon=/usr/share/icons/jamulus-startup.png
 Terminal=true
 Type=Application

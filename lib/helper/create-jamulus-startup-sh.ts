@@ -7,7 +7,6 @@ import { JamulusServer } from "../jamulus-server/jamulus-server-instance";
 
 const JAMULUS_STARTUP_SH = `jamulus/jamulus-startup.sh`;
 
-
 const makeJamulusServerStartupCommand = (ip: IP_TYPES, folderName?: string) => (clientName: string) => `jamulus -c %${IP_TYPES[ip]}% --clientname "${clientName}" -i "${folderName || '.'}/${clientName}.ini" -M`;
 
 const jamulusStartupClients = [{
@@ -42,9 +41,9 @@ export const createJamulusStartupServerSh = (targetFolder: string, channels: str
     '/usr/bin/jackd -ddummy -r48000 -p1024',
     ...channels.map(flow(
       createMixerChannelName,
-      makeJamulusServerStartupCommand(IP_TYPES.BAND_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(serverIniFolderName)),
+      makeJamulusServerStartupCommand(IP_TYPES.BAND_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(`jamulus/${serverIniFolderName}`)),
     )),
-    makeJamulusServerStartupCommand(IP_TYPES.MIXER_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(serverIniFolderName))('MixToZoom').replace(' -M', ''),
+    makeJamulusServerStartupCommand(IP_TYPES.MIXER_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(`jamulus/${serverIniFolderName}`))('MixToZoom').replace(' -M', ''),
     `ardour5 ${makePath(INSTANCE_TARGET_DIR)(ardourFolderName)}/mosaik-live.ardour`,
   ];
   
