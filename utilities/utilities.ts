@@ -1,6 +1,6 @@
 import { Instance } from "@aws-cdk/aws-ec2";
 import { readFileSync } from "fs";
-import { flow } from "lodash";
+import { flow } from "lodash/fp";
 import { JamulusInstancesProps } from "../lib/digital-workstation-stack";
 import { DetailedServerMetricsSettings } from "./basic-elements/instance-role";
 
@@ -23,8 +23,26 @@ export enum SERVER_TYPES {
 
 type ArrayFunctionWithFlexibleInput = <T>(arr: T[]) => (item: T) => T[];
 
-export const push: ArrayFunctionWithFlexibleInput = (arr) => (item) => [...arr, item];
+export const make2Digit = (num: number): string => (num < 10 ? '0' : '') + num;
 
+export const stringComparator = (a: string, b: string) => {
+  if (a>b) return 1;
+  if (a<b) return -1;
+  return 0;
+};
+
+export const lowerCaseStringComparator = (a: string, b: string) => stringComparator(a.toLowerCase(), b.toLowerCase());
+
+export const filter: <T>(filterFn: (item: T, index?: number) => boolean) => (arr: T[]) => T[] = (filterFn) => (arr) => arr.filter(filterFn);
+export const map: <T, U>(mapFn: (item: T, index: number) => U) => (arr: T[]) => U[] = (mapFn) => (arr) => arr.map(mapFn);
+export const push: ArrayFunctionWithFlexibleInput = (arr) => (item) => [...arr, item];
+export const pushItem: <T>(item: T) => (arr: T[]) => T[] = (item) => (arr) => [...arr, item];
+
+export const sortStrArr = (comparator: (a: string, b: string) => number) => (arr: string[]) => arr.sort(comparator);
+
+type ReduceFunction = <A,B>(callbackFn: (previous: A, current: B, index: number) => A, initialValue: A) => (arr: B[]) => A;
+
+export const reduce: ReduceFunction = (callbackFn, init) => (arr) => arr.reduce(callbackFn, init);
 export const defaultFn: <T>(obj: T) => T = obj => obj
 export const log: (message: string) => FunctionWithFlexibleInput = (message) => (value) => {
   const returnObjForLogging = (obj: AcceptedLogValues): AcceptedLogValues => {
