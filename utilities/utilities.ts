@@ -21,11 +21,11 @@ export enum SERVER_TYPES {
   MIXER,
 };
 
-type ArrayFunctionWithFlexibleInput = <T>(value: T[]) => (item: T) => T[];
+type ArrayFunctionWithFlexibleInput = <T>(arr: T[]) => (item: T) => T[];
 
 export const push: ArrayFunctionWithFlexibleInput = (arr) => (item) => [...arr, item];
 
-export const defaultFn: <T extends object | unknown>(obj: T) => T = obj => obj
+export const defaultFn: <T>(obj: T) => T = obj => obj
 export const log: (message: string) => FunctionWithFlexibleInput = (message) => (value) => {
   const returnObjForLogging = (obj: AcceptedLogValues): AcceptedLogValues => {
     if (obj == null) return 'null';
