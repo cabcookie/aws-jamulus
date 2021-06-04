@@ -30,6 +30,8 @@ const replaceChannelsConfig = (channels: string[] | undefined) => (file: string)
  * A construct to create an EC2 instance with an Ardour mixing console installed.
  */
 export class AudioWorkstation extends Instance {
+  public readonly publicIp: string;
+
   /**
    * Creates an audio workstation with Jack, Jamulus, and Ardour installed
    * and everything interconnected.
@@ -51,9 +53,11 @@ export class AudioWorkstation extends Instance {
     policyStatments,
     vpc,
     timezone,
+    publicIp,
   }: AudioWorkstationProps) {
     const userDataFileName = './lib/audio-workstation/configure-audio-workstation.sh';
     const defindedVpc = vpc || getStandardVpc(scope, id);
+    if (!jamulusBandServer) throw(new TypeError(`${id}: An Audio Workstation makes no sense when there is no Jamulus band server`));
     
     super(scope, id, {
       instanceName: id,
@@ -72,6 +76,8 @@ export class AudioWorkstation extends Instance {
       }],
       userDataCausesReplacement: true,
     });
+
+    if (publicIp) this.publicIp = publicIp;
 
     if (!imageId) {
       console.log(`${id}: Providing user data (${userDataFileName})`);

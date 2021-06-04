@@ -6,7 +6,6 @@ import { createSecurityGroup } from "../../utilities/basic-elements/create-secur
 import { JamulusInstancesProps, StandardServerProps, StandardServerSettings } from "../digital-workstation-stack";
 import { getStandardVpc } from "../../utilities/basic-elements/get-standard-vpc";
 import { Ec2InstanceRole } from "../../utilities/basic-elements/instance-role";
-import { JamulusServer } from "../jamulus-server/jamulus-server-instance";
 import { ConfigBucketDeployment } from "../../utilities/basic-elements/config-bucket-deployment";
 
 /**
@@ -38,6 +37,8 @@ export interface ZoomServerSettings extends StandardServerSettings {
 export interface ZoomServerProps extends ZoomServerSettings, StandardServerProps, JamulusInstancesProps {};
 
 export class ZoomServer extends Instance {
+  public readonly publicIp: string;
+
   /**
    * Will create an EC2 Windows Server with a Jamulus client and a Zoom client.
    * The Jamulus client will connect to the Jamulus server which provides the 
@@ -61,6 +62,7 @@ export class ZoomServer extends Instance {
     policyStatments,
     vpc,
     timezone,
+    publicIp,
   }: ZoomServerProps) {
     const userDataFileName = './lib/zoom-server/configure-zoom-server.ps1';
     const defindedVpc = vpc || getStandardVpc(scope, id);
@@ -80,6 +82,8 @@ export class ZoomServer extends Instance {
       userDataCausesReplacement: true,
       keyName,  
     });
+
+    if (publicIp) this.publicIp = publicIp;
 
     if (!imageId) {
       console.log(`${id}: Providing user data (${userDataFileName})`);

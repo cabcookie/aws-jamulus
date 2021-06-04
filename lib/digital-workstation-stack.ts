@@ -3,7 +3,6 @@ import { ConfigBucket, ConfigBucketName } from '../utilities/basic-elements/conf
 import { ZoomServer, ZoomServerSettings } from './zoom-server/zoom-server';
 import { JamulusServer, JamulusServerSettings } from './jamulus-server/jamulus-server-instance';
 import { AudioWorkstation, AudioWorkstationSettings } from './audio-workstation/audio-workstation';
-import { ConfigBucketDeployment } from '../utilities/basic-elements/config-bucket-deployment';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { DetailedServerMetricsSettings, Ec2InstanceRoleProps } from '../utilities/basic-elements/instance-role';
 
@@ -22,9 +21,17 @@ export interface JamulusInstancesProps {
 export interface StandardServerSettings extends DetailedServerMetricsSettings {
   /**
    * Provides an allocation ID for an Elastic IP so that this server will
-   * always be available under the same public IP address.
+   * always be available under the same public IP address. It is necessary
+   * if you want the system to create client packages and remote desktop
+   * configuration files automatically.
    */
   elasticIpAllocation?: string;
+  /**
+   * Provide the public IP address of the Elastic IP you generated. This IP
+   * will be used for creating any public connection automatically (i.e., 
+   * client packages, remote desktop configuration files).
+   */
+  publicIp?: string;
   /**
    * Provide an AMI ID if you have created an image with a running Jamulus
    * server already. This image will then be used instead of running a

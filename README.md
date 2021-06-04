@@ -11,7 +11,7 @@ Automatically sets up a Jamulus server and a Ardour mixing console on AWS using 
   - [Setup your `config.json`](#setup-your-config.json)
 - [Getting Started - Deploy your Jamulus environment](#getting-started---deploy-your-jamulus-environment)
   - [Destroy the environment](#destroy-the-environment)
-- [Settings for your Jamulus environment](#settings-for-your-jamulus-environment)
+- [Settings for your Digital Workstation environment](#Settings-for-your-Digital-Workstation-environment)
 - [Cost savings](#cost-savings)
 - [Roadmap](#roadmap)
 
@@ -314,12 +314,13 @@ aws s3 cp s3://jamulus-config-bucket/%%SERVER-SETTINGS-FILE-NAME%% jamulus.servi
 - **Required**: No
 - **Default**: -
 - **Description**: Provides an allocation ID for an Elastic IP so that this 
-server will always be available under the same public IP address. If you do not
-provide an Elastic IP the server will always have a new IP address. However, as
-the packages for the clients (the band members) are generated automatically
-each time you change settings, these client packages will always connect to
-the correct IP Address. Learn how to [setup your Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
-and provide the Allocation ID in this parameter.
+server will always be available under the same public IP address. Learn how to
+[setup your Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+and provide the Allocation ID in this parameter. If you do not provide an
+Elastic IP, everytime you redeploy or reconfigure your Digital Workstation you
+will have a different public IP and it will be harder for you to connect to the
+Audio Workstation or the Zoom Server or for your band members to connect to
+the Jamulus Band Server.
 
 **`imageId`**
 
@@ -338,6 +339,15 @@ comes with costs and you can also only use an image if you are also using
 Elastic IPs to ensure your servers always have the same IP address. See
 [details on creating an image](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/tkv-create-ami-from-instance.html) 
 and then provide the AMI ID in this parameter.
+
+**`publicIp`**
+
+- **Type**: `string`
+- **Required**: No
+- **Default**: -
+- **Description**: Provide the public IP address you generated through the
+Elastic IP. This is needed to create the client packages for the band members
+automatically.
 
 ### `ZoomMeetingProps`
 

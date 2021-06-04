@@ -34,6 +34,8 @@ export interface JamulusServerProps extends JamulusServerSettings, StandardServe
 const replaceServerSettingsFileName = (newFileName: string) => (file: string) => file.replace('%%SERVER-SETTINGS-FILE-NAME%%', newFileName);
 
 export class JamulusServer extends Instance {
+  public readonly publicIp: string;
+
   /**
    * Will create an EC2 instance with a running Jamulus server. This server will
    * be created either by providing a `settingsFileName` which
@@ -50,7 +52,7 @@ export class JamulusServer extends Instance {
    * @returns The EC2 instance and its properties
    */
   constructor(scope: Stack, id: string, {
-    elasticIpAllocation, keyName, imageId, settingsFileName, detailedServerMetrics, policyStatments, bucket, vpc, timezone,
+    elasticIpAllocation, keyName, imageId, settingsFileName, detailedServerMetrics, policyStatments, bucket, vpc, timezone, publicIp,
   }: JamulusServerProps) {
     const userDataFileName = './lib/jamulus-server/configure-jamulus.sh';
     const definedVpc = vpc || getStandardVpc(scope, id);
@@ -72,6 +74,8 @@ export class JamulusServer extends Instance {
       keyName,
       userDataCausesReplacement: true,      
     });
+
+    if (publicIp) this.publicIp = publicIp;
 
     if (!imageId && settingsFileName) {
       if (bucket) new ConfigBucketDeployment(this, `${id}BucketDeploy`, {
