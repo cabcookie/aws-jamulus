@@ -5,9 +5,13 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 # gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'jamulus-startup.desktop']"
 echo "./Documents/jamulus/jamulus-startup.sh" >> bin/autostart-workstation.sh
 
-sudo wget https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_ubuntu_amd64.deb
-sudo apt-get -y install ./jamulus_3.7.0_ubuntu_amd64.deb
-sudo rm ./jamulus_3.7.0_ubuntu_amd64.deb
+# DEBFILE=jamulus_3.7.0_ubuntu_amd64.deb
+# sudo wget https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/$DEBFILE
+
+DEBFILE=jamulus_3.8.0_ubuntu_amd64.deb
+sudo wget https://github.com/jamulussoftware/jamulus/releases/download/r3_8_0/$DEBFILE
+sudo apt-get -y install ./$DEBFILE
+sudo rm ./$DEBFILE
 
 sudo apt-get -y install ardour
 
