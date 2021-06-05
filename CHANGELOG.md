@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/cabcookie/aws-jamulus/compare/v1.6.4...v1.7.0) (2021-06-05)
+
+
+### Features
+
+* adding `publicIp` to the config ([8aa0b5b](https://github.com/cabcookie/aws-jamulus/commit/8aa0b5b411703994255584835f2970d840c1ca46))
+* fetched MixToZoom.ini ([9ace263](https://github.com/cabcookie/aws-jamulus/commit/9ace2630d0bc578b914d624b9114ec9f70750501))
+* jamulus client packages are on S3 [#17](https://github.com/cabcookie/aws-jamulus/issues/17) ([e735821](https://github.com/cabcookie/aws-jamulus/commit/e7358215dc672f5dd5afd59e2593efbbcc8017e1))
+* updated Jamulus client on audio workstation ([18a050a](https://github.com/cabcookie/aws-jamulus/commit/18a050a2ef840ba9be71d13aafa63028afab340b))
+
+
+### Bug Fixes
+
+* added connection to mixing instance ([6e75221](https://github.com/cabcookie/aws-jamulus/commit/6e752219d4ae57f4d4c31e5257eacfce14e127f5))
+* **files:** issues with file-handling ([972c57e](https://github.com/cabcookie/aws-jamulus/commit/972c57e0dcf79baf5f435f7b4e81d051ab4501ac))
+* **patches:** dependency updates ([b3499c3](https://github.com/cabcookie/aws-jamulus/commit/b3499c3ec0d936aba06d080c0e292dc52248fbc2))
+* **refactor:** `jamulus-startups.sh` ([8c18795](https://github.com/cabcookie/aws-jamulus/commit/8c187955bf96005678a5f202e0a95fa4d8d13ede))
+* **refactor:** Ardour session created locally ([620c4d0](https://github.com/cabcookie/aws-jamulus/commit/620c4d0fb30b3cbcb99f868039da310839800d02))
+* **refactor:** correct `jamulus-startup.sh` folder ([d69e877](https://github.com/cabcookie/aws-jamulus/commit/d69e8779665cf33256ce9e2378a8a9602a7d4503))
+* **refactor:** creating jamulus inis from client ([8d56eda](https://github.com/cabcookie/aws-jamulus/commit/8d56eda3524ee21763b3a7579b6d154307c45c79))
+* **refactor:** interfaces for channels and jamulus ([b78ce40](https://github.com/cabcookie/aws-jamulus/commit/b78ce400c2e2d77ac423e7886c5b34ee58f00946))
+* **refactor:** workstation initialization file ([0358d02](https://github.com/cabcookie/aws-jamulus/commit/0358d0227dbce7f5f4dda16ffeee469d86da7011))
+* **rename:** folder `ardour` to `mosaik-live` ([6aac4cd](https://github.com/cabcookie/aws-jamulus/commit/6aac4cd14a82579eaaf4c285e40d9fab2bae0661))
+* **security:** remove IP addresses [#16](https://github.com/cabcookie/aws-jamulus/issues/16) ([a9cf115](https://github.com/cabcookie/aws-jamulus/commit/a9cf115b14115f94aae4bd2b1192a1f1693e0704))
+
 ### [1.6.4](https://github.com/cabcookie/aws-jamulus/compare/v1.6.3...v1.6.4) (2021-06-03)
 
 
