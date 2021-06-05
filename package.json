@@ -12,6 +12,7 @@
     "logs:band": "`node fetch-command.js logs band`",
     "logs:daw": "`node fetch-command.js logs daw`",
     "logs:mixer": "`node fetch-command.js logs mixer`",
+    "inis:daw": "`node fetch-command.js clientInis daw`",
     "ardour": "rm -rf temp/mosaik-live && `node fetch-command.js ardour daw`",
     "release": "standard-version",
     "major-release": "standard-version --release-as major",

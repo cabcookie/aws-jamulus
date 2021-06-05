@@ -11,7 +11,8 @@ const ip = config[targetMapping[target]].publicIp;
 const statementMapping = {
   ssh: `ssh -i JamulusKey.pem ubuntu@${ip}`,
   logs: `scp -i JamulusKey.pem ubuntu@${ip}:/var/log/cloud-init-output.log logs/${target}-init.log`,
-  ardour: `scp -i JamulusKey.pem -r ubuntu@${config.audioWorkstationSettings.publicIp}:/home/ubuntu/Documents/mosaik-live/ temp/`,
+  clientInis: `scp -i JamulusKey.pem ubuntu@${ip}:/home/ubuntu/Documents/jamulus/jamulus-inis/* temp/jamulus/`,
+  ardour: `scp -i JamulusKey.pem -r ubuntu@${config.audioWorkstationSettings.publicIp}:/home/ubuntu/Documents/mosaik-live/ temp/ardour/`,
 };
 const statement = statementMapping[process.argv[2]];
 
