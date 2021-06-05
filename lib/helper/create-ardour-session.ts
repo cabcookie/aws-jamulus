@@ -15,6 +15,25 @@ const getChannelNameByIndex = (index: number) => `Channel ${make2Digit(index+1)}
 
 const findAndRenameChannel = (prevArdour: string, currChannel: string, index: number) => renameAConnection(prevArdour, getChannelNameByIndex(index), currChannel);
 
+/**
+ * TODO:
+ * ====
+ * We must connect the Master to the MixToZoom Jamulus instance. Therefore, replace:
+ *       <Port type="audio" name="Master/audio_out 1">
+ *         <Connection other="system:playback_1"/>
+ *       </Port>
+ *       <Port type="audio" name="Master/audio_out 2">
+ *         <Connection other="system:playback_2"/>
+ *       </Port>
+ * with
+ *       <Port type="audio" name="Master/audio_out 1">
+ *         <Connection other="Jamulus MixToZoom:input left"/>
+ *       </Port>
+ *       <Port type="audio" name="Master/audio_out 2">
+ *         <Connection other="Jamulus MixToZoom:input right"/>
+ *       </Port>
+ * I have put it in the template. Maybe that is totally enough.
+ */
 const renameMasterConnections = (channels: string[]) => (ardourSession: string) => flow(
   pushItem('Reverb'),
   sortStrArr(stringComparator),

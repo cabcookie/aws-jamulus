@@ -110,10 +110,10 @@
       </IO>
       <IO name="Master" id="83" direction="Output" default-type="audio" user-latency="0">
         <Port type="audio" name="Master/audio_out 1">
-          <Connection other="system:playback_1"/>
+          <Connection other="Jamulus MixToZoom:input left"/>
         </Port>
         <Port type="audio" name="Master/audio_out 2">
-          <Connection other="system:playback_2"/>
+          <Connection other="Jamulus MixToZoom:input right"/>
         </Port>
       </IO>
       <MuteMaster mute-point="PostFader,Listen,Main" muted="0"/>
