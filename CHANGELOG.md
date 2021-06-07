@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/cabcookie/aws-jamulus/compare/v1.7.0...v1.8.0) (2021-06-07)
+
+
+### Features
+
+* pre-install Ardour plugins [#23](https://github.com/cabcookie/aws-jamulus/issues/23) ([0efe47b](https://github.com/cabcookie/aws-jamulus/commit/0efe47bcd420c1f14845377ec8bd8434bdbdb965))
+* updated Ardour session ([a810975](https://github.com/cabcookie/aws-jamulus/commit/a81097518380a13f16283b66906b04bde641567e))
+
+
+### Bug Fixes
+
+* adapted to the new Ardour session ([cc0bc0d](https://github.com/cabcookie/aws-jamulus/commit/cc0bc0d803e53493f0f41ba6317e33cf210ea9a2))
+* meter channel names ([59b424c](https://github.com/cabcookie/aws-jamulus/commit/59b424c18073f8d62c72380938e24ca116030ff9))
+* **template:** playlist search ([7842610](https://github.com/cabcookie/aws-jamulus/commit/7842610977ec35172c5333a6073ae8d557b3c78a))
+* addind inis to connect with the mixing server ([6c0fcef](https://github.com/cabcookie/aws-jamulus/commit/6c0fcef40b7d4dc7af428962ce21893f02a9c3d9))
+* adjusted aux send to Mix To Zoom ([22b2c28](https://github.com/cabcookie/aws-jamulus/commit/22b2c28114825b77b96d3d2f3b3b31fc223903ee))
+* adjusting jamulus startup script ([270f89e](https://github.com/cabcookie/aws-jamulus/commit/270f89edd90ce7d2a2b1e3c87429df36011e2d36))
+* correct Windows Jamulus client command [#25](https://github.com/cabcookie/aws-jamulus/issues/25) ([24ef108](https://github.com/cabcookie/aws-jamulus/commit/24ef108854dd14bea0d6a10c34a8a7db88e7c8af))
+* install CloudWatch agent optionally ([5f97c99](https://github.com/cabcookie/aws-jamulus/commit/5f97c99bfb65044422a8301bb440506c81c4bafa))
+* removing ids ([64ddb9b](https://github.com/cabcookie/aws-jamulus/commit/64ddb9bb9b5d52a0bcb520b6568c99562dc65619))
+* show changes in config.json in init script ([7c84935](https://github.com/cabcookie/aws-jamulus/commit/7c849354e20febe39afd20bf9c02429eda5f6648))
+* understand routing to Mix To Zoom ([5dacd88](https://github.com/cabcookie/aws-jamulus/commit/5dacd88e1fc3f876a0fb8085826141caf51b8a36))
+* **infra:** switch off animations on Ubuntu ([d4d2cde](https://github.com/cabcookie/aws-jamulus/commit/d4d2cde0adfa34aecbfd065282b67c41b4031d2c))
+
 ## [1.7.0](https://github.com/cabcookie/aws-jamulus/compare/v1.6.4...v1.7.0) (2021-06-05)
 
 
