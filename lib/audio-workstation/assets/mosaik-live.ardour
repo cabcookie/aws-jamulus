@@ -902,7 +902,7 @@
       <Controllable name="monitor" id="3674" flags="RealTime" value="0" monitoring=""/>
       <Controllable name="rec-safe" id="3672" flags="Toggle,RealTime" value="0"/>
       <Controllable name="rec-enable" id="3670" flags="Toggle,RealTime" value="0"/>
-      <Diskstream flags="Recordable" playlist="Channel 01.1" name="Channel 01" id="3675" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
+      <Diskstream flags="Recordable" playlist="Channel 01.2" name="Channel 01.2" id="3675" speed="1" capture-alignment="Automatic" record-safe="0" channels="1"/>
     </Route>
     <Route id="6890" name="Mix To Zoom" default-type="audio" strict-io="1" active="1" denormal-protection="0" meter-point="MeterPostFader" meter-type="MeterPeak">
       <PresentationInfo order="12" flags="AudioBus,OrderSet" color="3850286079"/>
@@ -3843,7 +3843,7 @@
     <Playlist id="2109" name="Channel 08" type="audio" orig-track-id="2067" shared-with-ids="" frozen="0" combine-ops="0"/>
     <Playlist id="2157" name="Channel 09" type="audio" orig-track-id="2115" shared-with-ids="" frozen="0" combine-ops="0"/>
     <Playlist id="2205" name="Channel 10" type="audio" orig-track-id="2163" shared-with-ids="" frozen="0" combine-ops="0"/>
-    <Playlist id="3676" name="Channel 01.1" type="audio" orig-track-id="3634" shared-with-ids="" frozen="0" combine-ops="0"/>
+    <Playlist id="3676" name="Channel 01.2" type="audio" orig-track-id="3634" shared-with-ids="" frozen="0" combine-ops="0"/>
     <Playlist id="6969" name="Channel 02.2" type="audio" orig-track-id="7012" shared-with-ids="" frozen="0" combine-ops="0"/>
     <Playlist id="7290" name="Channel 03.2" type="audio" orig-track-id="7333" shared-with-ids="" frozen="0" combine-ops="0"/>
     <Playlist id="7611" name="Channel 04.2" type="audio" orig-track-id="7654" shared-with-ids="" frozen="0" combine-ops="0"/>
