@@ -19,7 +19,7 @@ const jamulusStartupClients = [{
   signature: 'sh',
 },{
   client: "windows",
-  makeCommand: (ip: string) => (clientName: string) => `Jamulus (**no idea yet**) -c ${ip || 'No IP defined'} --clientname "${clientName}" -i "${clientName}.ini"`,
+  makeCommand: (ip: string) => (clientName: string) => `start C:\"Program Files"\Jamulus\Jamulus.exe -c ${ip || 'No IP defined'} --clientname "${clientName}" -i "${clientName}.ini"`,
   signature: 'bat',
 }];
 
