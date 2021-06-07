@@ -122,7 +122,8 @@ const cloudWatchAgentInstallationScript = [
   "sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s",
   "SHOW_FILE /opt/aws/amazon-cloudwatch-agent/bin/config.json",
 ];
-const addCloudWatchAgentInstallScript = (tobeInstalled: boolean | undefined) => (file: string) => file.replace(/%%CLOUDWATCH_AGENT%%/, tobeInstalled ? cloudWatchAgentInstallationScript.join('\n') : '');
+const addCloudWatchAgentInstallScript = (tobeInstalled: boolean | undefined) => (file: string) => file.replace(/%%CLOUDWATCH_AGENT%%/, !tobeInstalled ? '' : cloudWatchAgentInstallationScript.join('\n'));
+
 
 const replaceIp = (serverType: SERVER_TYPES, instance?: Instance) => (file: string) => file.replace(
   serverType == SERVER_TYPES.BAND ? new RegExp(`%%${IP_TYPES[IP_TYPES.BAND_PRIVATE_IP]}%%`, 'g') : new RegExp(`%%${IP_TYPES[IP_TYPES.MIXER_PRIVATE_IP]}%%`, 'g'),

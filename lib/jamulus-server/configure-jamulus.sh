@@ -42,7 +42,7 @@ sudo mv llcon-jamulus/ /usr/local/bin
 LOG show if Jamulus exists in the correct folder
 ls /usr/local/bin/llcon-jamulus/Jamulus
 
-LOG create a non-privileged user to run the server; user: jamulus
+LOG create a non-privileged user to run the server user jamulus
 sudo adduser --system --no-create-home jamulus
 
 LOG make a log directory so that the jamulus logs are saved somewhere
@@ -61,19 +61,7 @@ SHOW_FILE /etc/systemd/system/jamulus.service
 LOG now give it executable permissions
 sudo chmod 644 /etc/systemd/system/jamulus.service
 
-LOG install the CloudWatch agent
-# see download links for different OS here: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html
-wget https://s3.%%REGION%%.amazonaws.com/amazoncloudwatch-agent-%%REGION%%/ubuntu/arm64/latest/amazon-cloudwatch-agent.deb
-echo yes | sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
-rm amazon-cloudwatch-agent.deb
-
-LOG load and show the config file
-aws s3 cp s3://jamulus-config-bucket/%%INSTANCE_FOLDER%%/cloudwatch-linux-settings.json config.json
-SHOW_FILE config.json
-
-LOG move the config file and start the CloudWatch agent
-sudo mv config.json /opt/aws/amazon-cloudwatch-agent/bin/
-sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+%%CLOUDWATCH_AGENT%%
 
 LOG start up the jamulus service
 sudo systemctl start jamulus
