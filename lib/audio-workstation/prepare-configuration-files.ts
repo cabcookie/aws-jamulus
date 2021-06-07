@@ -20,7 +20,7 @@ const createJamulusClientPackages = (targetFolder: string, channels: string[], d
   })
   channels.forEach((channel) => {
     const clientFolder = makePath(targetFolder)(channel);
-    createJamulusClientIni(clientFolder, channels, defaultIni, channel);
+    createJamulusClientIni(clientFolder, [...channels, "FromZoom", "Sound Engineer"], defaultIni, channel);
     createJamulusStartupClientSh(clientFolder, channel, jamulusBandServer);
   });
 };

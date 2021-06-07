@@ -44,6 +44,7 @@ export const createJamulusStartupServerSh = (targetFolder: string, channels: str
       makeJamulusServerStartupCommand(IP_TYPES.BAND_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(`jamulus/${serverIniFolderName}`)),
     )),
     makeJamulusServerStartupCommand(IP_TYPES.MIXER_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(`jamulus/${serverIniFolderName}`))('MixToZoom').replace(' -M', ''),
+    makeJamulusServerStartupCommand(IP_TYPES.MIXER_PRIVATE_IP, makePath(INSTANCE_TARGET_DIR)(`jamulus/${serverIniFolderName}`))('MonitorMix').replace( ' -M', ''),
     `ardour5 ${makePath(INSTANCE_TARGET_DIR)(ardourFolderName)}/mosaik-live.ardour`,
   ];
   
