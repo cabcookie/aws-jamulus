@@ -14,19 +14,25 @@ timedatectl set-timezone %%TIMEZONE%%
 
 LOG update packages
 sudo apt-get update
-echo y | sudo apt-get install awscli
+sudo apt-get -y install awscli
 
 LOG install basic Ubuntu Desktop
-echo y | sudo apt-get install --no-install-recommends ubuntu-desktop
+sudo apt-get -y install --no-install-recommends ubuntu-desktop
 sudo apt-get -y install `check-language-support -l de`
 
 LOG install gnome startup applications
 sudo apt-get install gnome-startup-applications
 
 LOG install ubuntu remote desktop environment
-echo y | sudo apt-get install xrdp
+sudo apt-get -y install xrdp
 sudo service gdm3 start
 sudo systemctl enable xrdp
+
+LOG install plugins for Ardour
+sudo apt-get -y install x42-plugins calf-plugins invada-studio-plugins-lv2
+
+LOG config.json
+echo "%%CONFIG_JSON%%"
 
 LOG fetch all files from S3
 USERDIR=/home/ubuntu
@@ -82,7 +88,7 @@ LOG create a password for user ubuntu
 echo -e "%%UBUNTU_PASSWORD%%\n%%UBUNTU_PASSWORD%%" | sudo passwd ubuntu
 
 LOG upgrade packages
-echo y | sudo apt-get upgrade
+sudo apt-get -y upgrade
 
 LOG finished installation of all dependencies - reboot
 sudo reboot
