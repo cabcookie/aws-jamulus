@@ -1,5 +1,6 @@
+import { writeFileSync } from "fs";
 import { flow, get, isEmpty, join, reject } from "lodash/fp";
-import { makeFolders, toFile } from "../../utilities/file-handling";
+import { makeFolders } from "../../utilities/file-handling";
 import { filter, lowerCaseStringComparator, make2Digit, pushItem, reduce, sortStrArr, stringComparator, map } from "../../utilities/utilities";
 
 export const ARDOUR_SESSION_PATH = './lib/audio-workstation/assets/mosaik-live.ardour';
@@ -15,25 +16,6 @@ const getChannelNameByIndex = (index: number) => `Channel ${make2Digit(index+1)}
 
 const findAndRenameChannel = (prevArdour: string, currChannel: string, index: number) => renameAConnection(prevArdour, getChannelNameByIndex(index), currChannel);
 
-/**
- * TODO:
- * ====
- * We must connect the Master to the MixToZoom Jamulus instance. Therefore, replace:
- *       <Port type="audio" name="Master/audio_out 1">
- *         <Connection other="system:playback_1"/>
- *       </Port>
- *       <Port type="audio" name="Master/audio_out 2">
- *         <Connection other="system:playback_2"/>
- *       </Port>
- * with
- *       <Port type="audio" name="Master/audio_out 1">
- *         <Connection other="Jamulus MixToZoom:input left"/>
- *       </Port>
- *       <Port type="audio" name="Master/audio_out 2">
- *         <Connection other="Jamulus MixToZoom:input right"/>
- *       </Port>
- * I have put it in the template. Maybe that is totally enough.
- */
 const renameMasterConnections = (channels: string[]) => (ardourSession: string) => flow(
   pushItem('Reverb'),
   sortStrArr(stringComparator),
@@ -58,8 +40,9 @@ const searchArr = (index: number) => [
   `<IO name="${getChannelNameByIndex(index)}" id="`,
   `<Port type="audio" name="${getChannelNameByIndex(index)}/audio_.*">`,
   `<Processor id="[0-9]*" name="${getChannelNameByIndex(index)}" .*output="${getChannelNameByIndex(index)}".*>`,
+  `<Processor id="[0-9]*" name="meter-${getChannelNameByIndex(index)}" active="1" user-latency="0" type="meter"/>`,
   `<Route id=".*" name="${getChannelNameByIndex(index)}" default-type="audio"`,
-  `<Diskstream flags="Recordable" playlist="${getChannelNameByIndex(index)}" name="${getChannelNameByIndex(index)}" id="`,
+  `<Diskstream flags="Recordable" playlist="${getChannelNameByIndex(index)}(\.2)?" name="${getChannelNameByIndex(index)}(\.2)?" id="`,
 ];
 
 const changeNameWhenFound = (line: string, index: number, newChannelName: string) => (arr: string[]) => arr.length == 0 ? line : line.replace(
@@ -86,8 +69,6 @@ const renameChannels = (channels: string[]) => (ardourSession: string) => flow(
     ardourSession.split('\n')
   ),
 )(channels);
-
-const playlistLine = '<Playlist id=".*" name="Channel [01][0-9]" type="audio" .*/>';
 
 interface CleanUpProps {
   skipLines: boolean;
@@ -118,10 +99,20 @@ const cleanUpArdourSession = (ardourSessionArr: string[]) => (playlist: string) 
   get('result'),
 )(ardourSessionArr);
 
-const renameChannelInPlaylist = (channels: string[]) => (line: string, index: number) => index >= channels.length ? '' : line.replace(
-  new RegExp(getChannelNameByIndex(index)),
-  sortChannelsIgnoreCase(channels)[index]
-);
+const renameChannelInPlaylist = (channels: string[]) => (line: string) => {
+  const matchedIndex = line.match(new RegExp('Channel [01][0-9]'))?.index;
+  if (matchedIndex) {
+    const channelNo = line.substr(matchedIndex+8, 2);
+    if (parseInt(channelNo) > channels.length) return '';
+    return line.replace(
+      `Channel ${channelNo}`,
+      channels[parseInt(channelNo)-1]
+    );
+  }
+  return line;
+};
+
+const playlistLine = '<Playlist id=".*" name="Channel [01][0-9](\.2)?" type="audio" .*/>';
 
 const restructurePlaylist = (channels: string[]) => (ardourSessionArr: string[]) => flow(
   filter((line: string) => (line.match(new RegExp(playlistLine)) || '').length > 0),
@@ -133,16 +124,11 @@ const restructurePlaylist = (channels: string[]) => (ardourSessionArr: string[])
 
 export const createArdourSession = (targetFolder: string, channels: string[], ardourSession: string) => {
   makeFolders({ folderNames: [targetFolder] });
-  flow(
+  writeFileSync(`${targetFolder}/mosaik-live.ardour`, flow(
     renameMasterConnections(channels),
     removeUnusedChannelsInMasterConnection(channels),
     renameChannels(channels),
     restructurePlaylist(channels),
-
-    toFile({
-      folderName: targetFolder,
-      fileName: 'mosaik-live.ardour',
-    })
-  )(ardourSession);
+  )(ardourSession));
 };
 
