@@ -9,6 +9,9 @@ SHOW_FILE() {
 
 LOG %%VERSION%%
 
+LOG config.json
+echo "%%CONFIG_JSON%%"
+
 LOG set timezone
 timedatectl set-timezone %%TIMEZONE%%
 
@@ -30,9 +33,6 @@ sudo systemctl enable xrdp
 
 LOG install plugins for Ardour
 sudo apt-get -y install x42-plugins calf-plugins invada-studio-plugins-lv2
-
-LOG config.json
-echo "%%CONFIG_JSON%%"
 
 LOG fetch all files from S3
 USERDIR=/home/ubuntu

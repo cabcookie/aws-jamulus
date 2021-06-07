@@ -126,15 +126,17 @@ export class DigitalWorkstation extends Stack {
       keyName,
       ...bandServerSettings,
       timezone,
+      relevantConfigChanges: ['bandServerSettings'],
       bucket: configBucket,
     });
-
+    
     let mixingServer;
     if (mixingServerSettings) {
       mixingServer = new JamulusServer(this, 'JamulusMixingServer', {
         keyName,
         ...mixingServerSettings,
         timezone,
+        relevantConfigChanges: ['mixingServerSettings'],
         bucket: configBucket,
       });
     }

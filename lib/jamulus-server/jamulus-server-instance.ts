@@ -29,7 +29,15 @@ export interface JamulusServerSettings extends StandardServerSettings {
 /**
  * Interface for Jamalus server properties.
  */
-export interface JamulusServerProps extends JamulusServerSettings, StandardServerProps {};
+export interface JamulusServerProps extends JamulusServerSettings, StandardServerProps {
+  /**
+   * List all attributes from the `config.json` which changes require the
+   * instance to be redeployed. This will be used to output those attributes to
+   * the instance initialization file (i.e., User Data) in an `echo` command.
+   * Every change on the user data require redeploying of the instance. 
+   */
+  relevantConfigChanges: string[],
+};
 
 const replaceServerSettingsFileName = (newFileName: string) => (file: string) => file.replace('%%SERVER-SETTINGS-FILE-NAME%%', newFileName);
 
@@ -52,7 +60,17 @@ export class JamulusServer extends Instance {
    * @returns The EC2 instance and its properties
    */
   constructor(scope: Stack, id: string, {
-    elasticIpAllocation, keyName, imageId, settingsFileName, detailedServerMetrics, policyStatments, bucket, vpc, timezone, publicIp,
+    elasticIpAllocation,
+    keyName,
+    imageId,
+    settingsFileName,
+    detailedServerMetrics,
+    policyStatments,
+    bucket,
+    vpc,
+    timezone,
+    publicIp,
+    relevantConfigChanges,
   }: JamulusServerProps) {
     const userDataFileName = './lib/jamulus-server/configure-jamulus.sh';
     const definedVpc = vpc || getStandardVpc(scope, id);
@@ -88,6 +106,7 @@ export class JamulusServer extends Instance {
         region: scope.region,
         filename: userDataFileName,
         timezone,
+        relevantConfigChanges,
         detailedServerMetrics,
         additionalProcessFn: flow(
           replaceServerSettingsFileName(settingsFileName),

@@ -97,6 +97,10 @@ export class ZoomServer extends Instance {
         detailedServerMetrics,
         jamulusBandServer,
         jamulusMixingServer,
+        relevantConfigChanges: [
+          'zoomServerSettings',
+          'mixingServerSettings',
+        ],
         timezone,
         additionalProcessFn: flow(
           replace('%%MEETING_ID%%', zoomMeeting.meetingId),

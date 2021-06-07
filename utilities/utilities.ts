@@ -1,6 +1,6 @@
 import { Instance } from "@aws-cdk/aws-ec2";
 import { readFileSync } from "fs";
-import { flow } from "lodash/fp";
+import { flow, replace } from "lodash/fp";
 import { JamulusInstancesProps } from "../lib/digital-workstation-stack";
 import { DetailedServerMetricsSettings } from "./basic-elements/instance-role";
 
@@ -82,6 +82,13 @@ interface UserDataProps extends DetailedServerMetricsSettings, JamulusInstancesP
    * initialization script.
    */
   timezone?: string;
+  /**
+   * List all attributes from the `config.json` which changes require the
+   * instance to be redeployed. This will be used to output those attributes to
+   * the instance initialization file (i.e., User Data) in an `echo` command.
+   * Every change on the user data require redeploying of the instance. 
+   */
+  relevantConfigChanges: string[],
 };
 
 const stdStrFn = (str: string) => str;
@@ -96,8 +103,10 @@ export const createUserData = ({
   jamulusBandServer,
   jamulusMixingServer,
   timezone,
+  relevantConfigChanges,
 }: UserDataProps) => flow(
   readFileSync,
+  replaceConfigJSON(relevantConfigChanges),
   replaceVersion,
   replaceIp(SERVER_TYPES.BAND, jamulusBandServer),
   replaceIp(SERVER_TYPES.MIXER, jamulusMixingServer),
@@ -124,6 +133,17 @@ const cloudWatchAgentInstallationScript = [
 ];
 const addCloudWatchAgentInstallScript = (tobeInstalled: boolean | undefined) => (file: string) => file.replace(/%%CLOUDWATCH_AGENT%%/, !tobeInstalled ? '' : cloudWatchAgentInstallationScript.join('\n'));
 
+const replaceConfigJSON = (relevantChanges: string[]) => (file: string) => file.replace('%%CONFIG_JSON%%', flow(
+  (configJson) => reduce(
+    (prev: object, curr: string) => ({
+      ...prev,
+      [`${curr}`]: configJson[curr]
+    }),
+    {}
+  )(relevantChanges),
+  JSON.stringify,
+  replace(/"/g, '\\"'),
+)(require('../bin/config.json')));
 
 const replaceIp = (serverType: SERVER_TYPES, instance?: Instance) => (file: string) => file.replace(
   serverType == SERVER_TYPES.BAND ? new RegExp(`%%${IP_TYPES[IP_TYPES.BAND_PRIVATE_IP]}%%`, 'g') : new RegExp(`%%${IP_TYPES[IP_TYPES.MIXER_PRIVATE_IP]}%%`, 'g'),

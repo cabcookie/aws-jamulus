@@ -92,6 +92,13 @@ export class AudioWorkstation extends Instance {
         filename: userDataFileName,
         detailedServerMetrics,
         timezone,
+        relevantConfigChanges: [
+          'bandServerSettings',
+          'mixingServerSettings',
+          'audioWorkstationSettings',
+          'zoomServerSettings',
+          'channels',
+        ],
         jamulusBandServer,
         additionalProcessFn: flow(
           replaceUbuntuPassword(ubuntuPassword),

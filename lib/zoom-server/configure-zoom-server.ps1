@@ -2,6 +2,9 @@
   $scriptVersion = "%%VERSION%%"
   Write-Output $scriptVersion
 
+  $configJson = "%%CONFIG_JSON%%"
+  Write-Output $configJson
+
   # The name of your S3 Bucket
   $bucket = "%%CONFIG_BUCKET_NAME%%"
   

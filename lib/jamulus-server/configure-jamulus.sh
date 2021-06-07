@@ -9,6 +9,9 @@ SHOW_FILE() {
 
 LOG %%VERSION%%
 
+LOG config.json
+echo "%%CONFIG_JSON%%"
+
 LOG set timezone
 timedatectl set-timezone %%TIMEZONE%%
 
